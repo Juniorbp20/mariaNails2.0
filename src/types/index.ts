@@ -14,8 +14,8 @@ export interface Appointment {
   id: number;
   service_id: string;
   client_name: string;
-  client_email: string;
-  client_phone: string;
+  client_email: string | null;
+  client_phone: string | null;
   appointment_date: string;
   appointment_time: string;
   status: 'pending' | 'confirmed' | 'completed' | 'cancelled';

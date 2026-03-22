@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { serviceService } from '../services/serviceService';
+import { useEffect, useState } from 'react';
 import ServiceCard from '../components/ServiceCard';
+import { serviceService } from '../services/serviceService';
 import type { Service } from '../types';
 
 export default function Services() {
@@ -20,7 +20,7 @@ export default function Services() {
       }
     };
 
-    loadServices();
+    void loadServices();
   }, []);
 
   return (
@@ -29,7 +29,7 @@ export default function Services() {
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Nuestros Servicios</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Ofrecemos una amplia variedad de servicios profesionales para el cuidado y embellecimiento de tus uñas.
+            Ofrecemos una amplia variedad de servicios profesionales para el cuidado y embellecimiento de tus unas.
           </p>
         </div>
 
@@ -37,12 +37,8 @@ export default function Services() {
           <div className="text-center text-gray-600">Cargando servicios...</div>
         ) : (
           <div className="grid md:grid-cols-2 gap-6 mb-12">
-            {services.map(service => (
-              <ServiceCard
-                key={service.id}
-                service={service}
-                onClick={() => setSelectedService(service)}
-              />
+            {services.map((service) => (
+              <ServiceCard key={service.id} service={service} onClick={() => setSelectedService(service)} />
             ))}
           </div>
         )}
@@ -56,27 +52,23 @@ export default function Services() {
                   onClick={() => setSelectedService(null)}
                   className="text-gray-500 hover:text-gray-700 text-2xl"
                 >
-                  ×
+                  x
                 </button>
               </div>
 
               <div className="mb-6">
-                <h3 className="text-sm font-semibold text-gray-600 uppercase mb-2">Descripción</h3>
+                <h3 className="text-sm font-semibold text-gray-600 uppercase mb-2">Descripcion</h3>
                 <p className="text-gray-700 leading-relaxed">{selectedService.description}</p>
               </div>
 
-              <div className="grid grid-cols-3 gap-4 mb-6 py-4 border-y border-gray-200">
+              <div className="grid grid-cols-2 gap-4 mb-6 py-4 border-y border-gray-200">
                 <div>
-                  <p className="text-sm text-gray-600">Categoría</p>
+                  <p className="text-sm text-gray-600">Categoria</p>
                   <p className="text-lg font-semibold text-gray-900">{selectedService.category}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Duración</p>
+                  <p className="text-sm text-gray-600">Duracion</p>
                   <p className="text-lg font-semibold text-gray-900">{selectedService.duration_minutes} min</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Precio</p>
-                  <p className="text-lg font-semibold text-pink-600">${selectedService.price}</p>
                 </div>
               </div>
 

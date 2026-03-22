@@ -9,6 +9,7 @@ type SupabaseErrorLike = {
 };
 
 type CalendarSyncAction = 'upsert' | 'cancel';
+type NotificationEventType = 'booking_created' | 'status_changed';
 
 type FunctionErrorLike = {
   message?: string;
@@ -41,7 +42,11 @@ const normalizeSupabaseError = (error: SupabaseErrorLike): Error => {
     typeof error.message === 'string' &&
     error.message.includes('Failed to send a request to the Edge Function')
   ) {
-    return new Error('No se pudo conectar con la funcion de sincronizacion de Google Calendar.');
+    return new Error('No se pudo conectar con una funcion de Supabase.');
+  }
+
+  if (error.code === '23514') {
+    return new Error('Debes ingresar al menos un correo o un telefono.');
   }
 
   if (error.code === '23505') {
@@ -105,6 +110,13 @@ const normalizeFunctionInvokeError = async (error: FunctionErrorLike): Promise<E
 
 export const appointmentService = {
   async createAppointment(data: BookingFormData): Promise<Appointment> {
+    const normalizedEmail = data.client_email.trim() || null;
+    const normalizedPhone = data.client_phone.trim() || null;
+
+    if (!normalizedEmail && !normalizedPhone) {
+      throw new Error('Debes ingresar al menos un correo o un telefono.');
+    }
+
     const { data: nextAppointmentId, error: nextIdError } = await supabase.rpc('next_appointment_id');
     if (nextIdError) throw normalizeSupabaseError(nextIdError);
     if (typeof nextAppointmentId !== 'number' || !Number.isInteger(nextAppointmentId)) {
@@ -115,9 +127,9 @@ export const appointmentService = {
     const localAppointment: Appointment = {
       id: nextAppointmentId,
       service_id: data.service_id,
-      client_name: data.client_name,
-      client_email: data.client_email,
-      client_phone: data.client_phone,
+      client_name: data.client_name.trim(),
+      client_email: normalizedEmail,
+      client_phone: normalizedPhone,
       appointment_date: data.appointment_date,
       appointment_time: data.appointment_time,
       status: 'pending',
@@ -140,6 +152,11 @@ export const appointmentService = {
       }]);
 
     if (error) throw normalizeSupabaseError(error);
+
+    await this.sendAppointmentNotification('booking_created', localAppointment.id).catch((notificationError) => {
+      console.error('Failed to send booking notification email', notificationError);
+    });
+
     return localAppointment;
   },
 
@@ -203,6 +220,22 @@ export const appointmentService = {
     if (error) throw await normalizeFunctionInvokeError(error);
   },
 
+  async sendAppointmentNotification(
+    eventType: NotificationEventType,
+    appointmentId: number,
+    status?: string,
+  ): Promise<void> {
+    const { error } = await supabase.functions.invoke('appointment-notifications', {
+      body: {
+        eventType,
+        appointmentId,
+        status,
+      },
+    });
+
+    if (error) throw await normalizeFunctionInvokeError(error);
+  },
+
   async updateAppointmentStatus(id: number, status: string): Promise<Appointment> {
     const { data, error } = await supabase
       .from('appointments')
@@ -212,6 +245,11 @@ export const appointmentService = {
       .single();
 
     if (error) throw normalizeSupabaseError(error);
+
+    await this.sendAppointmentNotification('status_changed', id, status).catch((notificationError) => {
+      console.error('Failed to send status notification email', notificationError);
+    });
+
     return data;
   },
 

@@ -2,3 +2,6 @@ project_id = "iaddxsralkqgqgktbtzd"
 
 [functions.google-calendar-sync]
 verify_jwt = false
+
+[functions.appointment-notifications]
+verify_jwt = false

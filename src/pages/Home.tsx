@@ -110,25 +110,25 @@ export default function Home() {
             <div className="bg-gradient-to-br from-pink-50 to-red-50 rounded-lg p-6 border border-pink-200">
               <h4 className="text-xl font-bold text-gray-900 mb-2">Sistema de Acrilico</h4>
               <p className="text-gray-700 mb-3">Extensiones resistentes y duraderas con acabado perfecto.</p>
-              <p className="text-pink-600 font-semibold">Consultar precio</p>
+              <p className="text-pink-600 font-semibold">Servicio personalizado</p>
             </div>
 
             <div className="bg-gradient-to-br from-pink-50 to-red-50 rounded-lg p-6 border border-pink-200">
               <h4 className="text-xl font-bold text-gray-900 mb-2">Sistema de Gel</h4>
               <p className="text-gray-700 mb-3">Brillo intenso y mayor resistencia. Ideal para un look elegante.</p>
-              <p className="text-pink-600 font-semibold">Consultar precio</p>
+              <p className="text-pink-600 font-semibold">Servicio personalizado</p>
             </div>
 
             <div className="bg-gradient-to-br from-pink-50 to-red-50 rounded-lg p-6 border border-pink-200">
               <h4 className="text-xl font-bold text-gray-900 mb-2">Manicura</h4>
               <p className="text-gray-700 mb-3">Cuidado completo de manos con esmaltado profesional.</p>
-              <p className="text-pink-600 font-semibold">Consultar precio</p>
+              <p className="text-pink-600 font-semibold">Servicio personalizado</p>
             </div>
 
             <div className="bg-gradient-to-br from-pink-50 to-red-50 rounded-lg p-6 border border-pink-200">
               <h4 className="text-xl font-bold text-gray-900 mb-2">Pedicura</h4>
               <p className="text-gray-700 mb-3">Tratamiento spa con exfoliacion, masaje y esmaltado.</p>
-              <p className="text-pink-600 font-semibold">Consultar precio</p>
+              <p className="text-pink-600 font-semibold">Servicio personalizado</p>
             </div>
           </div>
           <div className="text-center">

@@ -1,4 +1,4 @@
-import { Clock, DollarSign } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import type { Service } from '../types';
 
 interface ServiceCardProps {
@@ -22,10 +22,6 @@ export default function ServiceCard({ service, onClick }: ServiceCardProps) {
           <div className="flex items-center space-x-1 text-gray-500 text-sm">
             <Clock className="w-4 h-4" />
             <span>{service.duration_minutes} min</span>
-          </div>
-          <div className="flex items-center space-x-1 text-gray-500 text-sm">
-            <DollarSign className="w-4 h-4" />
-            <span>${service.price}</span>
           </div>
         </div>
         <span className="text-xs font-medium text-pink-600 bg-pink-50 px-2 py-1 rounded">

@@ -10,8 +10,8 @@ type SyncRequest = {
 type AppointmentRow = {
   id: number;
   client_name: string;
-  client_email: string;
-  client_phone: string;
+  client_email: string | null;
+  client_phone: string | null;
   appointment_date: string;
   appointment_time: string;
   status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
@@ -354,8 +354,8 @@ Deno.serve(async (request) => {
         summary: `Cita Maria Nails - ${appointment.service?.name || 'Servicio'}`,
         description: [
           `Cliente: ${appointment.client_name}`,
-          `Email: ${appointment.client_email}`,
-          `Telefono: ${appointment.client_phone}`,
+          `Email: ${appointment.client_email || 'No registrado'}`,
+          `Telefono: ${appointment.client_phone || 'No registrado'}`,
           appointment.notes ? `Notas: ${appointment.notes}` : '',
           `ID cita: ${appointment.id}`,
         ]
