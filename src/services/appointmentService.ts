@@ -153,6 +153,10 @@ export const appointmentService = {
 
     if (error) throw normalizeSupabaseError(error);
 
+    await this.syncPendingAppointmentWithGoogleCalendar(localAppointment.id).catch((calendarError) => {
+      console.error('Failed to sync booking with Google Calendar', calendarError);
+    });
+
     await this.sendAppointmentNotification('booking_created', localAppointment.id).catch((notificationError) => {
       console.error('Failed to send booking notification email', notificationError);
     });
@@ -214,6 +218,17 @@ export const appointmentService = {
       },
       headers: {
         Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (error) throw await normalizeFunctionInvokeError(error);
+  },
+
+  async syncPendingAppointmentWithGoogleCalendar(appointmentId: number): Promise<void> {
+    const { error } = await supabase.functions.invoke('google-calendar-sync', {
+      body: {
+        action: 'upsert',
+        appointmentId,
       },
     });
 

@@ -26,6 +26,8 @@ type BusinessProfileRow = {
   contact_email: string | null;
 };
 
+const DEFAULT_ADMIN_NOTIFICATION_EMAIL = 'marianails1795@gmail.com';
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -156,8 +158,10 @@ Deno.serve(async (request) => {
 
     const businessProfile = (businessProfileData || {}) as BusinessProfileRow;
     const businessName = safeValue(businessProfile.business_name, 'Maria Nails');
+    const configuredAdminEmail = Deno.env.get('BOOKING_NOTIFICATION_EMAIL')?.trim() || '';
+    const profileAdminEmail = businessProfile.contact_email?.trim() || '';
     const businessEmail =
-      Deno.env.get('BOOKING_NOTIFICATION_EMAIL') || businessProfile.contact_email || null;
+      configuredAdminEmail || profileAdminEmail || DEFAULT_ADMIN_NOTIFICATION_EMAIL;
 
     const serviceName = safeValue(appointment.service?.name, 'Servicio');
     const dateText = appointment.appointment_date;

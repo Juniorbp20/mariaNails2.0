@@ -283,17 +283,22 @@ Deno.serve(async (request) => {
   });
 
   try {
-    const authHeader = request.headers.get('Authorization') || '';
-    const jwt = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
-    if (!jwt) {
-      return jsonResponse(401, { error: 'Token de autorizacion requerido.' });
-    }
-
-    await ensureAdminCaller(supabase, jwt);
-
     const payload = (await request.json()) as SyncRequest;
     if (!payload?.appointmentId || !payload?.action) {
       return jsonResponse(400, { error: 'Payload invalido.' });
+    }
+
+    const authHeader = request.headers.get('Authorization') || '';
+    const jwt = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
+
+    const isPublicBookingUpsert = payload.action === 'upsert' && !jwt;
+
+    if (!isPublicBookingUpsert) {
+      if (!jwt) {
+        return jsonResponse(401, { error: 'Token de autorizacion requerido.' });
+      }
+
+      await ensureAdminCaller(supabase, jwt);
     }
 
     appointmentIdForError = payload.appointmentId;
@@ -337,9 +342,17 @@ Deno.serve(async (request) => {
     const calendarBaseUrl = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(googleCalendarId)}/events`;
 
     if (payload.action === 'upsert') {
-      if (appointment.status !== 'confirmed') {
+      const canSyncByStatus = appointment.status === 'pending' || appointment.status === 'confirmed';
+
+      if (!canSyncByStatus) {
         return jsonResponse(400, {
-          error: 'Solo se pueden sincronizar citas con estado confirmado.',
+          error: 'Solo se pueden sincronizar citas pendientes o confirmadas.',
+        });
+      }
+
+      if (isPublicBookingUpsert && appointment.status !== 'pending') {
+        return jsonResponse(403, {
+          error: 'Solo se puede sincronizar automaticamente una cita pendiente al momento de reservar.',
         });
       }
 
@@ -350,8 +363,9 @@ Deno.serve(async (request) => {
         durationMinutes,
       );
 
+      const summaryPrefix = appointment.status === 'pending' ? '[PENDIENTE] ' : '';
       const eventPayload = {
-        summary: `Cita Maria Nails - ${appointment.service?.name || 'Servicio'}`,
+        summary: `${summaryPrefix}Cita Maria Nails - ${appointment.service?.name || 'Servicio'}`,
         description: [
           `Cliente: ${appointment.client_name}`,
           `Email: ${appointment.client_email || 'No registrado'}`,
