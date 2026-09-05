@@ -14,6 +14,27 @@
   .btn-secondary {
     @apply px-6 py-3 bg-white border border-gray-200 text-gray-700 rounded-lg font-semibold hover:border-pink-500 transition;
   }
+
+  .card-hover {
+    @apply transition hover:shadow-lg hover:-translate-y-0.5;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid #ec4899;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 * {

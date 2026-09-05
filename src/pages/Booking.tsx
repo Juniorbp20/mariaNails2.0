@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Check } from 'lucide-react';
 import Calendar from '../components/Calendar';
 import TimeSlots from '../components/TimeSlots';
@@ -7,10 +8,12 @@ import { appointmentService } from '../services/appointmentService';
 import { serviceService } from '../services/serviceService';
 import type { BookingFormData, Service } from '../types';
 import { parseLocalDateString } from '../utils/dateUtils';
+import { formatDuration, formatPrice, isValidEmail, isValidPhone } from '../utils/format';
 
 type BookingStep = 'service' | 'date' | 'time' | 'contact' | 'confirmation';
 
 export default function Booking() {
+  const location = useLocation() as { state?: { serviceId?: string } };
   const [step, setStep] = useState<BookingStep>('service');
   const [services, setServices] = useState<Service[]>([]);
   const [blockedDates, setBlockedDates] = useState<string[]>([]);
@@ -37,6 +40,14 @@ export default function Booking() {
         ]);
         setServices(servicesData);
         setBlockedDates(blockedDatesData.map((d) => d.blocked_date));
+        const preselectedId = location.state?.serviceId;
+        if (preselectedId) {
+          const found = servicesData.find((s) => s.id === preselectedId);
+          if (found) {
+            setSelectedService(found);
+            setStep('date');
+          }
+        }
       } catch (err) {
         setError('Error cargando datos. Intenta de nuevo.');
         console.error(err);
@@ -81,7 +92,16 @@ export default function Booking() {
       const hasEmail = formData.client_email.trim().length > 0;
       const hasPhone = formData.client_phone.trim().length > 0;
       if (!hasEmail && !hasPhone) {
-        throw new Error('Debes ingresar al menos correo o telefono.');
+        throw new Error('Debes ingresar al menos correo o teléfono.');
+      }
+      if (hasEmail && !isValidEmail(formData.client_email)) {
+        throw new Error('El correo electrónico no es válido.');
+      }
+      if (hasPhone && !isValidPhone(formData.client_phone)) {
+        throw new Error('El teléfono no es válido. Revisa el número.');
+      }
+      if (formData.client_name.trim().length < 2) {
+        throw new Error('Ingresa tu nombre completo.');
       }
 
       const bookingData: BookingFormData = {
@@ -119,7 +139,7 @@ export default function Booking() {
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <p className="text-gray-600">Cargando informacion...</p>
+        <p className="text-gray-600" role="status">Cargando información...</p>
       </div>
     );
   }
@@ -160,7 +180,8 @@ export default function Booking() {
 
         {step === 'service' && (
           <div className="bg-white rounded-lg p-8 border border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Selecciona un servicio</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Selecciona un servicio</h2>
+            <p className="mb-6 text-sm text-gray-600">Precios claros, sin sorpresas.</p>
             {services.length > 0 ? (
               <div className="grid gap-4">
                 {services.map((service) => (
@@ -169,10 +190,13 @@ export default function Booking() {
                     onClick={() => handleServiceSelect(service)}
                     className="text-left p-6 border border-gray-200 rounded-lg hover:border-pink-500 hover:bg-pink-50 transition"
                   >
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">{service.name}</h3>
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <h3 className="text-lg font-bold text-gray-900">{service.name}</h3>
+                      <span className="whitespace-nowrap font-bold text-pink-600">{formatPrice(service.price)}</span>
+                    </div>
                     <p className="text-gray-600 mb-3">{service.description}</p>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-700">{service.duration_minutes} min</span>
+                      <span className="text-gray-700">{formatDuration(service.duration_minutes)}</span>
                       <span className="font-semibold text-pink-600">{service.category}</span>
                     </div>
                   </button>
@@ -192,7 +216,7 @@ export default function Booking() {
               onClick={() => setStep('service')}
               className="mt-6 px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition"
             >
-              Atras
+              Atrás
             </button>
           </div>
         )}
@@ -217,14 +241,14 @@ export default function Booking() {
               onClick={() => setStep('date')}
               className="mt-6 px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition"
             >
-              Atras
+              Atrás
             </button>
           </div>
         )}
 
         {step === 'contact' && selectedService && (
           <div className="bg-white rounded-lg p-8 border border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Informacion de contacto</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Información de contacto</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="booking-client-name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -245,7 +269,7 @@ export default function Booking() {
 
               <div>
                 <label htmlFor="booking-client-email" className="block text-sm font-medium text-gray-700 mb-2">
-                  Correo electronico
+                  Correo electrónico
                 </label>
                 <input
                   id="booking-client-email"
@@ -254,15 +278,15 @@ export default function Booking() {
                   value={formData.client_email}
                   onChange={handleInputChange}
                   required={!formData.client_phone.trim()}
-                  title="Correo electronico"
+                  title="Correo electrónico"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 outline-none"
-                  placeholder="tu@correo.com (opcional si pones telefono)"
+                  placeholder="tu@correo.com (opcional si pones teléfono)"
                 />
               </div>
 
               <div>
                 <label htmlFor="booking-client-phone" className="block text-sm font-medium text-gray-700 mb-2">
-                  Telefono
+                  Teléfono
                 </label>
                 <input
                   id="booking-client-phone"
@@ -271,7 +295,7 @@ export default function Booking() {
                   value={formData.client_phone}
                   onChange={handleInputChange}
                   required={!formData.client_email.trim()}
-                  title="Telefono de contacto"
+                  title="Teléfono de contacto"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 outline-none"
                   placeholder="+1 829 XXX XXXX (opcional si pones correo)"
                 />
@@ -291,7 +315,10 @@ export default function Booking() {
                     <strong>Hora:</strong> {selectedTime}
                   </li>
                   <li>
-                    <strong>Duracion:</strong> {selectedService.duration_minutes} minutos
+                    <strong>Duración:</strong> {formatDuration(selectedService.duration_minutes)}
+                  </li>
+                  <li>
+                    <strong>Precio:</strong> {formatPrice(selectedService.price)}
                   </li>
                 </ul>
               </div>
@@ -302,7 +329,7 @@ export default function Booking() {
                   onClick={() => setStep('time')}
                   className="flex-1 px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition"
                 >
-                  Atras
+                  Atrás
                 </button>
                 <button
                   type="submit"

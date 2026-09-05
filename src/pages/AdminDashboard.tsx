@@ -173,6 +173,9 @@ export default function AdminDashboard() {
   const [uploadDescription, setUploadDescription] = useState('');
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [profilePhotoFile, setProfilePhotoFile] = useState<File | null>(null);
+  const [editingImage, setEditingImage] = useState<GalleryImage | null>(null);
+  const [editImageTitle, setEditImageTitle] = useState('');
+  const [editImageDescription, setEditImageDescription] = useState('');
 
   const clearMessages = () => {
     setError('');
@@ -513,21 +516,23 @@ export default function AdminDashboard() {
     }
   };
 
-  const editImage = async (image: GalleryImage) => {
-    const newTitle = window.prompt('Nuevo nombre de la imagen:', image.title);
-    if (newTitle === null) return;
-    const newDescription = window.prompt(
-      'Nueva descripcion (deja vacio para quitarla):',
-      image.description || ''
-    );
-    if (newDescription === null) return;
+  const openEditImage = (image: GalleryImage) => {
+    setEditingImage(image);
+    setEditImageTitle(image.title);
+    setEditImageDescription(image.description || '');
+  };
 
+  const saveEditedImage = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!editingImage) return;
+    if (!editImageTitle.trim()) return fail('El título de la imagen es obligatorio.');
     clearMessages();
     try {
-      await galleryService.updateGalleryImage(image.id, {
-        title: newTitle.trim(),
-        description: newDescription.trim() || null
+      await galleryService.updateGalleryImage(editingImage.id, {
+        title: editImageTitle.trim(),
+        description: editImageDescription.trim() || null
       });
+      setEditingImage(null);
       await loadAllData();
       ok('Imagen actualizada.');
     } catch (err) {
@@ -584,7 +589,7 @@ export default function AdminDashboard() {
       setBusinessProfile(updated);
       setBusinessForm(mapBusinessProfileToForm(updated));
       applyProfile(updated);
-      ok('Informacion del negocio actualizada.');
+      ok('Información del negocio actualizada.');
     } catch (err) {
       fail('No se pudo actualizar la informacion del negocio.', err);
     }
@@ -676,7 +681,7 @@ export default function AdminDashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Panel de Administracion</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Panel de Administración</h1>
             <p className="text-sm text-gray-600">{email}</p>
           </div>
           <button
@@ -701,7 +706,7 @@ export default function AdminDashboard() {
             { tab: 'services', icon: Clock, label: 'Servicios' },
             { tab: 'availability', icon: Clock, label: 'Horarios' },
             { tab: 'blocked-dates', icon: Calendar, label: 'Fechas bloqueadas' },
-            { tab: 'gallery', icon: Image, label: 'Galeria' },
+            { tab: 'gallery', icon: Image, label: 'Galería' },
             { tab: 'business', icon: Building2, label: 'Negocio' },
             { tab: 'stats', icon: BarChart3, label: 'Estadisticas' }
           ].map(({ tab, icon: Icon, label }) => (
@@ -811,7 +816,7 @@ export default function AdminDashboard() {
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                   rows={3}
-                  placeholder="Descripcion"
+                  placeholder="Descripción"
                   required
                 />
                 <div className="grid grid-cols-2 gap-2">
@@ -842,7 +847,7 @@ export default function AdminDashboard() {
                   value={serviceForm.category}
                   onChange={(event) => setServiceForm((prev) => ({ ...prev, category: event.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Categoria"
+                  placeholder="Categoría"
                   required
                 />
                 <label className="flex items-center gap-2 text-sm text-gray-700">
@@ -1039,7 +1044,7 @@ export default function AdminDashboard() {
                   value={uploadDescription}
                   onChange={(event) => setUploadDescription(event.target.value)}
                   className="md:col-span-1 px-3 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Descripcion"
+                  placeholder="Descripción"
                 />
                 <button type="submit" className="md:col-span-1 px-4 py-2 bg-pink-600 text-white rounded-lg">
                   Subir
@@ -1056,7 +1061,7 @@ export default function AdminDashboard() {
                     {image.description && <p className="text-sm text-gray-600 mt-1">{image.description}</p>}
                     <div className="flex gap-2 mt-3">
                       <button
-                        onClick={() => editImage(image)}
+                        onClick={() => openEditImage(image)}
                         className="flex-1 px-3 py-2 rounded bg-blue-100 text-blue-700 hover:bg-blue-200"
                       >
                         Editar
@@ -1141,7 +1146,7 @@ export default function AdminDashboard() {
             </div>
 
             <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Informacion del negocio</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-4">Información del negocio</h2>
               <form onSubmit={saveBusinessInfo} className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-3">
                   <input
@@ -1195,7 +1200,7 @@ export default function AdminDashboard() {
                     value={businessForm.footer_description}
                     onChange={(event) => patchBusinessForm({ footer_description: event.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                    placeholder="Descripcion corta para footer"
+                    placeholder="Descripción corta para footer"
                     required
                   />
                 </div>
@@ -1205,7 +1210,7 @@ export default function AdminDashboard() {
                   onChange={(event) => patchBusinessForm({ about_description: event.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                   rows={4}
-                  placeholder="Descripcion de sobre mi (puedes usar saltos de linea)"
+                  placeholder="Descripción de sobre mi (puedes usar saltos de linea)"
                   required
                 />
 
@@ -1302,6 +1307,58 @@ export default function AdminDashboard() {
                 {services.filter((s) => s.active).length}
               </p>
             </div>
+          </div>
+        )}
+
+        {editingImage && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+            onClick={() => setEditingImage(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Editar imagen de galería"
+          >
+            <form
+              onSubmit={saveEditedImage}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl"
+            >
+              <h2 className="mb-4 text-lg font-bold text-gray-900">Editar imagen</h2>
+              <label className="mb-3 block">
+                <span className="mb-1 block text-sm font-medium text-gray-700">Título</span>
+                <input
+                  type="text"
+                  value={editImageTitle}
+                  onChange={(e) => setEditImageTitle(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2"
+                  required
+                />
+              </label>
+              <label className="mb-4 block">
+                <span className="mb-1 block text-sm font-medium text-gray-700">Descripción</span>
+                <textarea
+                  value={editImageDescription}
+                  onChange={(e) => setEditImageDescription(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2"
+                  rows={3}
+                />
+              </label>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingImage(null)}
+                  className="flex-1 rounded-lg bg-gray-200 px-4 py-2 font-medium text-gray-700 hover:bg-gray-300"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 rounded-lg bg-pink-600 px-4 py-2 font-medium text-white hover:bg-pink-700"
+                >
+                  Guardar
+                </button>
+              </div>
+            </form>
           </div>
         )}
       </div>

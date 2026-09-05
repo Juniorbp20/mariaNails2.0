@@ -15,7 +15,7 @@ export default function Header() {
     timer: ReturnType<typeof setTimeout> | null;
   }>({ count: 0, timer: null });
 
-  const businessName = profile.business_name || 'Maria Nails';
+  const businessName = profile.business_name || 'María Nails';
   const tagline = profile.tagline || 'Belleza en tus manos';
   const initials =
     businessName
@@ -82,13 +82,13 @@ export default function Header() {
               Inicio
             </Link>
             <Link to="/sobre-mi" className="text-gray-700 hover:text-pink-600 font-medium transition">
-              Sobre mi
+              Sobre mí
             </Link>
             <Link to="/servicios" className="text-gray-700 hover:text-pink-600 font-medium transition">
               Servicios
             </Link>
             <Link to="/galeria" className="text-gray-700 hover:text-pink-600 font-medium transition">
-              Galeria
+              Galería
             </Link>
             <Link
               to="/reserva"
@@ -100,6 +100,8 @@ export default function Header() {
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}
+            aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+            aria-expanded={menuOpen}
             className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition"
           >
             {menuOpen ? <X className="w-6 h-6 text-gray-700" /> : <Menu className="w-6 h-6 text-gray-700" />}
@@ -120,7 +122,7 @@ export default function Header() {
               className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition"
               onClick={() => setMenuOpen(false)}
             >
-              Sobre mi
+              Sobre mí
             </Link>
             <Link
               to="/servicios"
@@ -134,7 +136,7 @@ export default function Header() {
               className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition"
               onClick={() => setMenuOpen(false)}
             >
-              Galeria
+              Galería
             </Link>
             <Link
               to="/reserva"

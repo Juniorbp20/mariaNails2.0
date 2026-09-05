@@ -1,19 +1,25 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import ConfigBanner from './components/ConfigBanner';
+import ScrollToTop from './components/ScrollToTop';
+import WhatsAppFloat from './components/WhatsAppFloat';
 import Home from './pages/Home';
 import Services from './pages/Services';
 import Gallery from './pages/Gallery';
 import Booking from './pages/Booking';
 import About from './pages/About';
 import AdminDashboard from './pages/AdminDashboard';
+import NotFound from './pages/NotFound';
 import { BusinessProfileProvider } from './contexts/BusinessProfileContext';
 
 function App() {
   return (
     <BrowserRouter>
       <BusinessProfileProvider>
+        <ScrollToTop />
         <div className="flex flex-col min-h-screen bg-white">
+          <ConfigBanner />
           <Header />
           <main className="flex-grow">
             <Routes>
@@ -23,9 +29,11 @@ function App() {
               <Route path="/reserva" element={<Booking />} />
               <Route path="/sobre-mi" element={<About />} />
               <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
           <Footer />
+          <WhatsAppFloat />
         </div>
       </BusinessProfileProvider>
     </BrowserRouter>

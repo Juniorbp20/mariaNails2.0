@@ -38,7 +38,10 @@ export default function Calendar({ onDateSelect, blockedDates, minDate = new Dat
   };
 
   const handlePrevMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
+    const prev = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1);
+    const minMonth = new Date(minDateOnly.getFullYear(), minDateOnly.getMonth());
+    if (prev < minMonth) return;
+    setCurrentDate(prev);
   };
 
   const handleNextMonth = () => {
@@ -105,18 +108,20 @@ export default function Calendar({ onDateSelect, blockedDates, minDate = new Dat
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-bold text-gray-900">
+        <h3 className="text-lg font-bold text-gray-900 capitalize">
           {currentDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}
         </h3>
         <div className="flex space-x-2">
           <button
             onClick={handlePrevMonth}
-            className="p-2 hover:bg-gray-100 rounded-lg transition"
+            aria-label="Mes anterior"
+            className="p-2 hover:bg-gray-100 rounded-lg transition disabled:opacity-40"
           >
             <ChevronLeft className="w-5 h-5 text-gray-700" />
           </button>
           <button
             onClick={handleNextMonth}
+            aria-label="Mes siguiente"
             className="p-2 hover:bg-gray-100 rounded-lg transition"
           >
             <ChevronRight className="w-5 h-5 text-gray-700" />

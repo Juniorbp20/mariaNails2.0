@@ -23,9 +23,9 @@ function WhatsAppIcon({ className }: { className?: string }) {
 export default function Footer() {
   const { profile } = useBusinessProfile();
 
-  const businessName = profile.business_name || 'Maria Nails';
-  const footerDescription = profile.footer_description || 'Manicura, pedicura y unas acrilicas con atencion profesional.';
-  const addressLine1 = profile.address_line_1 || 'Direccion no configurada';
+  const businessName = profile.business_name || 'María Nails';
+  const footerDescription = profile.footer_description || 'Manicura, pedicura y uñas acrílicas con atención profesional.';
+  const addressLine1 = profile.address_line_1 || 'Dirección no configurada';
   const addressLine2 = profile.address_line_2 || '';
   const phone = profile.contact_phone || DEFAULT_PHONE;
   const mapsUrl = profile.maps_url;
@@ -42,7 +42,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-lg font-bold mb-4">Ubicacion</h3>
+            <h3 className="text-lg font-bold mb-4">Ubicación</h3>
             <div className="flex items-start space-x-3 mb-4">
               <MapPin className="w-5 h-5 text-pink-500 flex-shrink-0 mt-1" />
               <div>
@@ -72,17 +72,20 @@ export default function Footer() {
               <div className="flex items-center space-x-3">
                 <Clock className="w-5 h-5 text-pink-500" />
                 <div className="text-gray-300 text-sm">
-                  <p>Lun-Sab: 9am - 6pm</p>
+                  <p>Lun–Sáb: 9am - 6pm</p>
                   <p className="text-gray-400">Cerrado Dom y Mar</p>
                 </div>
               </div>
+              {profile.contact_email && (
+                <p className="text-gray-300 text-sm">{profile.contact_email}</p>
+              )}
             </div>
           </div>
         </div>
 
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <p className="text-gray-400 text-sm">&copy; 2026 {businessName}. Todos los derechos reservados.</p>
+            <p className="text-gray-400 text-sm">&copy; {new Date().getFullYear()} {businessName}. Todos los derechos reservados.</p>
             <div className="flex items-center gap-3">
               {instagramUrl && (
                 <a
