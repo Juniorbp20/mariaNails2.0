@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Award, Calendar, MapPin, Sparkles, Star } from 'lucide-react';
+import { Award, Calendar, Sparkles, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useBusinessProfile } from '../contexts/BusinessProfileContext';
 import { serviceService } from '../services/serviceService';
@@ -134,7 +134,7 @@ export default function Home() {
                 src={profile.profile_image_url}
                 alt={`${aboutTitle} — técnica de uñas`}
                 loading="lazy"
-                className="rounded-lg h-96 w-full object-cover border border-pink-200"
+                className="w-full h-auto max-h-[520px] object-contain rounded-lg border border-pink-200 bg-pink-50"
               />
             ) : (
               <div className="bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg h-96 flex items-center justify-center text-gray-400">
@@ -233,26 +233,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-gradient-to-r from-pink-600 to-red-500 py-16">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="mb-3 text-3xl font-bold text-white">¿Lista para unas uñas perfectas?</h2>
-          <p className="mb-8 text-pink-100">Elige tu servicio, fecha y hora. Te tomará menos de 2 minutos.</p>
-          <div className="flex flex-col sm:flex-row justify-center gap-3">
-            <Link
-              to="/reserva"
-              className="rounded-lg bg-white px-8 py-3 font-semibold text-pink-700 transition hover:shadow-xl"
-            >
-              Reservar ahora
-            </Link>
-            {profile.address_line_1 && (
-              <span className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-pink-100">
-                <MapPin className="h-4 w-4" aria-hidden="true" />
-                {profile.address_line_1}
-              </span>
-            )}
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

@@ -25,7 +25,7 @@ export default function About() {
             src={profile.profile_image_url}
             alt={`${aboutTitle} — técnica de uñas en ${businessName}`}
             loading="lazy"
-            className="w-full h-80 object-cover rounded-lg border border-pink-200 mb-8"
+            className="w-full h-auto max-h-[520px] object-contain rounded-lg border border-pink-200 bg-pink-50 mb-8"
           />
         )}
 
