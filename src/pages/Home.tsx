@@ -80,7 +80,6 @@ export default function Home() {
                 <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" aria-hidden="true" />
               ))}
             </span>
-            <span>+200 clientas felices nos recomiendan</span>
           </div>
         </div>
       </section>
