@@ -1,28 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Award, Calendar, Sparkles, Star } from 'lucide-react';
+import { Award, Calendar, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useBusinessProfile } from '../contexts/BusinessProfileContext';
 import { serviceService } from '../services/serviceService';
 import type { Service } from '../types';
 import { formatPrice } from '../utils/format';
-
-const TESTIMONIALS = [
-  {
-    name: 'Carolina M.',
-    text: 'El mejor servicio de uñas que he probado. Mis acrílicas duraron perfectas por semanas. ¡Volveré siempre!',
-    rating: 5,
-  },
-  {
-    name: 'Yohanna P.',
-    text: 'Reservé en línea en menos de un minuto y me atendieron puntual. La pedicura spa es increíble.',
-    rating: 5,
-  },
-  {
-    name: 'Daniela R.',
-    text: 'Diseños preciosos y atención muy profesional. Se nota la experiencia y la calidad de los productos.',
-    rating: 5,
-  },
-];
 
 export default function Home() {
   const { profile } = useBusinessProfile();
@@ -212,26 +194,6 @@ export default function Home() {
           </div>
         </section>
       )}
-
-      <section className="py-20 bg-gray-50" aria-label="Opiniones de clientas">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">Lo que dicen nuestras clientas</h2>
-          <p className="text-center text-gray-600 mb-12">La confianza se gana trabajo a trabajo.</p>
-          <div className="grid md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((t) => (
-              <figure key={t.name} className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-                <div className="mb-3 flex gap-1" aria-label={`${t.rating} estrellas`}>
-                  {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" aria-hidden="true" />
-                  ))}
-                </div>
-                <blockquote className="mb-4 text-gray-700 leading-relaxed">“{t.text}”</blockquote>
-                <figcaption className="font-semibold text-gray-900">— {t.name}</figcaption>
-              </figure>
-            ))}
-          </div>
-        </div>
-      </section>
 
     </div>
   );
