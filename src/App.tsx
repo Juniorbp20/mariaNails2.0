@@ -9,6 +9,7 @@ import Services from './pages/Services';
 import Gallery from './pages/Gallery';
 import Booking from './pages/Booking';
 import About from './pages/About';
+import PriceCatalog from './pages/PriceCatalog';
 import AdminDashboard from './pages/AdminDashboard';
 import NotFound from './pages/NotFound';
 import { BusinessProfileProvider } from './contexts/BusinessProfileContext';
@@ -28,6 +29,7 @@ function App() {
               <Route path="/galeria" element={<Gallery />} />
               <Route path="/reserva" element={<Booking />} />
               <Route path="/sobre-mi" element={<About />} />
+              <Route path="/precios" element={<PriceCatalog />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

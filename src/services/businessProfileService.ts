@@ -8,7 +8,7 @@ type UploadResult = {
   path: string;
 };
 
-export type BrandingAssetKind = 'logo' | 'profile';
+export type BrandingAssetKind = 'logo' | 'profile' | 'catalog';
 
 export type BusinessProfileUpdateInput = Partial<
   Pick<
@@ -158,20 +158,31 @@ export const businessProfileService = {
     const profile = await this.getBusinessProfile();
     const upload = await this.uploadBrandingAsset(file, kind);
 
-    const isLogo = kind === 'logo';
-    const previousPath = isLogo ? profile.logo_storage_path : profile.profile_image_storage_path;
+    const previousPath =
+      kind === 'logo'
+        ? profile.logo_storage_path
+        : kind === 'profile'
+          ? profile.profile_image_storage_path
+          : profile.price_catalog_storage_path;
 
-    const updatePayload = isLogo
-      ? {
-          logo_url: upload.publicUrl,
-          logo_storage_path: upload.path,
-          updated_at: new Date().toISOString(),
-        }
-      : {
-          profile_image_url: upload.publicUrl,
-          profile_image_storage_path: upload.path,
-          updated_at: new Date().toISOString(),
-        };
+    const updatePayload =
+      kind === 'logo'
+        ? {
+            logo_url: upload.publicUrl,
+            logo_storage_path: upload.path,
+            updated_at: new Date().toISOString(),
+          }
+        : kind === 'profile'
+          ? {
+              profile_image_url: upload.publicUrl,
+              profile_image_storage_path: upload.path,
+              updated_at: new Date().toISOString(),
+            }
+          : {
+              price_catalog_url: upload.publicUrl,
+              price_catalog_storage_path: upload.path,
+              updated_at: new Date().toISOString(),
+            };
 
     const { data, error } = await supabase
       .from('business_profile')
@@ -184,6 +195,45 @@ export const businessProfileService = {
       await this.removeBrandingAsset(upload.path).catch(() => undefined);
       throw error;
     }
+
+    await this.removeBrandingAsset(previousPath).catch(() => undefined);
+
+    return data;
+  },
+
+  async clearBrandingAsset(kind: BrandingAssetKind): Promise<BusinessProfile> {
+    const profile = await this.getBusinessProfile();
+
+    const previousPath =
+      kind === 'logo'
+        ? profile.logo_storage_path
+        : kind === 'profile'
+          ? profile.profile_image_storage_path
+          : profile.price_catalog_storage_path;
+
+    const updatePayload =
+      kind === 'logo'
+        ? { logo_url: null, logo_storage_path: null, updated_at: new Date().toISOString() }
+        : kind === 'profile'
+          ? {
+              profile_image_url: null,
+              profile_image_storage_path: null,
+              updated_at: new Date().toISOString(),
+            }
+          : {
+              price_catalog_url: null,
+              price_catalog_storage_path: null,
+              updated_at: new Date().toISOString(),
+            };
+
+    const { data, error } = await supabase
+      .from('business_profile')
+      .update(updatePayload)
+      .eq('id', profile.id)
+      .select('*')
+      .single();
+
+    if (error) throw error;
 
     await this.removeBrandingAsset(previousPath).catch(() => undefined);
 

@@ -86,6 +86,8 @@ export interface BusinessProfile {
   logo_storage_path: string | null;
   profile_image_url: string | null;
   profile_image_storage_path: string | null;
+  price_catalog_url: string | null;
+  price_catalog_storage_path: string | null;
   created_at: string;
   updated_at: string;
 }

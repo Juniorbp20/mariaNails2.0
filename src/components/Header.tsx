@@ -90,6 +90,9 @@ export default function Header() {
             <Link to="/galeria" className="text-gray-700 hover:text-pink-600 font-medium transition">
               Galería
             </Link>
+            <Link to="/precios" className="text-gray-700 hover:text-pink-600 font-medium transition">
+              Precios
+            </Link>
             <Link
               to="/reserva"
               className="px-4 py-2 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-lg font-medium hover:shadow-lg transition"
@@ -137,6 +140,13 @@ export default function Header() {
               onClick={() => setMenuOpen(false)}
             >
               Galería
+            </Link>
+            <Link
+              to="/precios"
+              className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition"
+              onClick={() => setMenuOpen(false)}
+            >
+              Precios
             </Link>
             <Link
               to="/reserva"

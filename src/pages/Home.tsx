@@ -74,13 +74,6 @@ export default function Home() {
               Ver trabajos
             </Link>
           </div>
-          <div className="mt-6 flex items-center justify-center gap-2 text-sm text-gray-600">
-            <span className="flex" aria-label="Calificación 5 de 5">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" aria-hidden="true" />
-              ))}
-            </span>
-          </div>
         </div>
       </section>
 
@@ -196,6 +189,29 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {profile.price_catalog_url && (
+        <section className="py-20 bg-white" aria-label="Catálogo de precios">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Catálogo de precios</h2>
+            <p className="text-gray-600 mb-8">Consulta todos nuestros precios de un vistazo.</p>
+            <Link to="/precios" className="block overflow-hidden rounded-lg border border-pink-200 shadow-lg transition hover:shadow-xl">
+              <img
+                src={profile.price_catalog_url}
+                alt={`Catálogo de precios de ${businessName}`}
+                loading="lazy"
+                className="max-h-[480px] w-full object-cover object-top"
+              />
+            </Link>
+            <Link
+              to="/precios"
+              className="mt-6 inline-block rounded-lg bg-gradient-to-r from-pink-500 to-red-500 px-8 py-3 font-semibold text-white transition hover:shadow-lg"
+            >
+              Ver catálogo completo
+            </Link>
+          </div>
+        </section>
+      )}
 
       <section className="py-20 bg-gray-50" aria-label="Opiniones de clientas">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

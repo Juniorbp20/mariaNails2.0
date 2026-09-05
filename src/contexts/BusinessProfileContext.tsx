@@ -31,6 +31,8 @@ const DEFAULT_PROFILE: BusinessProfile = {
   logo_storage_path: null,
   profile_image_url: null,
   profile_image_storage_path: null,
+  price_catalog_url: null,
+  price_catalog_storage_path: null,
   created_at: '',
   updated_at: '',
 };

@@ -173,6 +173,7 @@ export default function AdminDashboard() {
   const [uploadDescription, setUploadDescription] = useState('');
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [profilePhotoFile, setProfilePhotoFile] = useState<File | null>(null);
+  const [catalogFile, setCatalogFile] = useState<File | null>(null);
   const [editingImage, setEditingImage] = useState<GalleryImage | null>(null);
   const [editImageTitle, setEditImageTitle] = useState('');
   const [editImageDescription, setEditImageDescription] = useState('');
@@ -595,11 +596,17 @@ export default function AdminDashboard() {
     }
   };
 
-  const uploadBrandAsset = async (kind: 'logo' | 'profile') => {
+  const uploadBrandAsset = async (kind: 'logo' | 'profile' | 'catalog') => {
     clearMessages();
-    const selectedFile = kind === 'logo' ? logoFile : profilePhotoFile;
+    const selectedFile = kind === 'logo' ? logoFile : kind === 'profile' ? profilePhotoFile : catalogFile;
     if (!selectedFile) {
-      fail(kind === 'logo' ? 'Selecciona un archivo para el logo.' : 'Selecciona un archivo para la foto de perfil.');
+      fail(
+        kind === 'logo'
+          ? 'Selecciona un archivo para el logo.'
+          : kind === 'profile'
+            ? 'Selecciona un archivo para la foto de perfil.'
+            : 'Selecciona una imagen para el catálogo de precios.'
+      );
       return;
     }
 
@@ -610,9 +617,31 @@ export default function AdminDashboard() {
       applyProfile(updated);
       if (kind === 'logo') setLogoFile(null);
       if (kind === 'profile') setProfilePhotoFile(null);
-      ok(kind === 'logo' ? 'Logo actualizado.' : 'Foto de perfil actualizada.');
+      if (kind === 'catalog') setCatalogFile(null);
+      ok(
+        kind === 'logo'
+          ? 'Logo actualizado.'
+          : kind === 'profile'
+            ? 'Foto de perfil actualizada.'
+            : 'Catálogo de precios actualizado.'
+      );
     } catch (err) {
       fail('No se pudo subir el archivo de branding.', err);
+    }
+  };
+
+  const removeBrandAsset = async (kind: 'logo' | 'profile' | 'catalog') => {
+    const label = kind === 'logo' ? 'logo' : kind === 'profile' ? 'foto de perfil' : 'catálogo de precios';
+    if (!window.confirm(`Quitar ${label}?`)) return;
+    clearMessages();
+    try {
+      const updated = await businessProfileService.clearBrandingAsset(kind);
+      setBusinessProfile(updated);
+      setBusinessForm(mapBusinessProfileToForm(updated));
+      applyProfile(updated);
+      ok(`${label[0].toUpperCase()}${label.slice(1)} eliminado.`);
+    } catch (err) {
+      fail('No se pudo eliminar el archivo.', err);
     }
   };
 
@@ -1087,7 +1116,7 @@ export default function AdminDashboard() {
 
         {!loading && activeTab === 'business' && (
           <div className="space-y-6">
-            <div className="grid lg:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <h2 className="text-lg font-bold text-gray-900 mb-4">Logo del negocio</h2>
                 {businessProfile?.logo_url ? (
@@ -1142,6 +1171,48 @@ export default function AdminDashboard() {
                 >
                   Subir foto de perfil
                 </button>
+              </div>
+
+              <div className="bg-white border border-gray-200 rounded-lg p-6">
+                <h2 className="text-lg font-bold text-gray-900 mb-4">Catálogo de precios</h2>
+                {businessProfile?.price_catalog_url ? (
+                  <img
+                    src={businessProfile.price_catalog_url}
+                    alt="Catálogo de precios actual"
+                    className="w-full h-40 object-cover object-top rounded-lg border border-pink-200 mb-4"
+                  />
+                ) : (
+                  <div className="w-full h-40 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-500 mb-4">
+                    Sin catálogo
+                  </div>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => setCatalogFile(event.target.files?.[0] ?? null)}
+                  className="w-full text-sm mb-3"
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => uploadBrandAsset('catalog')}
+                    className="flex-1 px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+                  >
+                    Subir catálogo
+                  </button>
+                  {businessProfile?.price_catalog_url && (
+                    <button
+                      type="button"
+                      onClick={() => removeBrandAsset('catalog')}
+                      className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200"
+                    >
+                      Quitar
+                    </button>
+                  )}
+                </div>
+                <p className="mt-3 text-xs text-gray-500">
+                  Se muestra en la página de Precios y en el inicio. Sube una imagen con todos tus servicios y precios.
+                </p>
               </div>
             </div>
 
