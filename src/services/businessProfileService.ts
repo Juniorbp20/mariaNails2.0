@@ -27,6 +27,7 @@ export type BusinessProfileUpdateInput = Partial<
     | 'address_line_2'
     | 'maps_url'
     | 'instagram_url'
+    | 'payment_details'
   >
 >;
 
@@ -76,6 +77,8 @@ const sanitizeUpdates = (updates: BusinessProfileUpdateInput): Record<string, st
   if (updates.address_line_2 !== undefined) payload.address_line_2 = toNullableText(updates.address_line_2);
   if (updates.maps_url !== undefined) payload.maps_url = toNullableText(updates.maps_url);
   if (updates.instagram_url !== undefined) payload.instagram_url = toNullableText(updates.instagram_url);
+  if (updates.payment_details !== undefined)
+    payload.payment_details = toNullableText(updates.payment_details);
 
   return payload;
 };

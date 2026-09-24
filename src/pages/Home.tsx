@@ -5,20 +5,21 @@ import { useBusinessProfile } from '../contexts/BusinessProfileContext';
 import { serviceService } from '../services/serviceService';
 import type { Service } from '../types';
 import { formatPrice } from '../utils/format';
+import { BUSINESS_INFO, COURTESIES } from '../data/officialCatalog';
 
 export default function Home() {
   const { profile } = useBusinessProfile();
   const [services, setServices] = useState<Service[]>([]);
 
-  const businessName = profile.business_name || 'María Nails';
+  const businessName = profile.business_name || BUSINESS_INFO.name;
   const heroTitle = profile.hero_title || `Bienvenida a ${businessName}`;
   const heroSubtitle =
     profile.hero_subtitle ||
-    'Especialista en manicura, pedicura y uñas acrílicas con atención profesional y experiencia.';
-  const aboutTitle = profile.about_title || 'Sobre María';
+    'Manicurista profesional: manicura, gel, pedicura spa y acrílico del #1 al #8. Solo con cita previa.';
+  const aboutTitle = profile.about_title || 'Sobre María Bonifacio';
   const aboutDescription =
     profile.about_description ||
-    'Técnica en uñas con experiencia, dedicada a realzar la belleza de tus manos y pies.';
+    'Soy María Bonifacio, técnica en manicura completa y pedicura.';
 
   const aboutParagraphs = aboutDescription
     .split('\n')
@@ -37,10 +38,13 @@ export default function Home() {
       <section className="bg-gradient-to-br from-pink-50 to-red-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="mb-3 inline-block rounded-full bg-white/70 px-4 py-1 text-sm font-medium text-pink-700 border border-pink-200">
-            ✨ Reserva en línea · Confirmación inmediata
+            ✨ Reserva en línea · Solo con cita previa · {BUSINESS_INFO.phoneDisplay}
           </p>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{heroTitle}</h1>
-          <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">{heroSubtitle}</p>
+          <p className="text-lg text-gray-700 mb-4 max-w-2xl mx-auto">{heroSubtitle}</p>
+          <p className="text-sm text-purple-700 mb-8">
+            ☕ Coffee bar de cortesía: {COURTESIES.join(' · ')} · 📍 {BUSINESS_INFO.addressLine1}
+          </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               to="/reserva"
@@ -68,23 +72,23 @@ export default function Home() {
                 <Award className="w-8 h-8 text-pink-600" aria-hidden="true" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Experiencia profesional</h3>
-              <p className="text-gray-600">Técnica profesional con amplia trayectoria en el arte de las uñas.</p>
+              <p className="text-gray-600">María Bonifacio, técnica en manicura completa y pedicura.</p>
             </div>
 
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-pink-100 to-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Sparkles className="w-8 h-8 text-pink-600" aria-hidden="true" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Calidad premium</h3>
-              <p className="text-gray-600">Productos de primera calidad y técnicas modernas.</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Coffee bar de cortesía</h3>
+              <p className="text-gray-600">Café, tés, jugos y galletitas gratis en tu cita.</p>
             </div>
 
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-pink-100 to-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Calendar className="w-8 h-8 text-pink-600" aria-hidden="true" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Reservas fáciles</h3>
-              <p className="text-gray-600">Sistema de reservas en línea disponible 24/7 para tu comodidad.</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Solo con cita previa</h3>
+              <p className="text-gray-600">Reserva por WhatsApp al {BUSINESS_INFO.phoneDisplay} con anticipación.</p>
             </div>
           </div>
         </div>
@@ -130,7 +134,11 @@ export default function Home() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">Nuestros Servicios</h2>
-          <p className="text-center text-gray-600 mb-12">Precios claros, sin sorpresas. Elige y reserva en segundos.</p>
+          <p className="text-center text-gray-600 mb-2">Precios oficiales en RD$, sin sorpresas. Elige y reserva en segundos.</p>
+          <p className="text-center text-sm text-purple-700 mb-12">
+            Manicura desde RD$250 · Gel desde RD$450 · Pedicura RD$1,234 · Acrílico #1-#8 ·{' '}
+            <a href="/precios" className="font-semibold underline">Ver tabla completa</a>
+          </p>
           <div className="grid md:grid-cols-2 gap-6 mb-8">
             {services.length > 0
               ? services.map((service) => (
@@ -149,10 +157,10 @@ export default function Home() {
                   </Link>
                 ))
               : [
-                  { name: 'Sistema de Acrílico', desc: 'Extensiones resistentes y duraderas con acabado perfecto.' },
-                  { name: 'Sistema de Gel', desc: 'Brillo intenso y mayor resistencia. Ideal para un look elegante.' },
-                  { name: 'Manicura', desc: 'Cuidado completo de manos con esmaltado profesional.' },
-                  { name: 'Pedicura', desc: 'Tratamiento spa con exfoliación, masaje y esmaltado.' },
+                  { name: 'Manicura en Seco desde RD$250', desc: 'Retiro de cutículas con drill + hidratación.' },
+                  { name: 'Pedicura completa RD$1,234', desc: '3 horas spa con exfoliación y coffee bar.' },
+                  { name: 'Acrílico #1-#8', desc: '6 estilos: Pintura, Cover, French, Gel, Baby Boomer, Full Set.' },
+                  { name: 'Sistemas en Gel desde RD$1,234', desc: 'Rubber, Acry y Builder Gel de larga duración.' },
                 ].map((s) => (
                   <div key={s.name} className="bg-gradient-to-br from-pink-50 to-red-50 rounded-lg p-6 border border-pink-200">
                     <h3 className="text-xl font-bold text-gray-900 mb-2">{s.name}</h3>

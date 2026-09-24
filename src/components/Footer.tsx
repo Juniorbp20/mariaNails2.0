@@ -1,5 +1,6 @@
-import { Clock, Instagram, MapPin, Phone } from 'lucide-react';
+import { Clock, CreditCard, Instagram, MapPin, Phone } from 'lucide-react';
 import { useBusinessProfile } from '../contexts/BusinessProfileContext';
+import { BUSINESS_INFO, COURTESIES } from '../data/officialCatalog';
 
 const DEFAULT_PHONE = '+1 829 338 8282';
 
@@ -23,13 +24,18 @@ function WhatsAppIcon({ className }: { className?: string }) {
 export default function Footer() {
   const { profile } = useBusinessProfile();
 
-  const businessName = profile.business_name || 'María Nails';
-  const footerDescription = profile.footer_description || 'Manicura, pedicura y uñas acrílicas con atención profesional.';
-  const addressLine1 = profile.address_line_1 || 'Dirección no configurada';
-  const addressLine2 = profile.address_line_2 || '';
+  const businessName = profile.business_name || BUSINESS_INFO.name;
+  const footerDescription =
+    profile.footer_description ||
+    'Manicura, gel, pedicura spa y acrílico con atención profesional de María Bonifacio. Solo con cita previa.';
+  const addressLine1 = profile.address_line_1 || BUSINESS_INFO.addressLine1;
+  const addressLine2 = profile.address_line_2 || BUSINESS_INFO.addressLine2;
   const phone = profile.contact_phone || DEFAULT_PHONE;
   const mapsUrl = profile.maps_url;
   const instagramUrl = profile.instagram_url;
+  const paymentDetails =
+    profile.payment_details ||
+    `Efectivo. Transferencia ${BUSINESS_INFO.bank} ${BUSINESS_INFO.bankAccount} (${BUSINESS_INFO.bankHolder})`;
   const whatsappUrl = toWhatsappUrl(profile.contact_whatsapp || profile.contact_phone);
 
   return (
@@ -38,7 +44,10 @@ export default function Footer() {
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
             <h3 className="text-xl font-bold mb-4">{businessName}</h3>
-            <p className="text-gray-400">{footerDescription}</p>
+            <p className="text-gray-400 text-sm">{footerDescription}</p>
+            <p className="mt-3 text-xs text-purple-300">
+              ☕ Cortesía: {COURTESIES.join(' · ')}
+            </p>
           </div>
 
           <div>
@@ -63,17 +72,21 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-lg font-bold mb-4">Contacto</h3>
+            <h3 className="text-lg font-bold mb-4">Contacto y Pagos</h3>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-pink-500" />
-                <span className="text-gray-300">{phone}</span>
+                <span className="text-gray-300">{phone} · WhatsApp citas</span>
+              </div>
+              <div className="flex items-start space-x-3">
+                <CreditCard className="w-5 h-5 text-pink-500 flex-shrink-0 mt-0.5" />
+                <p className="text-gray-300 text-sm">{paymentDetails}</p>
               </div>
               <div className="flex items-center space-x-3">
                 <Clock className="w-5 h-5 text-pink-500" />
                 <div className="text-gray-300 text-sm">
-                  <p>Lun–Sáb: 9am - 6pm</p>
-                  <p className="text-gray-400">Cerrado Dom y Mar</p>
+                  <p>Solo con cita previa</p>
+                  <p className="text-gray-400">Cancela sin costo 24h antes · Tolerancia 15 min</p>
                 </div>
               </div>
               {profile.contact_email && (

@@ -4,6 +4,7 @@ import Footer from './components/Footer';
 import ConfigBanner from './components/ConfigBanner';
 import ScrollToTop from './components/ScrollToTop';
 import WhatsAppFloat from './components/WhatsAppFloat';
+import AIAssistant from './components/AIAssistant';
 import Home from './pages/Home';
 import Services from './pages/Services';
 import Gallery from './pages/Gallery';
@@ -36,6 +37,7 @@ function App() {
           </main>
           <Footer />
           <WhatsAppFloat />
+          <AIAssistant />
         </div>
       </BusinessProfileProvider>
     </BrowserRouter>

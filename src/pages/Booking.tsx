@@ -9,6 +9,7 @@ import { serviceService } from '../services/serviceService';
 import type { BookingFormData, Service } from '../types';
 import { parseLocalDateString } from '../utils/dateUtils';
 import { formatDuration, formatPrice, isValidEmail, isValidPhone } from '../utils/format';
+import { BUSINESS_INFO, POLICIES } from '../data/officialCatalog';
 
 type BookingStep = 'service' | 'date' | 'time' | 'contact' | 'confirmation';
 
@@ -147,7 +148,19 @@ export default function Booking() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-red-50 py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-12 text-center">Reserva tu cita</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-4 text-center">Reserva tu cita 💅</h1>
+        <p className="text-center text-gray-600 mb-4">
+          Hola mi amor 💜 Solo con cita previa · WhatsApp {BUSINESS_INFO.phoneDisplay}
+        </p>
+        <div className="mb-8 rounded-xl border border-purple-200 bg-white/80 p-4 text-sm text-gray-700 space-y-1">
+          <p>💬 {POLICIES.bookingChannel}</p>
+          <p>🕒 {POLICIES.cancellation}</p>
+          <p>⏰ {POLICIES.punctuality}</p>
+          <p>
+            📍 {BUSINESS_INFO.addressLine1} ({BUSINESS_INFO.addressLine2})
+          </p>
+          <p>☕ Coffee bar de cortesía en tu cita: café, té, jugos y galletitas.</p>
+        </div>
 
         <div className="mb-12 bg-white rounded-lg p-6 border border-gray-200">
           <div className="flex items-center justify-between">
@@ -401,16 +414,28 @@ export default function Booking() {
             )}
 
             <p className="text-gray-600 mb-6">
-              Si necesitas cancelar o reprogramar, contactanos por WhatsApp:{' '}
+              Si necesitas cancelar o reprogramar, contáctanos por WhatsApp (recuerda: sin costo
+              cancelando 24h antes):{' '}
               <a
-                href="https://wa.me/+18293388282"
+                href="https://wa.me/18293388282"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-pink-600 font-semibold"
               >
-                +1 829 338 8282
+                {BUSINESS_INFO.phoneInternational}
               </a>
             </p>
+            <div className="mb-6 rounded-xl border border-purple-200 bg-purple-50 p-4 text-left text-sm text-gray-700">
+              <p className="font-semibold text-gray-900 mb-1">Para tu visita 💜</p>
+              <p>
+                📍 {BUSINESS_INFO.addressLine1} ({BUSINESS_INFO.addressLine2})
+              </p>
+              <p>
+                💳 Efectivo o transferencia {BUSINESS_INFO.bank} {BUSINESS_INFO.bankAccount} a
+                nombre de {BUSINESS_INFO.bankHolder}.
+              </p>
+              <p>☕ Te esperamos con cafecito, té, jugos y galletitas de cortesía.</p>
+            </div>
 
             <button
               onClick={handleNewBooking}

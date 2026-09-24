@@ -52,6 +52,7 @@ type BusinessProfileForm = {
   address_line_2: string;
   maps_url: string;
   instagram_url: string;
+  payment_details: string;
 };
 
 const DAYS: Record<number, string> = {
@@ -123,6 +124,7 @@ const mapBusinessProfileToForm = (profile: BusinessProfile): BusinessProfileForm
   address_line_2: profile.address_line_2 || '',
   maps_url: profile.maps_url || '',
   instagram_url: profile.instagram_url || '',
+  payment_details: profile.payment_details || '',
 });
 
 export default function AdminDashboard() {
@@ -160,6 +162,7 @@ export default function AdminDashboard() {
     address_line_2: '',
     maps_url: '',
     instagram_url: '',
+    payment_details: '',
   });
 
   const [serviceForm, setServiceForm] = useState<ServiceForm>(createEmptyServiceForm());
@@ -585,6 +588,7 @@ export default function AdminDashboard() {
         address_line_2: businessForm.address_line_2,
         maps_url: businessForm.maps_url,
         instagram_url: businessForm.instagram_url,
+        payment_details: businessForm.payment_details,
       });
 
       setBusinessProfile(updated);
@@ -876,9 +880,21 @@ export default function AdminDashboard() {
                   value={serviceForm.category}
                   onChange={(event) => setServiceForm((prev) => ({ ...prev, category: event.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Categoría"
+                  placeholder="Categoría: Manicura, Gel, Pedicura, Acrílico, Nail Art"
                   required
+                  list="official-categories"
                 />
+                <datalist id="official-categories">
+                  <option value="Manicura" />
+                  <option value="Gel" />
+                  <option value="Pedicura" />
+                  <option value="Acrílico" />
+                  <option value="Nail Art" />
+                </datalist>
+                <p className="text-xs text-gray-500">
+                  Para acrílico usa formato oficial: “Acrílico Cover Liso #4”, categoría Acrílico.
+                  Precios oficiales #1-#8 en catálogo.
+                </p>
                 <label className="flex items-center gap-2 text-sm text-gray-700">
                   <input
                     type="checkbox"
@@ -1343,6 +1359,18 @@ export default function AdminDashboard() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                   placeholder="URL de Google Maps"
                 />
+
+                <textarea
+                  value={businessForm.payment_details}
+                  onChange={(event) => patchBusinessForm({ payment_details: event.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  rows={2}
+                  placeholder="Métodos de pago: Efectivo, Banreservas 9605474442 María Bonifacio..."
+                />
+                <p className="text-xs text-gray-500">
+                  Oficial: Efectivo en el local · Banreservas 9605474442 a nombre de María Bonifacio.
+                  Se muestra en footer, precios y reserva.
+                </p>
 
                 <div>
                   <button type="submit" className="px-6 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700">

@@ -1,5 +1,6 @@
 import { useBusinessProfile } from '../contexts/BusinessProfileContext';
 import { toWhatsAppUrl } from '../utils/format';
+import { BUSINESS_INFO } from '../data/officialCatalog';
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
@@ -11,18 +12,22 @@ function WhatsAppIcon({ className }: { className?: string }) {
 
 export default function WhatsAppFloat() {
   const { profile } = useBusinessProfile();
-  const url = toWhatsAppUrl(profile.contact_whatsapp || profile.contact_phone || '+18293388282');
+  const url = toWhatsAppUrl(
+    profile.contact_whatsapp || profile.contact_phone || BUSINESS_INFO.whatsappUrl,
+  );
   if (!url) return null;
 
   const withText = url.includes('?') ? `${url}&text=` : `${url}?text=`;
-  const href = `${withText}${encodeURIComponent('Hola, quiero reservar una cita en María Nails 💅')}`;
+  const href = `${withText}${encodeURIComponent(
+    'Hola María 💅✨ Quiero reservar mi cita en Maria Nails Studio & Pedicure. Mi nombre es: ___. Quedo atenta, ¡gracias!',
+  )}`;
 
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Escríbenos por WhatsApp"
+      aria-label="Escríbenos por WhatsApp al 829-338-8282"
       title="Escríbenos por WhatsApp"
       className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500 text-white shadow-xl shadow-emerald-500/30 transition hover:-translate-y-1 hover:bg-emerald-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300"
     >

@@ -1,14 +1,15 @@
 import { Heart, Users, Zap } from 'lucide-react';
 import { useBusinessProfile } from '../contexts/BusinessProfileContext';
+import { BUSINESS_INFO, COURTESIES } from '../data/officialCatalog';
 
 export default function About() {
   const { profile } = useBusinessProfile();
 
-  const businessName = profile.business_name || 'María Nails';
-  const aboutTitle = profile.about_title || 'Sobre María';
+  const businessName = profile.business_name || BUSINESS_INFO.name;
+  const aboutTitle = profile.about_title || 'Sobre María Bonifacio';
   const aboutDescription =
     profile.about_description ||
-    'Técnica en uñas con experiencia, dedicada a ofrecer servicios personalizados y profesionales.';
+    'Soy María Bonifacio, manicurista profesional técnica en manicura completa y pedicura.';
 
   const paragraphs = aboutDescription
     .split('\n')
@@ -68,12 +69,19 @@ export default function About() {
         </div>
 
         <section aria-label="Contacto del salón">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Contacto del salón</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Contacto del salón 💜</h2>
           <div className="bg-white border border-gray-200 rounded-lg p-8 space-y-3">
+            <p className="text-gray-700">Profesional: {BUSINESS_INFO.professional} — {BUSINESS_INFO.professionalTitle}</p>
+            <p className="text-gray-700">WhatsApp citas: {BUSINESS_INFO.phoneDisplay} ({BUSINESS_INFO.phoneInternational})</p>
             {profile.contact_phone && <p className="text-gray-700">Teléfono: {profile.contact_phone}</p>}
             {profile.contact_email && <p className="text-gray-700">Email: {profile.contact_email}</p>}
-            {profile.address_line_1 && <p className="text-gray-700">Dirección: {profile.address_line_1}</p>}
-            {profile.address_line_2 && <p className="text-gray-700">{profile.address_line_2}</p>}
+            <p className="text-gray-700">Dirección: {profile.address_line_1 || BUSINESS_INFO.addressLine1}</p>
+            <p className="text-gray-700">{profile.address_line_2 || BUSINESS_INFO.addressLine2}</p>
+            <p className="text-gray-700">Modalidad: {BUSINESS_INFO.modality}</p>
+            <p className="text-gray-700">☕ Cortesías: {COURTESIES.join(', ')}</p>
+            <p className="text-gray-700">
+              💳 {profile.payment_details || `Efectivo. Transferencia ${BUSINESS_INFO.bank} ${BUSINESS_INFO.bankAccount} (${BUSINESS_INFO.bankHolder})`}
+            </p>
             {profile.maps_url && (
               <a
                 href={profile.maps_url}
