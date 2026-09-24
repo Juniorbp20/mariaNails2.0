@@ -1,3 +1,11 @@
+/**
+ * BusinessProfileContext.tsx — Perfil del negocio disponible en toda la app.
+ *
+ * Cómo se usa: <BusinessProfileProvider> envuelve la app en App.tsx y
+ * cualquier componente lee `const { profile } = useBusinessProfile()`.
+ * Carga una vez desde Supabase (con valores oficiales de respaldo) y
+ * /admin lo actualiza en vivo con applyProfile().
+ */
 import {
   createContext,
   useCallback,
@@ -10,6 +18,7 @@ import {
 import { businessProfileService } from '../services/businessProfileService';
 import type { BusinessProfile } from '../types';
 
+/** Valores oficiales que se ven si Supabase aún no responde. */
 const DEFAULT_PROFILE: BusinessProfile = {
   id: '',
   singleton: true,
@@ -42,6 +51,7 @@ const DEFAULT_PROFILE: BusinessProfile = {
   updated_at: '',
 };
 
+/** Lo que ofrece el contexto: perfil, estado de carga y recarga. */
 type BusinessProfileContextValue = {
   profile: BusinessProfile;
   loading: boolean;
@@ -51,6 +61,7 @@ type BusinessProfileContextValue = {
 
 const BusinessProfileContext = createContext<BusinessProfileContextValue | undefined>(undefined);
 
+/** Proveedor: envuelve la app y reparte el perfil a todos los componentes. */
 export function BusinessProfileProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<BusinessProfile>(DEFAULT_PROFILE);
   const [loading, setLoading] = useState(true);
@@ -82,6 +93,7 @@ export function BusinessProfileProvider({ children }: { children: ReactNode }) {
   return <BusinessProfileContext.Provider value={contextValue}>{children}</BusinessProfileContext.Provider>;
 }
 
+/** Atajo para leer el perfil en cualquier componente (debe usarse dentro del Provider). */
 export function useBusinessProfile() {
   const context = useContext(BusinessProfileContext);
   if (!context) {

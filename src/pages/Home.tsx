@@ -1,3 +1,10 @@
+/**
+ * Home.tsx — Página de inicio (/).
+ *
+ * Secciones: portada con reserva, 3 beneficios (experiencia María,
+ * coffee bar, cita previa), sobre María y vista previa de servicios
+ * con precios. Los textos salen del perfil (/admin) con respaldo oficial.
+ */
 import { useEffect, useState } from 'react';
 import { Award, Calendar, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -7,6 +14,7 @@ import type { Service } from '../types';
 import { formatPrice } from '../utils/format';
 import { BUSINESS_INFO, COURTESIES } from '../data/officialCatalog';
 
+/** Portada del negocio: hero, beneficios, sobre María y servicios destacados. */
 export default function Home() {
   const { profile } = useBusinessProfile();
   const [services, setServices] = useState<Service[]>([]);

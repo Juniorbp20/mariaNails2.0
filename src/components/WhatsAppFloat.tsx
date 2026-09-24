@@ -1,7 +1,14 @@
+/**
+ * WhatsAppFloat.tsx — Botón verde flotante (abajo-derecha) a WhatsApp.
+ *
+ * Qué hace: abre wa.me/18293388282 con un mensaje de reserva ya escrito.
+ * El número sale del perfil del negocio (/admin) o del oficial por defecto.
+ */
 import { useBusinessProfile } from '../contexts/BusinessProfileContext';
 import { toWhatsAppUrl } from '../utils/format';
 import { BUSINESS_INFO } from '../data/officialCatalog';
 
+/** Icono de WhatsApp dibujado en SVG (sin librerías externas). */
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
@@ -10,6 +17,7 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
+/** Botón flotante que abre WhatsApp con mensaje de reserva pre-llenado. */
 export default function WhatsAppFloat() {
   const { profile } = useBusinessProfile();
   const url = toWhatsAppUrl(

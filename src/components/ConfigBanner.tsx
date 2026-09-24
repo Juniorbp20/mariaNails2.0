@@ -1,5 +1,12 @@
+/**
+ * ConfigBanner.tsx — Aviso amarillo cuando falta el archivo .env.
+ *
+ * Solo aparece en desarrollo local sin credenciales de Supabase;
+ * en producción (con .env) no muestra nada.
+ */
 import { isSupabaseConfigured } from '../lib/supabase';
 
+/** Franja de alerta si Supabase no está configurado; null si todo está bien. */
 export default function ConfigBanner() {
   if (isSupabaseConfigured) return null;
   return (

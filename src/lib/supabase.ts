@@ -1,8 +1,16 @@
+/**
+ * supabase.ts — Conexión única a Supabase (BD + Storage + Auth).
+ *
+ * Lee VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY del .env. Si faltan,
+ * la app sigue abriendo en modo local con un aviso (ConfigBanner).
+ * Importa `supabase` desde aquí, nunca crees otro cliente.
+ */
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 
+/** True si hay credenciales; false → modo local con aviso amarillo. */
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseKey);
 
 if (!isSupabaseConfigured) {

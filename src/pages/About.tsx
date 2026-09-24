@@ -1,7 +1,14 @@
+/**
+ * About.tsx — Página /sobre-mi de María Bonifacio.
+ *
+ * Presenta a la profesional, sus valores (experiencia/pasión/comunidad)
+ * y un bloque de contacto con dirección, WhatsApp, pagos y cortesías.
+ */
 import { Heart, Users, Zap } from 'lucide-react';
 import { useBusinessProfile } from '../contexts/BusinessProfileContext';
 import { BUSINESS_INFO, COURTESIES } from '../data/officialCatalog';
 
+/** Perfil de María + valores + tarjeta de contacto del salón. */
 export default function About() {
   const { profile } = useBusinessProfile();
 

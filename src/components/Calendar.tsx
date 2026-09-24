@@ -1,14 +1,22 @@
+/**
+ * Calendar.tsx — Calendario mensual para elegir la fecha de la cita.
+ *
+ * Cómo funciona: carga los días laborables desde Supabase, bloquea el
+ * pasado + fechas cerradas por la admin, y avisa al padre con onDateSelect.
+ */
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { availabilityService } from '../services/availabilityService';
 import { toLocalDateString } from '../utils/dateUtils';
 
+/** Props: a quién avisar al elegir fecha, fechas bloqueadas y fecha mínima. */
 interface CalendarProps {
   onDateSelect: (date: string) => void;
   blockedDates: string[];
   minDate?: Date;
 }
 
+/** Calendario de reservas: solo deja elegir días laborables y futuros. */
 export default function Calendar({ onDateSelect, blockedDates, minDate = new Date() }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date(minDate));
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -29,14 +37,17 @@ export default function Calendar({ onDateSelect, blockedDates, minDate = new Dat
     loadAvailableDays();
   }, []);
 
+  /** Cuántos días trae el mes (28-31). */
   const getDaysInMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
 
+  /** En qué columna empieza el mes (0=domingo). */
   const getFirstDayOfMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
   };
 
+  /** Va al mes anterior (sin pasar del mes mínimo permitido). */
   const handlePrevMonth = () => {
     const prev = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1);
     const minMonth = new Date(minDateOnly.getFullYear(), minDateOnly.getMonth());
@@ -44,10 +55,12 @@ export default function Calendar({ onDateSelect, blockedDates, minDate = new Dat
     setCurrentDate(prev);
   };
 
+  /** Avanza al mes siguiente. */
   const handleNextMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
   };
 
+  /** Elige un día si está libre; ignora bloqueados, pasados o no laborables. */
   const handleDateClick = (day: number) => {
     const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
     const dateString = toLocalDateString(date);
@@ -66,6 +79,7 @@ export default function Calendar({ onDateSelect, blockedDates, minDate = new Dat
     onDateSelect(dateString);
   };
 
+  /** Dibuja los 42 casilleros del mes (vacíos + días clicables). */
   const renderDays = () => {
     const daysInMonth = getDaysInMonth(currentDate);
     const firstDay = getFirstDayOfMonth(currentDate);

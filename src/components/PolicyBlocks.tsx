@@ -1,7 +1,16 @@
+/**
+ * PolicyBlocks.tsx — Tarjetas de cortesías, ubicación, políticas y pagos.
+ *
+ * Dónde se usa: debajo del catálogo (/precios) y de servicios (/servicios).
+ * Muestra siempre la info oficial: coffee bar, dirección de Tenares,
+ * reglas 24h/15min y Banreservas. El texto de pagos puede venir del perfil
+ * editable en /admin o del valor oficial por defecto.
+ */
 import { Coffee, CreditCard, MapPin, ShieldCheck } from 'lucide-react';
 import { BUSINESS_INFO, COURTESIES, POLICIES } from '../data/officialCatalog';
 import { waLink, WHATSAPP_TEMPLATES } from '../data/whatsappTemplates';
 
+/** Bloques informativos (cortesía, ubicación, políticas, pagos) con datos oficiales. */
 export default function PolicyBlocks({ paymentDetails }: { paymentDetails?: string | null }) {
   return (
     <div className="grid md:grid-cols-2 gap-4 mt-10">

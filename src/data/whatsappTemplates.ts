@@ -1,9 +1,19 @@
+/**
+ * whatsappTemplates.ts — Mensajes listos para WhatsApp + prompt del asistente.
+ *
+ * Qué contiene: textos con el tono cálido oficial (bienvenida, precios,
+ * reserva, cancelación, pagos...) y el system prompt que define cómo debe
+ * responder cualquier IA/bot del negocio. Edítalos aquí y se actualizan
+ * en el botón flotante, el asistente y los enlaces de reserva.
+ */
 import { BUSINESS_INFO } from './officialCatalog';
 
+/** Arma un link wa.me con el mensaje ya codificado. */
 export function waLink(message: string): string {
   return `${BUSINESS_INFO.whatsappUrl}?text=${encodeURIComponent(message)}`;
 }
 
+/** Plantillas de respuesta rápida (se usan en la web y pueden copiarse a bots). */
 export const WHATSAPP_TEMPLATES = {
   bienvenida: `Hola, bienvenida a ${BUSINESS_INFO.name} Soy la asistente de María. Atendemos exclusivamente con cita previa. ¿En qué servicio estás interesada hoy? Tenemos manicura, gel, pedicura spa y acrílico del #1 al #8.`,
 
@@ -16,6 +26,7 @@ export const WHATSAPP_TEMPLATES = {
 • Acrílico desde RD$750 según largo #1-#8 y estilo.
 ¿Te ayudo a reservar tu cita?`,
 
+  /** Mensaje de reserva con servicio, fecha y hora ya rellenables. */
   agendar: (servicio = 'tu servicio', fecha = 'tu fecha', hora = 'tu hora') =>
     `Hola María. Quiero reservar: ${servicio} para el ${fecha} a las ${hora}. Mi nombre es: ___. Quedo atenta a confirmación. ¡Gracias!`,
 
@@ -30,6 +41,7 @@ export const WHATSAPP_TEMPLATES = {
   direccion: `Estamos en ${BUSINESS_INFO.addressLine1} (${BUSINESS_INFO.addressLine2}). Te esperamos con cafecito, té, jugos y galletitas de cortesía ☕🍪💜`,
 };
 
+/** System prompt maestro: pégalo en ChatGPT/Claude/bots para clonar a la asistente. */
 export const ASSISTANT_SYSTEM_PROMPT = `Actúa como la asistente virtual y community manager oficial de "${BUSINESS_INFO.name}", salón especializado en manos y pies. Tono cálido, profesional, empático, femenino y delicado (estética lila/pastel).
 Datos 100% exactos:
 - Profesional: ${BUSINESS_INFO.professional} (${BUSINESS_INFO.professionalTitle})

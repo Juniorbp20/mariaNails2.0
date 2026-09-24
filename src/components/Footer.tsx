@@ -1,9 +1,18 @@
+/**
+ * Footer.tsx — Pie de página con negocio, ubicación, contacto y redes.
+ *
+ * Qué muestra: nombre oficial, dirección de Tenares, WhatsApp de citas,
+ * métodos de pago (Banreservas) y políticas 24h/15min. Los datos salen
+ * del perfil editable en /admin con respaldo oficial si falta algo.
+ */
 import { Clock, CreditCard, Instagram, MapPin, Phone } from 'lucide-react';
 import { useBusinessProfile } from '../contexts/BusinessProfileContext';
 import { BUSINESS_INFO, COURTESIES } from '../data/officialCatalog';
 
+/** Teléfono oficial si el perfil aún no tiene uno configurado. */
 const DEFAULT_PHONE = '+1 829 338 8282';
 
+/** Convierte un teléfono o URL en link wa.me para el botón de WhatsApp. */
 const toWhatsappUrl = (value: string | null): string | null => {
   if (!value) return null;
   if (/^https?:\/\//i.test(value)) return value;
@@ -13,6 +22,7 @@ const toWhatsappUrl = (value: string | null): string | null => {
   return `https://wa.me/${digits}`;
 };
 
+/** Icono de WhatsApp en SVG (igual que el botón flotante). */
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
@@ -21,6 +31,7 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
+/** Pie de página: lee el perfil del negocio y pinta las 3 columnas + redes. */
 export default function Footer() {
   const { profile } = useBusinessProfile();
 

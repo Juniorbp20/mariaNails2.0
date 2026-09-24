@@ -1,3 +1,10 @@
+/**
+ * PriceCatalog.tsx — Página /precios con precios oficiales en RD$.
+ *
+ * Tabs: Manicura, Gel y Pedicura, Acrílico #1-#8 (interactivo), Nail Art
+ * y Cortesías/Políticas. Si la admin subió una imagen de catálogo se muestra
+ * arriba; si la BD está vacía usa los precios oficiales locales.
+ */
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BadgeDollarSign, Calendar } from 'lucide-react';
@@ -10,6 +17,7 @@ import { WHATSAPP_TEMPLATES, waLink } from '../data/whatsappTemplates';
 import AcrylicPriceTable from '../components/AcrylicPriceTable';
 import PolicyBlocks from '../components/PolicyBlocks';
 
+/** Claves de las 5 pestañas del catálogo. */
 type TabKey = 'manicura' | 'gel' | 'acrilico' | 'nailart' | 'info';
 
 const TABS: { key: TabKey; label: string }[] = [
@@ -20,6 +28,7 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: 'info', label: 'Cortesías y Políticas ☕' },
 ];
 
+/** Convierte los precios oficiales en servicios ficticios si la BD viene vacía. */
 function toServiceLike(): Service[] {
   const now = new Date().toISOString();
   return OFFICIAL_SERVICES.map((s, i) => ({
@@ -35,6 +44,7 @@ function toServiceLike(): Service[] {
   }));
 }
 
+/** Catálogo oficial por pestañas con reserva directa o por WhatsApp. */
 export default function PriceCatalog() {
   const { profile, loading: profileLoading } = useBusinessProfile();
   const [services, setServices] = useState<Service[]>([]);

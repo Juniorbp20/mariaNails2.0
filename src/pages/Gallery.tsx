@@ -1,9 +1,16 @@
+/**
+ * Gallery.tsx — Página /galeria con los trabajos del salón.
+ *
+ * Cómo funciona: pide 12 fotos por página a Supabase (galleryService),
+ * muestra skeletons mientras cargan y cada foto se amplía con GalleryImage.
+ */
 import { useState, useEffect } from 'react';
 import { galleryService } from '../services/galleryService';
 import GalleryImage from '../components/GalleryImage';
 import { GallerySkeleton } from '../components/Skeletons';
 import type { GalleryImage as GalleryImageType } from '../types';
 
+/** Galería paginada de 12 fotos: carga desde Supabase y maneja error/vacío. */
 export default function Gallery() {
   const [images, setImages] = useState<GalleryImageType[]>([]);
   const [loading, setLoading] = useState(true);

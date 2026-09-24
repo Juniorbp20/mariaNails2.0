@@ -1,3 +1,10 @@
+/**
+ * Booking.tsx — Página /reserva en 5 pasos.
+ *
+ * Flujo: 1 servicio → 2 fecha (Calendar) → 3 hora (TimeSlots) →
+ * 4 datos de contacto → 5 confirmación. Muestra políticas 24h/15min,
+ * dirección y pagos Banreservas. Guarda la cita en Supabase.
+ */
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Check } from 'lucide-react';
@@ -11,8 +18,10 @@ import { parseLocalDateString } from '../utils/dateUtils';
 import { formatDuration, formatPrice, isValidEmail, isValidPhone } from '../utils/format';
 import { BUSINESS_INFO, POLICIES } from '../data/officialCatalog';
 
+/** Pasos del asistente de reserva. */
 type BookingStep = 'service' | 'date' | 'time' | 'contact' | 'confirmation';
 
+/** Reserva en 5 pasos con validación de email/teléfono y resumen final. */
 export default function Booking() {
   const location = useLocation() as { state?: { serviceId?: string } };
   const [step, setStep] = useState<BookingStep>('service');

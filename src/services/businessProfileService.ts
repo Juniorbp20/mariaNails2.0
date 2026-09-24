@@ -1,6 +1,14 @@
+/**
+ * businessProfileService.ts — Perfil del negocio + logos en Supabase.
+ *
+ * Tabla `business_profile` (una sola fila): nombre, eslogan, dirección,
+ * WhatsApp, pagos Banreservas... Bucket `branding`: logo, foto y catálogo.
+ * Toda la web lee de aquí vía BusinessProfileContext.
+ */
 import { supabase } from '../lib/supabase';
 import type { BusinessProfile } from '../types';
 
+/** Carpeta de Storage donde viven logo, foto y catálogo. */
 const BRANDING_BUCKET = 'branding';
 
 type UploadResult = {
@@ -10,6 +18,7 @@ type UploadResult = {
 
 export type BrandingAssetKind = 'logo' | 'profile' | 'catalog';
 
+/** Campos del perfil que /admin puede editar (incluye pagos). */
 export type BusinessProfileUpdateInput = Partial<
   Pick<
     BusinessProfile,
@@ -31,6 +40,7 @@ export type BusinessProfileUpdateInput = Partial<
   >
 >;
 
+/** Saca la ruta de Storage desde una URL pública de branding. */
 const extractBrandingPathFromPublicUrl = (url: string): string | null => {
   try {
     const pathname = new URL(url).pathname;
@@ -43,6 +53,7 @@ const extractBrandingPathFromPublicUrl = (url: string): string | null => {
   }
 };
 
+/** Normaliza ruta o URL a solo-ruta de Storage (o null si no hay). */
 const normalizeBrandingPath = (value: string | null | undefined): string | null => {
   if (!value) return null;
 
@@ -53,12 +64,14 @@ const normalizeBrandingPath = (value: string | null | undefined): string | null 
   return value.replace(/^branding\//, '');
 };
 
+/** Texto vacío → null para no guardar basura en la BD. */
 const toNullableText = (value: string | null): string | null => {
   if (value === null) return null;
   const trimmed = value.trim();
   return trimmed ? trimmed : null;
 };
 
+/** Limpia los campos del formulario antes de guardar en Supabase. */
 const sanitizeUpdates = (updates: BusinessProfileUpdateInput): Record<string, string | null> => {
   const payload: Record<string, string | null> = {};
 
@@ -83,6 +96,7 @@ const sanitizeUpdates = (updates: BusinessProfileUpdateInput): Record<string, st
   return payload;
 };
 
+/** Arma la URL pública de un archivo del bucket branding. */
 const getPublicUrl = (path: string): string => {
   const {
     data: { publicUrl },
@@ -91,7 +105,9 @@ const getPublicUrl = (path: string): string => {
   return publicUrl;
 };
 
+/** API del perfil: leer, actualizar textos y gestionar logo/foto/catálogo. */
 export const businessProfileService = {
+  /** Lee el perfil único (lo crea si aún no existe). */
   async getBusinessProfile(): Promise<BusinessProfile> {
     const { data, error } = await supabase
       .from('business_profile')
@@ -112,6 +128,7 @@ export const businessProfileService = {
     return created;
   },
 
+  /** Guarda los cambios del formulario de /admin en el perfil. */
   async updateBusinessProfile(updates: BusinessProfileUpdateInput): Promise<BusinessProfile> {
     const profile = await this.getBusinessProfile();
     const payload = {
@@ -130,6 +147,7 @@ export const businessProfileService = {
     return data;
   },
 
+  /** Sube un archivo al bucket branding y devuelve URL + ruta. */
   async uploadBrandingAsset(file: File, kind: BrandingAssetKind): Promise<UploadResult> {
     const safeFileName = file.name.replace(/\s+/g, '-');
     const path = `${kind}/${Date.now()}-${safeFileName}`;
@@ -149,6 +167,7 @@ export const businessProfileService = {
     };
   },
 
+  /** Borra un archivo viejo del Storage (al reemplazar o quitar). */
   async removeBrandingAsset(pathOrUrl: string | null | undefined): Promise<void> {
     const storagePath = normalizeBrandingPath(pathOrUrl);
     if (!storagePath) return;
@@ -157,6 +176,7 @@ export const businessProfileService = {
     if (error) throw error;
   },
 
+  /** Reemplaza logo/foto/catálogo: sube el nuevo y borra el anterior. */
   async replaceBrandingAsset(kind: BrandingAssetKind, file: File): Promise<BusinessProfile> {
     const profile = await this.getBusinessProfile();
     const upload = await this.uploadBrandingAsset(file, kind);
@@ -204,6 +224,7 @@ export const businessProfileService = {
     return data;
   },
 
+  /** Quita el logo/foto/catálogo actual (vuelve al diseño por defecto). */
   async clearBrandingAsset(kind: BrandingAssetKind): Promise<BusinessProfile> {
     const profile = await this.getBusinessProfile();
 

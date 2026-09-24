@@ -1,13 +1,27 @@
+/**
+ * AIAssistant.tsx — Asistente virtual flotante (botón 💬 abajo-izquierda).
+ *
+ * Cómo funciona: chat con respuestas por palabras clave (precios, acrílico,
+ * pedicura, dirección, pagos, 24h/15min...). No usa IA externa ni cuesta
+ * dinero: todo sale de officialCatalog.ts. Incluye atajos rápidos y enlaces
+ * a /precios y WhatsApp. Para una IA real, usa ASSISTANT_SYSTEM_PROMPT.
+ */
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Bot, MessageCircle } from 'lucide-react';
 import { ACRYLIC_STYLES, BUSINESS_INFO, COURTESIES } from '../data/officialCatalog';
 import { WHATSAPP_TEMPLATES, waLink } from '../data/whatsappTemplates';
 
+/** Un mensaje del chat: 'bot' (asistente) o 'user' (visitante). */
 interface ChatMsg {
   from: 'bot' | 'user';
   text: string;
 }
 
+/**
+ * Elige la respuesta según palabras clave del mensaje.
+ * Ej: si escriben "pedicura" responde precio + duración + WhatsApp.
+ */
 function getBotReply(input: string): string {
   const q = input.toLowerCase();
 
@@ -53,8 +67,10 @@ function getBotReply(input: string): string {
   return `Gracias por escribirnos Soy la asistente de ${BUSINESS_INFO.name}. Puedo ayudarte con precios, acrílico #1-#8, dirección, pagos ${BUSINESS_INFO.bank}, políticas 24h/15min y reservas al ${BUSINESS_INFO.phoneDisplay}. ¿Qué te gustaría hoy? Prueba: “precio pedicura” o “acrílico #5”.`;
 }
 
+/** Botones de acceso rápido dentro del chat. */
 const QUICK = ['Precios', 'Acrílico #1-#8', 'Pedicura 3h', 'Dirección', 'Reservar'];
 
+/** Asistente flotante: botón + ventana de chat con historial y formulario. */
 export default function AIAssistant() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
@@ -62,6 +78,7 @@ export default function AIAssistant() {
     { from: 'bot', text: WHATSAPP_TEMPLATES.bienvenida },
   ]);
 
+  /** Envía un mensaje del usuario y agrega la respuesta del bot al historial. */
   const send = (text: string) => {
     const clean = text.trim();
     if (!clean) return;
@@ -76,9 +93,10 @@ export default function AIAssistant() {
         <button
           onClick={() => setOpen(true)}
           aria-label="Abrir asistente virtual"
-          className="fixed bottom-5 left-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-white text-2xl shadow-xl shadow-purple-500/30 transition hover:-translate-y-1"
+          title="Asistente virtual"
+          className="fixed bottom-5 left-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-xl shadow-purple-500/30 transition hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-300"
         >
-        
+          <MessageCircle className="h-7 w-7" aria-hidden="true" />
         </button>
       )}
 
@@ -86,9 +104,14 @@ export default function AIAssistant() {
         <div className="fixed bottom-5 left-5 z-50 flex h-[480px] w-[330px] max-w-[calc(100vw-2.5rem)] flex-col overflow-hidden rounded-2xl border border-purple-200 bg-white shadow-2xl">
           <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 text-white">
             <div className="flex items-start justify-between gap-2">
-              <div>
-                <p className="font-bold">Asistente María</p>
-                <p className="text-xs opacity-90">Tono lila · Respuestas oficiales · {BUSINESS_INFO.phoneDisplay}</p>
+              <div className="flex items-center gap-2">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
+                  <Bot className="h-5 w-5" aria-hidden="true" />
+                </span>
+                <div>
+                  <p className="font-bold">Asistente María</p>
+                  <p className="text-xs opacity-90">Tono lila · Respuestas oficiales · {BUSINESS_INFO.phoneDisplay}</p>
+                </div>
               </div>
               <button
                 onClick={() => setOpen(false)}

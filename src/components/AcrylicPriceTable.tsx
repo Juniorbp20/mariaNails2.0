@@ -1,3 +1,11 @@
+/**
+ * AcrylicPriceTable.tsx — Tabla interactiva de acrílico #1 al #8.
+ *
+ * Cómo funciona: la clienta elige un largo (#1-#8) y ve los 6 estilos
+ * con su precio. Si el servicio existe en la BD (Supabase) el botón
+ * reserva directo en /reserva; si no, abre WhatsApp con el mensaje listo.
+ * Abajo hay una tabla completa con los 48 precios oficiales.
+ */
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ACRYLIC_STYLES, type AcrylicLength } from '../data/officialCatalog';
@@ -5,12 +13,15 @@ import type { Service } from '../types';
 import { findServiceForAcrylic } from '../utils/catalog';
 import { formatPrice } from '../utils/format';
 
+/** Props: lista de servicios de la BD para enlazar cada card a su reserva. */
 interface AcrylicPriceTableProps {
   services: Service[];
 }
 
+/** Los 8 largos disponibles. */
 const LENGTHS: AcrylicLength[] = [1, 2, 3, 4, 5, 6, 7, 8];
 
+/** Tabla interactiva: selector de largo + cards por estilo + tabla 48 precios. */
 export default function AcrylicPriceTable({ services }: AcrylicPriceTableProps) {
   const [selectedLength, setSelectedLength] = useState<AcrylicLength>(3);
 

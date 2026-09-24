@@ -1,3 +1,10 @@
+/**
+ * appointmentService.ts — Citas entre clientas y el salón.
+ *
+ * Cubre: crear reserva (con número consecutivo), listar, ver ocupados por
+ * fecha, cambiar estado, borrar, sincronizar a Google Calendar y enviar
+ * notificaciones por email. Los errores de BD se traducen a español claro.
+ */
 import { supabase } from '../lib/supabase';
 import type { Appointment, BookingFormData } from '../types';
 
@@ -23,6 +30,7 @@ type FunctionErrorLike = {
   };
 };
 
+/** Traduce errores de Supabase a mensajes en español para la clienta. */
 const normalizeSupabaseError = (error: SupabaseErrorLike): Error => {
   if (
     typeof error.message === 'string' &&
@@ -61,6 +69,7 @@ const normalizeSupabaseError = (error: SupabaseErrorLike): Error => {
   return new Error(details || 'Error en la base de datos.');
 };
 
+/** Extrae el mensaje real cuando falla una Edge Function de Supabase. */
 const normalizeFunctionInvokeError = async (error: FunctionErrorLike): Promise<Error> => {
   const defaultError = normalizeSupabaseError({
     message: error.message || 'Error al invocar la funcion.'
@@ -108,7 +117,9 @@ const normalizeFunctionInvokeError = async (error: FunctionErrorLike): Promise<E
   return defaultError;
 };
 
+/** API de citas: reservar, consultar, sincronizar, notificar y administrar. */
 export const appointmentService = {
+  /** Crea la reserva (exige email o teléfono) y dispara calendario + email. */
   async createAppointment(data: BookingFormData): Promise<Appointment> {
     const normalizedEmail = data.client_email.trim() || null;
     const normalizedPhone = data.client_phone.trim() || null;
@@ -164,6 +175,7 @@ export const appointmentService = {
     return localAppointment;
   },
 
+  /** Lista todas las citas ordenadas por fecha (panel /admin). */
   async getAppointments(): Promise<Appointment[]> {
     const { data, error } = await supabase
       .from('appointments')
@@ -174,6 +186,7 @@ export const appointmentService = {
     return data || [];
   },
 
+  /** Citas confirmadas de un día (para la agenda diaria). */
   async getAppointmentsByDate(date: string): Promise<Appointment[]> {
     const { data, error } = await supabase
       .from('appointments')
@@ -186,6 +199,7 @@ export const appointmentService = {
     return data || [];
   },
 
+  /** Horas ya ocupadas de una fecha (para bloquearlas en TimeSlots). */
   async getBookedTimesByDate(date: string): Promise<string[]> {
     const { data, error } = await supabase.rpc('get_booked_times', { input_date: date });
 
@@ -197,11 +211,13 @@ export const appointmentService = {
       .map((time: string) => time.slice(0, 5));
   },
 
+  /** Dice si un horario sigue libre antes de confirmar (evita choques). */
   async checkTimeSlotAvailable(date: string, time: string): Promise<boolean> {
     const bookedTimes = await this.getBookedTimesByDate(date);
     return !bookedTimes.includes(time.slice(0, 5));
   },
 
+  /** Sincroniza una cita con Google Calendar (requiere sesión admin). */
   async syncAppointmentWithGoogleCalendar(action: CalendarSyncAction, appointmentId: number): Promise<void> {
     const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
     if (sessionError) throw normalizeSupabaseError(sessionError);
@@ -224,6 +240,7 @@ export const appointmentService = {
     if (error) throw await normalizeFunctionInvokeError(error);
   },
 
+  /** Sincroniza una reserva recién creada (sin pedir login a la clienta). */
   async syncPendingAppointmentWithGoogleCalendar(appointmentId: number): Promise<void> {
     const { error } = await supabase.functions.invoke('google-calendar-sync', {
       body: {
@@ -235,6 +252,7 @@ export const appointmentService = {
     if (error) throw await normalizeFunctionInvokeError(error);
   },
 
+  /** Envía el email de confirmación o cambio de estado vía Edge Function. */
   async sendAppointmentNotification(
     eventType: NotificationEventType,
     appointmentId: number,
@@ -251,6 +269,7 @@ export const appointmentService = {
     if (error) throw await normalizeFunctionInvokeError(error);
   },
 
+  /** Cambia el estado (pendiente/confirmada/completada/cancelada) y avisa por email. */
   async updateAppointmentStatus(id: number, status: string): Promise<Appointment> {
     const { data, error } = await supabase
       .from('appointments')
@@ -268,6 +287,7 @@ export const appointmentService = {
     return data;
   },
 
+  /** Borra una cita de la BD (desde /admin, con confirmación previa). */
   async deleteAppointment(id: number): Promise<void> {
     const { error } = await supabase
       .from('appointments')

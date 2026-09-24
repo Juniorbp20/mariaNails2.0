@@ -1,3 +1,9 @@
+/**
+ * galleryService.ts — Fotos de trabajos en Supabase.
+ *
+ * Tabla `gallery_images` + bucket `gallery`: subir, listar paginado,
+ * filtrar por servicio, editar título y borrar (foto + registro).
+ */
 import { supabase } from '../lib/supabase';
 import type { GalleryImage } from '../types';
 
@@ -6,6 +12,7 @@ type UploadResult = {
   path: string;
 };
 
+/** Saca la ruta de Storage desde una URL pública de la galería. */
 const extractPathFromPublicUrl = (url: string): string | null => {
   try {
     const pathname = new URL(url).pathname;
@@ -18,6 +25,7 @@ const extractPathFromPublicUrl = (url: string): string | null => {
   }
 };
 
+/** Resuelve la ruta de Storage de una foto (acepta ruta o URL vieja). */
 const getStoragePathFromImage = (image: Pick<GalleryImage, 'storage_path' | 'image_url'>): string | null => {
   if (image.storage_path) {
     if (/^https?:\/\//i.test(image.storage_path)) {
@@ -30,7 +38,9 @@ const getStoragePathFromImage = (image: Pick<GalleryImage, 'storage_path' | 'ima
   return extractPathFromPublicUrl(image.image_url);
 };
 
+/** API de galería: subir, listar, crear, editar y borrar fotos. */
 export const galleryService = {
+  /** Sube la imagen al bucket y devuelve su URL pública + ruta. */
   async uploadImage(file: File): Promise<UploadResult> {
     const safeFileName = file.name.replace(/\s+/g, '-');
     const fileName = `${Date.now()}-${safeFileName}`;
@@ -51,6 +61,7 @@ export const galleryService = {
     return { publicUrl, path: data.path };
   },
 
+  /** Lista fotos paginadas (público ve solo activas; admin puede ver todas). */
   async getGalleryImages(limit = 100, offset = 0, includeInactive = false): Promise<GalleryImage[]> {
     let query = supabase
       .from('gallery_images')
@@ -68,6 +79,7 @@ export const galleryService = {
     return data || [];
   },
 
+  /** Fotos de un servicio concreto (para mostrar ejemplos al reservar). */
   async getGalleryImagesByService(serviceId: string): Promise<GalleryImage[]> {
     const { data, error } = await supabase
       .from('gallery_images')
@@ -80,6 +92,7 @@ export const galleryService = {
     return data || [];
   },
 
+  /** Registra en la BD una foto ya subida al Storage. */
   async createGalleryImage(image: Omit<GalleryImage, 'id' | 'created_at' | 'updated_at'>): Promise<GalleryImage> {
     const { data, error } = await supabase
       .from('gallery_images')
@@ -91,6 +104,7 @@ export const galleryService = {
     return data;
   },
 
+  /** Edita título/descripción de una foto. */
   async updateGalleryImage(id: string, updates: Partial<GalleryImage>): Promise<GalleryImage> {
     const { data, error } = await supabase
       .from('gallery_images')
@@ -103,6 +117,7 @@ export const galleryService = {
     return data;
   },
 
+  /** Borra la foto del Storage y su registro de la BD. */
   async deleteGalleryImage(id: string): Promise<void> {
     const { data: image, error: readError } = await supabase
       .from('gallery_images')

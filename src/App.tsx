@@ -1,3 +1,10 @@
+/**
+ * App.tsx — Raíz de la app: rutas y estructura común.
+ *
+ * Rutas: / (inicio), /servicios, /galeria, /reserva, /sobre-mi, /precios,
+ * /admin y 404. Todo vive dentro de BusinessProfileProvider; Header, Footer,
+ * WhatsApp flotante y asistente aparecen en todas las páginas.
+ */
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -15,6 +22,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import NotFound from './pages/NotFound';
 import { BusinessProfileProvider } from './contexts/BusinessProfileContext';
 
+/** Componente raíz: router + perfil global + layout común. */
 function App() {
   return (
     <BrowserRouter>

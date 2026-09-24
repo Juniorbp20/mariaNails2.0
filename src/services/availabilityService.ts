@@ -1,8 +1,17 @@
+/**
+ * availabilityService.ts — Horarios laborables y fechas cerradas.
+ *
+ * Tablas: `availability_slots` (un horario por día 0-6 con descanso) y
+ * `blocked_dates` (feriados o días libres). El calendario y los turnos
+ * se arman con estos datos.
+ */
 import { supabase } from '../lib/supabase';
 import type { AvailabilitySlot, BlockedDate } from '../types';
 import { getTodayLocalDateString } from '../utils/dateUtils';
 
+/** API de disponibilidad: horarios por día y fechas bloqueadas. */
 export const availabilityService = {
+  /** Lista horarios (solo activos, salvo includeInactive para /admin). */
   async getAvailabilitySlots(options?: { includeInactive?: boolean }): Promise<AvailabilitySlot[]> {
     const includeInactive = options?.includeInactive ?? false;
 
@@ -21,6 +30,7 @@ export const availabilityService = {
     return data || [];
   },
 
+  /** Horario de un día de semana (0=domingo); null si ese día se cierra. */
   async getAvailabilityByDayOfWeek(dayOfWeek: number): Promise<AvailabilitySlot | null> {
     const { data, error } = await supabase
       .from('availability_slots')
@@ -33,6 +43,7 @@ export const availabilityService = {
     return data;
   },
 
+  /** Fechas cerradas futuras (con includePast también trae las viejas). */
   async getBlockedDates(options?: { includePast?: boolean }): Promise<BlockedDate[]> {
     const includePast = options?.includePast ?? false;
 
@@ -51,6 +62,7 @@ export const availabilityService = {
     return data || [];
   },
 
+  /** Dice si una fecha concreta está bloqueada. */
   async isDateBlocked(date: string): Promise<boolean> {
     const { data, error } = await supabase
       .from('blocked_dates')
@@ -62,6 +74,7 @@ export const availabilityService = {
     return !!data;
   },
 
+  /** Guarda cambios al horario de un día (apertura, cierre, descanso). */
   async updateAvailabilitySlot(id: string, updates: Partial<AvailabilitySlot>): Promise<AvailabilitySlot> {
     const { data, error } = await supabase
       .from('availability_slots')
@@ -74,6 +87,7 @@ export const availabilityService = {
     return data;
   },
 
+  /** Crea el horario de un día que aún no existía. */
   async createAvailabilitySlot(slot: Omit<AvailabilitySlot, 'id' | 'created_at' | 'updated_at'>): Promise<AvailabilitySlot> {
     const { data, error } = await supabase
       .from('availability_slots')
@@ -85,6 +99,7 @@ export const availabilityService = {
     return data;
   },
 
+  /** Bloquea una fecha (feriado o día libre) con motivo opcional. */
   async addBlockedDate(blockedDate: string, reason?: string): Promise<BlockedDate> {
     const { data, error } = await supabase
       .from('blocked_dates')
@@ -96,6 +111,7 @@ export const availabilityService = {
     return data;
   },
 
+  /** Desbloquea una fecha para volver a recibir reservas. */
   async removeBlockedDate(id: string): Promise<void> {
     const { error } = await supabase
       .from('blocked_dates')

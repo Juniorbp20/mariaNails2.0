@@ -1,3 +1,10 @@
+/**
+ * TimeSlots.tsx — Botones de hora disponible para la fecha elegida.
+ *
+ * Cómo funciona: lee el horario del día + las citas ya ocupadas en Supabase,
+ * genera turnos cada 30 min (respetando el descanso) y marca los ocupados
+ * como no clicables. Al elegir una hora avisa con onTimeSelect.
+ */
 import { useState, useEffect } from 'react';
 import { Clock } from 'lucide-react';
 import { availabilityService } from '../services/availabilityService';
@@ -5,12 +12,14 @@ import { appointmentService } from '../services/appointmentService';
 import type { AvailabilitySlot } from '../types';
 import { formatTime, getDayOfWeek } from '../utils/dateUtils';
 
+/** Props: fecha elegida, a quién avisar al elegir hora y duración del servicio. */
 interface TimeSlotsProps {
   selectedDate: string;
   onTimeSelect: (time: string) => void;
   serviceDuration: number;
 }
 
+/** Lista de horarios libres/ocupados para una fecha concreta. */
 export default function TimeSlots({ selectedDate, onTimeSelect }: TimeSlotsProps) {
   const [availability, setAvailability] = useState<AvailabilitySlot | null>(null);
   const [bookedTimes, setBookedTimes] = useState<string[]>([]);
@@ -38,6 +47,7 @@ export default function TimeSlots({ selectedDate, onTimeSelect }: TimeSlotsProps
     loadAvailability();
   }, [selectedDate]);
 
+  /** Genera los turnos del día cada 30 min, saltando la hora de descanso. */
   const generateTimeSlots = (): string[] => {
     if (!availability) return [];
 

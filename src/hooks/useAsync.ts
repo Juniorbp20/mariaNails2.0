@@ -1,11 +1,19 @@
+/**
+ * useAsync.ts — Hook para cargar datos asíncronos sin repetir código.
+ *
+ * Uso: const { data, loading, error } = useAsync(() => service.getX()).
+ * Si immediate=false no carga solo; (actualmente solo expone el estado).
+ */
 import { useState, useEffect, useCallback } from 'react';
 
+/** Estado que devuelve el hook: datos, cargando o error. */
 interface UseAsyncState<T> {
   data: T | null;
   loading: boolean;
   error: Error | null;
 }
 
+/** Ejecuta una promesa y guarda su resultado/loading/error en el estado. */
 export function useAsync<T>(
   asyncFunction: () => Promise<T>,
   immediate = true,

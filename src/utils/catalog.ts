@@ -1,6 +1,14 @@
+/**
+ * catalog.ts — Ayudas para ordenar y buscar servicios del catálogo.
+ *
+ * Qué hace: agrupa servicios por categoría en el orden oficial
+ * (Manicura → Gel → Pedicura → Acrílico → Nail Art) y localiza el
+ * servicio de BD que corresponde a un estilo + largo acrílico.
+ */
 import type { Service } from '../types';
 import { ACRYLIC_STYLES, type AcrylicLength, type AcrylicStyleKey } from '../data/officialCatalog';
 
+/** Orden oficial en que se muestran las categorías en /servicios y /precios. */
 export const CATEGORY_ORDER = [
   'Manicura',
   'Gel',
@@ -9,6 +17,7 @@ export const CATEGORY_ORDER = [
   'Nail Art',
 ] as const;
 
+/** Agrupa una lista de servicios por su categoría (ej: { Manicura: [...] }). */
 export function groupServicesByCategory(services: Service[]): Record<string, Service[]> {
   const grouped: Record<string, Service[]> = {};
   for (const s of services) {
@@ -19,6 +28,7 @@ export function groupServicesByCategory(services: Service[]): Record<string, Ser
   return grouped;
 }
 
+/** Ordena las categorías según CATEGORY_ORDER; las desconocidas van al final. */
 export function sortedCategoryKeys(grouped: Record<string, Service[]>): string[] {
   const keys = Object.keys(grouped);
   return keys.sort((a, b) => {
@@ -31,6 +41,10 @@ export function sortedCategoryKeys(grouped: Record<string, Service[]>): string[]
   });
 }
 
+/**
+ * Extrae estilo y largo desde un nombre de BD.
+ * Ej: "Acrílico Cover Liso #4" → { styleKey: 'cover-liso', length: 4 }.
+ */
 export function parseAcrylicName(name: string): {
   styleKey: AcrylicStyleKey | null;
   length: AcrylicLength | null;
@@ -47,6 +61,10 @@ export function parseAcrylicName(name: string): {
   return { styleKey: found ? found.key : null, length: validLength };
 }
 
+/**
+ * Busca en la lista de la BD el servicio que coincide con un estilo + largo.
+ * Devuelve null si aún no existe (entonces se usa el precio oficial).
+ */
 export function findServiceForAcrylic(
   services: Service[],
   styleKey: AcrylicStyleKey,

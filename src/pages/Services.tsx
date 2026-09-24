@@ -1,3 +1,10 @@
+/**
+ * Services.tsx — Página /servicios con todo el catálogo reservable.
+ *
+ * Cómo funciona: carga servicios de Supabase, los agrupa por categoría
+ * (Manicura/Gel/Pedicura/Acrílico/Nail Art) con filtros, muestra la tabla
+ * acrílica interactiva y abre un modal con detalle + botón Reservar.
+ */
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { X } from 'lucide-react';
@@ -11,6 +18,7 @@ import { groupServicesByCategory, sortedCategoryKeys } from '../utils/catalog';
 import { formatDuration, formatPrice } from '../utils/format';
 import { useBusinessProfile } from '../contexts/BusinessProfileContext';
 
+/** Catálogo por categorías con filtros, tabla acrílica y modal de detalle. */
 export default function Services() {
   const { profile } = useBusinessProfile();
   const [services, setServices] = useState<Service[]>([]);

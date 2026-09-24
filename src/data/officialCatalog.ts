@@ -1,3 +1,13 @@
+/**
+ * officialCatalog.ts — Fuente única de verdad del negocio.
+ *
+ * Qué contiene: datos oficiales de Maria Nails Studio & Pedicure
+ * (contacto, dirección, precios de manicura/gel/pedicura y la matriz
+ * de acrílico 6 estilos x 8 largos). Sirve para pintar la web, validar
+ * precios y alimentar el asistente virtual sin depender de la BD.
+ * Si un precio cambia aquí, cambia en catálogo, reserva y asistente.
+ */
+
 export const BUSINESS_INFO = {
   name: 'Maria Nails Studio & Pedicure',
   shortName: 'María Nails',
@@ -16,6 +26,7 @@ export const BUSINESS_INFO = {
   bankHolder: 'María Bonifacio',
 } as const;
 
+/** Cortesías gratis que disfruta cada clienta durante su cita. */
 export const COURTESIES = [
   'Café recién colado',
   'Selección variada de tés',
@@ -23,6 +34,7 @@ export const COURTESIES = [
   'Galletas y aperitivos dulces',
 ] as const;
 
+/** Políticas de reserva: canal, cancelación 24h y tolerancia de 15 min. */
 export const POLICIES = {
   bookingChannel: 'Gestión de turnos exclusivamente vía WhatsApp al 829-338-8282.',
   cancellation:
@@ -31,8 +43,10 @@ export const POLICIES = {
     'Esperamos un máximo de 15 minutos a partir de la hora pautada. Pasado ese tiempo, el turno quedará vacante y se perderá la cita.',
 } as const;
 
+/** Largos de uña acrílica disponibles (#1 corto → #8 extra largo). */
 export type AcrylicLength = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
+/** Clave interna de cada estilo de acrílico (se usa en URLs y búsquedas). */
 export type AcrylicStyleKey =
   | 'pintura-regular'
   | 'cover-liso'
@@ -41,6 +55,7 @@ export type AcrylicStyleKey =
   | 'baby-boomer'
   | 'full-set';
 
+/** Un estilo de acrílico con su precio oficial por cada largo. */
 export interface AcrylicStyle {
   key: AcrylicStyleKey;
   label: string;
@@ -49,6 +64,7 @@ export interface AcrylicStyle {
   prices: Record<AcrylicLength, number>;
 }
 
+/** Los 6 estilos oficiales con sus 48 precios (ver tabla en /precios). */
 export const ACRYLIC_STYLES: AcrylicStyle[] = [
   {
     key: 'pintura-regular',
@@ -94,6 +110,7 @@ export const ACRYLIC_STYLES: AcrylicStyle[] = [
   },
 ];
 
+/** Forma de un servicio base (manicura, gel, pedicura, nail art). */
 export interface OfficialServiceSeed {
   name: string;
   description: string;
@@ -102,6 +119,7 @@ export interface OfficialServiceSeed {
   category: string;
 }
 
+/** Los 8 servicios base con precio y duración oficial (RD$ y minutos). */
 export const OFFICIAL_SERVICES: OfficialServiceSeed[] = [
   {
     name: 'Manicura en Seco',
@@ -166,12 +184,20 @@ export const OFFICIAL_SERVICES: OfficialServiceSeed[] = [
   },
 ];
 
+/**
+ * Devuelve el precio oficial de un estilo + largo.
+ * Ej: getAcrylicPrice('cover-liso', 4) → 1250.
+ */
 export function getAcrylicPrice(styleKey: AcrylicStyleKey, length: AcrylicLength): number {
   const style = ACRYLIC_STYLES.find((s) => s.key === styleKey);
   if (!style) return 0;
   return style.prices[length];
 }
 
+/**
+ * Construye el nombre estándar de un servicio acrílico en la BD.
+ * Ej: buildAcrylicServiceName('Cover Liso', 4) → "Acrílico Cover Liso #4".
+ */
 export function buildAcrylicServiceName(styleLabel: string, length: AcrylicLength): string {
   return `Acrílico ${styleLabel} #${length}`;
 }

@@ -1,12 +1,20 @@
+/**
+ * ServiceCard.tsx — Tarjeta de un servicio (nombre, precio, descripción).
+ *
+ * Se usa en /servicios y al hacer clic abre el detalle con botón Reservar.
+ * Funciona con mouse y teclado (Enter/Espacio) por accesibilidad.
+ */
 import { Clock } from 'lucide-react';
 import type { Service } from '../types';
 import { formatDuration, formatPrice } from '../utils/format';
 
+/** Props: el servicio a mostrar y qué pasa al hacer clic (abre el detalle). */
 interface ServiceCardProps {
   service: Service;
   onClick?: () => void;
 }
 
+/** Tarjeta clicable de servicio con precio, duración y categoría. */
 export default function ServiceCard({ service, onClick }: ServiceCardProps) {
   return (
     <article

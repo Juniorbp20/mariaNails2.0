@@ -1,3 +1,11 @@
+/**
+ * AdminDashboard.tsx — Panel privado /admin para María.
+ *
+ * Pestañas: citas (confirmar/cancelar/eliminar), servicios (crear/editar
+ * precios oficiales y acrílico #1-#8), horarios, fechas bloqueadas, galería,
+ * negocio (textos, dirección, WhatsApp, pagos) y estadísticas. Requiere
+ * login con un email registrado en admin_users de Supabase.
+ */
 import { useEffect, useState } from 'react';
 import { BarChart3, Building2, Calendar, Clock, Eye, EyeOff, Image, LogOut, Trash2 } from 'lucide-react';
 import { useBusinessProfile } from '../contexts/BusinessProfileContext';
@@ -9,6 +17,7 @@ import { galleryService } from '../services/galleryService';
 import { serviceService } from '../services/serviceService';
 import type { Appointment, AvailabilitySlot, BlockedDate, BusinessProfile, GalleryImage, Service } from '../types';
 
+/** Pestañas disponibles del panel. */
 type AdminTab =
   | 'appointments'
   | 'services'
@@ -18,6 +27,7 @@ type AdminTab =
   | 'business'
   | 'stats';
 
+/** Datos del formulario de servicio (los inputs son texto y se convierten a número). */
 type ServiceForm = {
   name: string;
   description: string;
@@ -27,6 +37,7 @@ type ServiceForm = {
   active: boolean;
 };
 
+/** Horario de un día en el formulario (horas como "09:00"). */
 type AvailabilityDraft = {
   id?: string;
   day_of_week: number;
@@ -37,6 +48,7 @@ type AvailabilityDraft = {
   is_active: boolean;
 };
 
+/** Campos editables de la información del negocio (incluye pagos Banreservas). */
 type BusinessProfileForm = {
   business_name: string;
   tagline: string;
@@ -65,6 +77,7 @@ const DAYS: Record<number, string> = {
   6: 'Sabado'
 };
 
+/** Crea un formulario de servicio vacío con valores por defecto. */
 const createEmptyServiceForm = (): ServiceForm => ({
   name: '',
   description: '',
@@ -74,13 +87,16 @@ const createEmptyServiceForm = (): ServiceForm => ({
   active: true
 });
 
+/** Pasa una hora de BD ("09:00:00") a formato de input ("09:00"). */
 const toInputTime = (value: string | null): string => {
   if (!value) return '';
   return value.length >= 5 ? value.slice(0, 5) : value;
 };
 
+/** Pasa una hora de input ("09:00") a formato BD ("09:00:00"). */
 const toDbTime = (value: string): string => (value.length === 5 ? `${value}:00` : value);
 
+/** Horario por defecto para un día aún no configurado. */
 const defaultDraft = (day: number): AvailabilityDraft => ({
   day_of_week: day,
   start_time: '09:00',
@@ -90,6 +106,7 @@ const defaultDraft = (day: number): AvailabilityDraft => ({
   is_active: false
 });
 
+/** Arma el borrador editable de los 7 días a partir de los horarios guardados. */
 const buildDrafts = (slots: AvailabilitySlot[]): Record<number, AvailabilityDraft> => {
   const drafts: Record<number, AvailabilityDraft> = {};
   for (let day = 0; day <= 6; day += 1) {
@@ -109,6 +126,7 @@ const buildDrafts = (slots: AvailabilitySlot[]): Record<number, AvailabilityDraf
   return drafts;
 };
 
+/** Convierte el perfil de la BD al formato del formulario de negocio. */
 const mapBusinessProfileToForm = (profile: BusinessProfile): BusinessProfileForm => ({
   business_name: profile.business_name || '',
   tagline: profile.tagline || '',
@@ -127,6 +145,7 @@ const mapBusinessProfileToForm = (profile: BusinessProfile): BusinessProfileForm
   payment_details: profile.payment_details || '',
 });
 
+/** Panel admin completo: login + 7 pestañas de gestión del salón. */
 export default function AdminDashboard() {
   const { applyProfile } = useBusinessProfile();
   const [email, setEmail] = useState('');

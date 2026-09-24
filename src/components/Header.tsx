@@ -1,11 +1,20 @@
+/**
+ * Header.tsx — Barra superior con logo, nombre y menú de navegación.
+ *
+ * Incluye: enlaces a Inicio/Sobre mí/Servicios/Galería/Precios/Reservar,
+ * menú hamburguesa en móvil y acceso oculto a /admin (3 toques al logo).
+ */
 import { Menu, X } from 'lucide-react';
 import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useBusinessProfile } from '../contexts/BusinessProfileContext';
 
+/** Toques necesarios en el logo para abrir el panel admin oculto. */
 const SECRET_ADMIN_TAP_COUNT = 3;
+/** Tiempo máximo (ms) para completar los 3 toques. */
 const SECRET_ADMIN_TAP_WINDOW_MS = 2500;
 
+/** Encabezado fijo con navegación principal y acceso secreto a /admin. */
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { profile } = useBusinessProfile();

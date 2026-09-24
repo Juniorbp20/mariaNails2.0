@@ -1,14 +1,23 @@
+/**
+ * GalleryImage.tsx — Foto de trabajos con vista ampliada.
+ *
+ * Muestra la miniatura; al tocarla abre un modal a pantalla completa
+ * (se cierra con ✕, clic fuera o tecla Escape).
+ */
 import { useCallback, useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import type { GalleryImage as GalleryImageType } from '../types';
 
+/** Props: la foto (título, descripción y URL) a mostrar. */
 interface GalleryImageProps {
   image: GalleryImageType;
 }
 
+/** Miniatura clicable que abre la foto en grande. */
 export default function GalleryImage({ image }: GalleryImageProps) {
   const [isOpen, setIsOpen] = useState(false);
 
+  /** Cierra el modal ampliado. */
   const close = useCallback(() => setIsOpen(false), []);
 
   useEffect(() => {

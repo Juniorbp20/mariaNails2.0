@@ -1,6 +1,12 @@
+/**
+ * NotFound.tsx — Página 404 para rutas que no existen.
+ *
+ * Muestra un mensaje amable con botones a Inicio y Reservar.
+ */
 import { Link } from 'react-router-dom';
 import { CalendarX } from 'lucide-react';
 
+/** Pantalla 404: orienta a la visitante de vuelta al inicio o la reserva. */
 export default function NotFound() {
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center bg-white px-4 py-20 text-center">

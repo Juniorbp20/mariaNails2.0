@@ -1,3 +1,11 @@
+/**
+ * types/index.ts — Formas de los datos que viajan entre BD y pantalla.
+ *
+ * Service: servicio reservable · Appointment: cita de una clienta ·
+ * AvailabilitySlot: horario de un día · BlockedDate: día cerrado ·
+ * GalleryImage: foto de trabajos · BookingFormData: lo que pide el
+ * formulario · BusinessProfile: datos del salón editables en /admin.
+ */
 export interface Service {
   id: string;
   name: string;
@@ -10,6 +18,7 @@ export interface Service {
   updated_at: string;
 }
 
+/** Cita: quién reservó, qué servicio, cuándo y en qué estado va. */
 export interface Appointment {
   id: number;
   service_id: string;
@@ -24,6 +33,7 @@ export interface Appointment {
   updated_at: string;
 }
 
+/** Horario de un día de semana (0=domingo) con descanso opcional. */
 export interface AvailabilitySlot {
   id: string;
   day_of_week: number;
@@ -36,6 +46,7 @@ export interface AvailabilitySlot {
   updated_at: string;
 }
 
+/** Día cerrado (feriado o libre) con su motivo. */
 export interface BlockedDate {
   id: string;
   blocked_date: string;
@@ -43,6 +54,7 @@ export interface BlockedDate {
   created_at: string;
 }
 
+/** Foto de la galería con su URL y orden de muestra. */
 export interface GalleryImage {
   id: string;
   title: string;
@@ -56,6 +68,7 @@ export interface GalleryImage {
   updated_at: string;
 }
 
+/** Lo que la clienta escribe en el paso final de /reserva. */
 export interface BookingFormData {
   service_id: string;
   client_name: string;
@@ -65,6 +78,7 @@ export interface BookingFormData {
   appointment_time: string;
 }
 
+/** Perfil único del salón: textos, contacto, dirección, pagos e imágenes. */
 export interface BusinessProfile {
   id: string;
   singleton: boolean;
