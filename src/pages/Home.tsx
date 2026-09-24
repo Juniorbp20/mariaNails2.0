@@ -38,12 +38,12 @@ export default function Home() {
       <section className="bg-gradient-to-br from-pink-50 to-red-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="mb-3 inline-block rounded-full bg-white/70 px-4 py-1 text-sm font-medium text-pink-700 border border-pink-200">
-            ✨ Reserva en línea · Solo con cita previa · {BUSINESS_INFO.phoneDisplay}
+            Reserva en línea · Solo con cita previa · {BUSINESS_INFO.phoneDisplay}
           </p>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{heroTitle}</h1>
           <p className="text-lg text-gray-700 mb-4 max-w-2xl mx-auto">{heroSubtitle}</p>
           <p className="text-sm text-purple-700 mb-8">
-            ☕ Coffee bar de cortesía: {COURTESIES.join(' · ')} · 📍 {BUSINESS_INFO.addressLine1}
+            ☕ Coffee bar de cortesía: {COURTESIES.join(' · ')} · {BUSINESS_INFO.addressLine1}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link

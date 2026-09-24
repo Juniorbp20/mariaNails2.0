@@ -8,7 +8,7 @@ export default function PolicyBlocks({ paymentDetails }: { paymentDetails?: stri
       <div className="rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50 p-6">
         <div className="flex items-center gap-2 mb-3">
           <Coffee className="h-5 w-5 text-purple-600" aria-hidden="true" />
-          <h3 className="font-bold text-gray-900">Coffee bar de cortesía ☕💜</h3>
+          <h3 className="font-bold text-gray-900">Coffee bar de cortesía</h3>
         </div>
         <ul className="text-sm text-gray-700 space-y-1 list-disc list-inside">
           {COURTESIES.map((c) => (
@@ -42,9 +42,9 @@ export default function PolicyBlocks({ paymentDetails }: { paymentDetails?: stri
           <h3 className="font-bold text-gray-900">Reservas y puntualidad</h3>
         </div>
         <ul className="text-sm text-gray-700 space-y-2">
-          <li>💬 {POLICIES.bookingChannel}</li>
-          <li>🕒 {POLICIES.cancellation}</li>
-          <li>⏰ {POLICIES.punctuality}</li>
+          <li>{POLICIES.bookingChannel}</li>
+          <li>{POLICIES.cancellation}</li>
+          <li>{POLICIES.punctuality}</li>
         </ul>
       </div>
 
@@ -59,7 +59,7 @@ export default function PolicyBlocks({ paymentDetails }: { paymentDetails?: stri
         </p>
         <a
           href={waLink(
-            `Hola María 💜 Haré mi pago por transferencia Banreservas cuenta ${BUSINESS_INFO.bankAccount} a nombre de ${BUSINESS_INFO.bankHolder}. Te envío el comprobante.`,
+            `Hola María Haré mi pago por transferencia Banreservas cuenta ${BUSINESS_INFO.bankAccount} a nombre de ${BUSINESS_INFO.bankHolder}. Te envío el comprobante.`,
           )}
           target="_blank"
           rel="noopener noreferrer"

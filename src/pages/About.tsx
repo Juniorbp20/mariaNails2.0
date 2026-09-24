@@ -69,7 +69,7 @@ export default function About() {
         </div>
 
         <section aria-label="Contacto del salón">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Contacto del salón 💜</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Contacto del salón</h2>
           <div className="bg-white border border-gray-200 rounded-lg p-8 space-y-3">
             <p className="text-gray-700">Profesional: {BUSINESS_INFO.professional} — {BUSINESS_INFO.professionalTitle}</p>
             <p className="text-gray-700">WhatsApp citas: {BUSINESS_INFO.phoneDisplay} ({BUSINESS_INFO.phoneInternational})</p>

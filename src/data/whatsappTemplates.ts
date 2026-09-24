@@ -5,9 +5,9 @@ export function waLink(message: string): string {
 }
 
 export const WHATSAPP_TEMPLATES = {
-  bienvenida: `Hola, bienvenida a ${BUSINESS_INFO.name} 💅✨ Soy la asistente de María. Atendemos exclusivamente con cita previa. ¿En qué servicio estás interesada hoy? Tenemos manicura, gel, pedicura spa y acrílico del #1 al #8.`,
+  bienvenida: `Hola, bienvenida a ${BUSINESS_INFO.name} Soy la asistente de María. Atendemos exclusivamente con cita previa. ¿En qué servicio estás interesada hoy? Tenemos manicura, gel, pedicura spa y acrílico del #1 al #8.`,
 
-  consultaPrecios: `Con gusto, mi amor 💜 Estos son nuestros precios oficiales:
+  consultaPrecios: `Con gusto, mi amor. Estos son nuestros precios oficiales:
 • Manicura en Seco RD$250 | En Gel RD$450
 • Manicura Regular RD$600 | Manicura en Gel RD$800
 • Esmaltado gel uña natural RD$450
@@ -17,15 +17,15 @@ export const WHATSAPP_TEMPLATES = {
 ¿Te ayudo a reservar tu cita?`,
 
   agendar: (servicio = 'tu servicio', fecha = 'tu fecha', hora = 'tu hora') =>
-    `Hola María 💅✨ Quiero reservar: ${servicio} para el ${fecha} a las ${hora}. Mi nombre es: ___. Quedo atenta a confirmación. ¡Gracias!`,
+    `Hola María. Quiero reservar: ${servicio} para el ${fecha} a las ${hora}. Mi nombre es: ___. Quedo atenta a confirmación. ¡Gracias!`,
 
-  cancelacion24h: `Hola María 💜 Necesito cancelar/reprogramar mi cita con más de 24 horas de anticipación. Mi cita es: ___. Gracias por tu comprensión.`,
+  cancelacion24h: `Hola María. Necesito cancelar/reprogramar mi cita con más de 24 horas de anticipación. Mi cita es: ___. Gracias por tu comprensión.`,
 
-  tardanza15min: `Hola María 💜 Voy en camino, podría llegar unos minutos tarde. Entiendo la tolerancia de 15 minutos. Mi cita es a las: ___. Gracias.`,
+  tardanza15min: `Hola María. Voy en camino, podría llegar unos minutos tarde. Entiendo la tolerancia de 15 minutos. Mi cita es a las: ___. Gracias.`,
 
-  nailArt: `Hola María 🎨✨ Me interesa Nail Art personalizado (mano alzada / 3D / pedrería). Te envío mis fotos de referencia para cotizar. ¡Gracias!`,
+  nailArt: `Hola María. Me interesa Nail Art personalizado (mano alzada / 3D / pedrería). Te envío mis fotos de referencia para cotizar. ¡Gracias!`,
 
-  pagoTransferencia: `Hola María 💜 Haré mi pago por transferencia Banreservas cuenta ${BUSINESS_INFO.bankAccount} a nombre de ${BUSINESS_INFO.bankHolder}. Te envío el comprobante. ¡Gracias!`,
+  pagoTransferencia: `Hola María. Haré mi pago por transferencia Banreservas cuenta ${BUSINESS_INFO.bankAccount} a nombre de ${BUSINESS_INFO.bankHolder}. Te envío el comprobante. ¡Gracias!`,
 
   direccion: `Estamos en ${BUSINESS_INFO.addressLine1} (${BUSINESS_INFO.addressLine2}). Te esperamos con cafecito, té, jugos y galletitas de cortesía ☕🍪💜`,
 };

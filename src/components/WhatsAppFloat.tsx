@@ -19,7 +19,7 @@ export default function WhatsAppFloat() {
 
   const withText = url.includes('?') ? `${url}&text=` : `${url}?text=`;
   const href = `${withText}${encodeURIComponent(
-    'Hola María 💅✨ Quiero reservar mi cita en Maria Nails Studio & Pedicure. Mi nombre es: ___. Quedo atenta, ¡gracias!',
+    'Hola María. Quiero reservar mi cita en Maria Nails Studio & Pedicure. Mi nombre es: ___. Quedo atenta, ¡gracias!',
   )}`;
 
   return (

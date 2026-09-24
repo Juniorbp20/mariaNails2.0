@@ -13,10 +13,10 @@ import PolicyBlocks from '../components/PolicyBlocks';
 type TabKey = 'manicura' | 'gel' | 'acrilico' | 'nailart' | 'info';
 
 const TABS: { key: TabKey; label: string }[] = [
-  { key: 'manicura', label: 'Manicura 💅' },
-  { key: 'gel', label: 'Gel y Pedicura ✨' },
-  { key: 'acrilico', label: 'Acrílico #1-#8 💜' },
-  { key: 'nailart', label: 'Nail Art 🎨' },
+  { key: 'manicura', label: 'Manicura' },
+  { key: 'gel', label: 'Gel y Pedicura' },
+  { key: 'acrilico', label: 'Acrílico #1-#8' },
+  { key: 'nailart', label: 'Nail Art' },
   { key: 'info', label: 'Cortesías y Políticas ☕' },
 ];
 
@@ -100,7 +100,7 @@ export default function PriceCatalog() {
             <div className="flex gap-2">
               {s.id.startsWith('official-') ? (
                 <a
-                  href={waLink(`Hola María 💅✨ Quiero reservar: ${s.name} (${formatPrice(s.price)}). Mi nombre es: ___.`)}
+                  href={waLink(`Hola María. Quiero reservar: ${s.name} (${formatPrice(s.price)}). Mi nombre es: ___.`)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 text-center rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-sm font-semibold text-white"
@@ -130,7 +130,7 @@ export default function PriceCatalog() {
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-purple-100">
             <BadgeDollarSign className="h-7 w-7 text-purple-600" aria-hidden="true" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Catálogo de precios 💜</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Catálogo de precios</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             {businessName} · Belleza en tus manos y pies · Precios oficiales en RD$, sin sorpresas.
           </p>
@@ -169,7 +169,7 @@ export default function PriceCatalog() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-1">Manicura clásica y cuidado</h2>
               <p className="text-gray-600 mb-5 text-sm">
-                Hola mi amor 💜 Elige tu manicura ideal. Todas incluyen hidratación de cutícula.
+                Hola mi amor. Elige tu manicura ideal. Todas incluyen hidratación de cutícula.
               </p>
               {renderServiceCards(manicura, 'Pronto publicamos la manicura oficial. Escríbenos por WhatsApp.')}
             </div>
@@ -197,7 +197,7 @@ export default function PriceCatalog() {
 
           {tab === 'nailart' && (
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-1">Nail Art & Decoración 🎨</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-1">Nail Art & Decoración</h2>
               <p className="text-gray-600 mb-5 text-sm">
                 Mano alzada, stickers, 3D, pedrería y gel sólido. Trae fotos de referencia para cotizar.
               </p>
@@ -217,7 +217,7 @@ export default function PriceCatalog() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-1">Cortesías, ubicación y políticas</h2>
               <p className="text-gray-600 mb-2 text-sm">
-                Todo lo que disfrutas en tu cita, mi amor 💜.
+                Todo lo que disfrutas en tu cita, mi amor.
               </p>
               <PolicyBlocks paymentDetails={profile.payment_details} />
             </div>
@@ -240,7 +240,7 @@ export default function PriceCatalog() {
                 rel="noopener noreferrer"
                 className="text-sm font-semibold text-purple-700 hover:text-purple-800"
               >
-                ¿Dudas? Escríbenos al 829-338-8282 por WhatsApp 💬
+                ¿Dudas? Escríbenos al 829-338-8282 por WhatsApp
               </a>
             )}
           </div>

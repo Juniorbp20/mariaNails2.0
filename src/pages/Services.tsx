@@ -61,13 +61,13 @@ export default function Services() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">Nuestros Servicios 💅</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">Nuestros Servicios</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Hola mi amor 💜 Precios oficiales en RD$, sin sorpresas. Solo con cita previa al
-            829-338-8282. Incluye coffee bar de cortesía ☕🍪.
+            Hola mi amor. Precios oficiales en RD$, sin sorpresas. Solo con cita previa al
+            829-338-8282. Incluye coffee bar de cortesía.
           </p>
           <Link to="/precios" className="mt-3 inline-block font-semibold text-purple-700 hover:text-purple-800">
-            Ver catálogo completo con tabla acrílica #1-#8 →
+            Ver catálogo completo con tabla acrílica #1-#8
           </Link>
         </div>
 
@@ -147,7 +147,7 @@ export default function Services() {
         ) : (
           <p className="text-center text-gray-600">
             No hay servicios disponibles por el momento. Escríbenos por WhatsApp al 829-338-8282 y te
-            ayudamos 💜.
+            ayudamos.
           </p>
         )}
 

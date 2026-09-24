@@ -82,7 +82,7 @@ export default function AcrylicPriceTable({ services }: AcrylicPriceTableProps) 
             ) : (
               <a
                 href={`https://wa.me/18293388282?text=${encodeURIComponent(
-                  `Hola María 💅✨ Quiero reservar: Acrílico ${style.label} #${selectedLength} (${formatPrice(price)}). Mi nombre es: ___.`,
+                  `Hola María Quiero reservar: Acrílico ${style.label} #${selectedLength} (${formatPrice(price)}). Mi nombre es: ___.`,
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
