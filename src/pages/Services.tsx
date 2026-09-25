@@ -1,13 +1,14 @@
 /**
  * Services.tsx — Página /servicios con todo el catálogo reservable.
  *
- * Cómo funciona: carga servicios de Supabase, los agrupa por categoría
- * (Manicura/Gel/Pedicura/Acrílico/Nail Art) con filtros, muestra la tabla
- * acrílica interactiva y abre un modal con detalle + botón Reservar.
+ * Cómo funciona: carga servicios de Supabase y los muestra con buscador,
+ * filtro por categoría y orden (precio, duración, nombre). La tabla
+ * acrílica interactiva vive en su propia pestaña y abre un modal con
+ * detalle + botón Reservar.
  */
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import ServiceCard from '../components/ServiceCard';
 import { GridSkeleton } from '../components/Skeletons';
 import AcrylicPriceTable from '../components/AcrylicPriceTable';
@@ -18,7 +19,30 @@ import { groupServicesByCategory, sortedCategoryKeys } from '../utils/catalog';
 import { formatDuration, formatPrice } from '../utils/format';
 import { useBusinessProfile } from '../contexts/BusinessProfileContext';
 
-/** Catálogo por categorías con filtros, tabla acrílica y modal de detalle. */
+/** Clave especial para la vista interactiva (distinta de la categoría "Acrílico" de la BD). */
+const INTERACTIVE_KEY = 'Acrílico interactivo';
+
+/** Opciones de orden para la lista filtrada. */
+type SortKey = 'orden' | 'precio-asc' | 'precio-desc' | 'duracion' | 'nombre';
+
+const SORT_OPTIONS: { value: SortKey; label: string }[] = [
+  { value: 'orden', label: 'Orden del salón' },
+  { value: 'precio-asc', label: 'Precio: menor a mayor' },
+  { value: 'precio-desc', label: 'Precio: mayor a menor' },
+  { value: 'duracion', label: 'Duración más corta' },
+  { value: 'nombre', label: 'Nombre A-Z' },
+];
+
+/** Compara dos servicios según la opción de orden elegida. */
+function compareServices(a: Service, b: Service, sort: SortKey): number {
+  if (sort === 'precio-asc') return a.price - b.price;
+  if (sort === 'precio-desc') return b.price - a.price;
+  if (sort === 'duracion') return a.duration_minutes - b.duration_minutes;
+  if (sort === 'nombre') return a.name.localeCompare(b.name, 'es');
+  return 0;
+}
+
+/** Catálogo con buscador, filtros por categoría, orden y modal de detalle. */
 export default function Services() {
   const { profile } = useBusinessProfile();
   const [services, setServices] = useState<Service[]>([]);
@@ -26,6 +50,8 @@ export default function Services() {
   const [error, setError] = useState('');
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>('Todos');
+  const [query, setQuery] = useState('');
+  const [sort, setSort] = useState<SortKey>('orden');
 
   useEffect(() => {
     const loadServices = async () => {
@@ -59,11 +85,32 @@ export default function Services() {
   const grouped = useMemo(() => groupServicesByCategory(services), [services]);
   const categories = useMemo(() => ['Todos', ...sortedCategoryKeys(grouped)], [grouped]);
 
+  const hasFilters = query.trim() !== '' || activeCategory !== 'Todos' || sort !== 'orden';
+
+  const clearFilters = () => {
+    setQuery('');
+    setActiveCategory('Todos');
+    setSort('orden');
+  };
+
   const visibleGroups = useMemo(() => {
-    if (activeCategory === 'Todos') return sortedCategoryKeys(grouped).map((k) => ({ key: k, items: grouped[k] }));
-    if (activeCategory === 'Acrílico') return [];
-    return grouped[activeCategory] ? [{ key: activeCategory, items: grouped[activeCategory] }] : [];
-  }, [grouped, activeCategory]);
+    if (activeCategory === INTERACTIVE_KEY) return [];
+    const q = query.trim().toLowerCase();
+    let list = services;
+    if (activeCategory !== 'Todos') {
+      list = list.filter((s) => s.category === activeCategory);
+    }
+    if (q) {
+      list = list.filter((s) =>
+        `${s.name} ${s.description} ${s.category}`.toLowerCase().includes(q),
+      );
+    }
+    const sorted = [...list].sort((a, b) => compareServices(a, b, sort));
+    const g = groupServicesByCategory(sorted);
+    return sortedCategoryKeys(g).map((k) => ({ key: k, items: g[k] }));
+  }, [services, activeCategory, query, sort]);
+
+  const totalVisible = visibleGroups.reduce((acc, g) => acc + g.items.length, 0);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-white">
@@ -80,30 +127,92 @@ export default function Services() {
         </div>
 
         {!loading && !error && services.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
-            {categories.map((c) => (
+          <div className="mb-8 rounded-2xl border border-purple-100 bg-white/80 p-4 shadow-sm">
+            <div className="flex flex-col gap-3 md:flex-row md:items-center">
+              <label className="relative flex-1">
+                <span className="sr-only">Buscar servicio</span>
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" aria-hidden="true" />
+                <input
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Buscar: manicura, gel, pedicura, acrílico..."
+                  className="w-full rounded-full border border-purple-200 bg-white py-2 pl-9 pr-9 text-sm outline-none placeholder:text-gray-400 focus:border-purple-400"
+                />
+                {query && (
+                  <button
+                    type="button"
+                    onClick={() => setQuery('')}
+                    aria-label="Limpiar búsqueda"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </label>
+              <label className="flex items-center gap-2 text-sm text-gray-700">
+                <span className="whitespace-nowrap font-medium">Ordenar:</span>
+                <select
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value as SortKey)}
+                  className="rounded-full border border-purple-200 bg-white px-3 py-2 text-sm font-medium text-purple-800 outline-none focus:border-purple-400"
+                >
+                  {SORT_OPTIONS.map((o) => (
+                    <option key={o.value} value={o.value}>
+                      {o.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div className="mt-3 flex flex-wrap gap-2" role="tablist" aria-label="Filtrar por categoría">
+              {categories.map((c) => (
+                <button
+                  key={c}
+                  role="tab"
+                  aria-selected={activeCategory === c}
+                  onClick={() => setActiveCategory(c)}
+                  className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                    activeCategory === c
+                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow'
+                      : 'bg-white text-purple-700 border border-purple-200 hover:border-purple-400'
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
               <button
-                key={c}
-                onClick={() => setActiveCategory(c)}
+                role="tab"
+                aria-selected={activeCategory === INTERACTIVE_KEY}
+                onClick={() => setActiveCategory(INTERACTIVE_KEY)}
+                title="Compara los 6 estilos acrílicos por largo #1-#8"
                 className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-                  activeCategory === c
+                  activeCategory === INTERACTIVE_KEY
                     ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow'
-                    : 'bg-white text-purple-700 border border-purple-200 hover:border-purple-400'
+                    : 'bg-white text-purple-700 border border-dashed border-purple-300 hover:border-purple-400'
                 }`}
               >
-                {c}
+                Acrílico interactivo #1-#8
               </button>
-            ))}
-            <button
-              onClick={() => setActiveCategory('Acrílico')}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-                activeCategory === 'Acrílico'
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow'
-                  : 'bg-white text-purple-700 border border-purple-200 hover:border-purple-400'
-              }`}
-            >
-              Acrílico interactivo
-            </button>
+            </div>
+
+            <div className="mt-3 flex items-center justify-between text-xs text-gray-600">
+              <p aria-live="polite">
+                {activeCategory === INTERACTIVE_KEY
+                  ? 'Tabla interactiva de acrílico con 48 precios oficiales.'
+                  : `${totalVisible} servicio${totalVisible === 1 ? '' : 's'} ${hasFilters ? 'con estos filtros' : 'en total'}`}
+              </p>
+              {hasFilters && (
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="font-semibold text-purple-700 underline hover:text-purple-900"
+                >
+                  Limpiar filtros
+                </button>
+              )}
+            </div>
           </div>
         )}
 
@@ -121,13 +230,27 @@ export default function Services() {
           </div>
         ) : services.length > 0 ? (
           <>
-            {activeCategory === 'Acrílico' ? (
+            {activeCategory === INTERACTIVE_KEY ? (
               <div className="rounded-2xl bg-white/70 border border-purple-100 p-4 sm:p-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Elige tu largo #1-#8</h2>
                 <p className="text-sm text-gray-600 mb-4">
                   Precios oficiales. Toca un largo para ver los 6 estilos.
                 </p>
                 <AcrylicPriceTable services={services} />
+              </div>
+            ) : totalVisible === 0 ? (
+              <div className="rounded-2xl border border-purple-100 bg-white p-8 text-center">
+                <p className="text-lg font-semibold text-gray-900">No encontramos servicios con esos filtros</p>
+                <p className="mt-1 text-sm text-gray-600">
+                  Prueba con otra palabra o limpia los filtros para ver todo el catálogo.
+                </p>
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="mt-4 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-2 font-semibold text-white"
+                >
+                  Ver todos los servicios
+                </button>
               </div>
             ) : (
               <div className="space-y-10 mb-12">
@@ -136,6 +259,7 @@ export default function Services() {
                     <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                       <span className="inline-block h-6 w-1.5 rounded bg-gradient-to-b from-purple-500 to-pink-500" />
                       {key}
+                      <span className="text-sm font-medium text-gray-500">({items.length})</span>
                     </h2>
                     <div className="grid md:grid-cols-2 gap-6">
                       {items.map((service) => (
