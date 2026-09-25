@@ -10,7 +10,12 @@ import { useBusinessProfile } from '../contexts/BusinessProfileContext';
 import { BUSINESS_INFO, COURTESIES } from '../data/officialCatalog';
 
 /** Teléfono oficial si el perfil aún no tiene uno configurado. */
-const DEFAULT_PHONE = '+1 829 338 8282';
+const DEFAULT_PHONE = BUSINESS_INFO.phoneDisplay;
+
+/** Solo dígitos para comparar teléfonos sin formato. */
+function onlyDigits(value: string | null | undefined): string {
+  return (value || '').replace(/\D/g, '');
+}
 
 /** Convierte un teléfono o URL en link wa.me para el botón de WhatsApp. */
 const toWhatsappUrl = (value: string | null): string | null => {
@@ -41,13 +46,18 @@ export default function Footer() {
     'Manicura, gel, pedicura spa y acrílico con atención profesional de María Bonifacio. Solo con cita previa.';
   const addressLine1 = profile.address_line_1 || BUSINESS_INFO.addressLine1;
   const addressLine2 = profile.address_line_2 || BUSINESS_INFO.addressLine2;
-  const phone = profile.contact_phone || DEFAULT_PHONE;
+  const phone = profile.contact_phone || profile.contact_whatsapp || DEFAULT_PHONE;
+  const whatsapp = profile.contact_whatsapp || profile.contact_phone || BUSINESS_INFO.phoneDisplay;
+  const showBothPhones =
+    !!profile.contact_phone &&
+    !!profile.contact_whatsapp &&
+    onlyDigits(profile.contact_phone).slice(-10) !== onlyDigits(profile.contact_whatsapp).slice(-10);
   const mapsUrl = profile.maps_url;
   const instagramUrl = profile.instagram_url;
   const paymentDetails =
     profile.payment_details ||
     `Efectivo. Transferencia ${BUSINESS_INFO.bank} ${BUSINESS_INFO.bankAccount} (${BUSINESS_INFO.bankHolder})`;
-  const whatsappUrl = toWhatsappUrl(profile.contact_whatsapp || profile.contact_phone);
+  const whatsappUrl = toWhatsappUrl(profile.contact_whatsapp || profile.contact_phone) || BUSINESS_INFO.whatsappUrl;
 
   return (
     <footer className="bg-gray-900 text-white mt-20">
@@ -87,7 +97,9 @@ export default function Footer() {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-pink-500" />
-                <span className="text-gray-300">{phone} · WhatsApp citas</span>
+                <span className="text-gray-300">
+                  {showBothPhones ? `${phone} · WhatsApp ${whatsapp}` : `${phone} · WhatsApp citas`}
+                </span>
               </div>
               <div className="flex items-start space-x-3">
                 <CreditCard className="w-5 h-5 text-pink-500 flex-shrink-0 mt-0.5" />

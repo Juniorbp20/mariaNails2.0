@@ -8,6 +8,19 @@ import { Heart, Users, Zap } from 'lucide-react';
 import { useBusinessProfile } from '../contexts/BusinessProfileContext';
 import { BUSINESS_INFO, COURTESIES } from '../data/officialCatalog';
 
+/** Solo dígitos de un teléfono para comparar sin formato. */
+function onlyDigits(value: string | null | undefined): string {
+  return (value || '').replace(/\D/g, '');
+}
+
+/** Dos teléfonos son el mismo si coinciden sus últimos 10 dígitos. */
+function samePhone(a: string | null | undefined, b: string | null | undefined): boolean {
+  const da = onlyDigits(a);
+  const db = onlyDigits(b);
+  if (!da || !db) return false;
+  return da.slice(-10) === db.slice(-10);
+}
+
 /** Perfil de María + valores + tarjeta de contacto del salón. */
 export default function About() {
   const { profile } = useBusinessProfile();
@@ -22,6 +35,15 @@ export default function About() {
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean);
+
+  const whatsapp = profile.contact_whatsapp || profile.contact_phone || BUSINESS_INFO.phoneDisplay;
+  const phone = profile.contact_phone;
+  const showPhoneSeparately = phone && !samePhone(phone, whatsapp);
+  const addressLine1 = profile.address_line_1 || BUSINESS_INFO.addressLine1;
+  const addressLine2 = profile.address_line_2 || BUSINESS_INFO.addressLine2;
+  const paymentDetails =
+    profile.payment_details ||
+    `Efectivo. Transferencia ${BUSINESS_INFO.bank} ${BUSINESS_INFO.bankAccount} (${BUSINESS_INFO.bankHolder})`;
 
   return (
     <div className="min-h-screen bg-white">
@@ -79,16 +101,16 @@ export default function About() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Contacto del salón</h2>
           <div className="bg-white border border-gray-200 rounded-lg p-8 space-y-3">
             <p className="text-gray-700">Profesional: {BUSINESS_INFO.professional} — {BUSINESS_INFO.professionalTitle}</p>
-            <p className="text-gray-700">WhatsApp citas: {BUSINESS_INFO.phoneDisplay} ({BUSINESS_INFO.phoneInternational})</p>
-            {profile.contact_phone && <p className="text-gray-700">Teléfono: {profile.contact_phone}</p>}
+            <p className="text-gray-700">WhatsApp citas: {whatsapp}</p>
+            {showPhoneSeparately && <p className="text-gray-700">Teléfono: {phone}</p>}
             {profile.contact_email && <p className="text-gray-700">Email: {profile.contact_email}</p>}
-            <p className="text-gray-700">Dirección: {profile.address_line_1 || BUSINESS_INFO.addressLine1}</p>
-            <p className="text-gray-700">{profile.address_line_2 || BUSINESS_INFO.addressLine2}</p>
+            <p className="text-gray-700">
+              Dirección: {addressLine1}
+              {addressLine2 && `, ${addressLine2}`}
+            </p>
             <p className="text-gray-700">Modalidad: {BUSINESS_INFO.modality}</p>
             <p className="text-gray-700">Cortesías: {COURTESIES.join(', ')}</p>
-            <p className="text-gray-700">
-              {profile.payment_details || `Efectivo. Transferencia ${BUSINESS_INFO.bank} ${BUSINESS_INFO.bankAccount} (${BUSINESS_INFO.bankHolder})`}
-            </p>
+            <p className="text-gray-700">Pagos: {paymentDetails}</p>
             {profile.maps_url && (
               <a
                 href={profile.maps_url}
