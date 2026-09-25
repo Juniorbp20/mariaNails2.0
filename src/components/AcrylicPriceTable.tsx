@@ -2,12 +2,10 @@
  * AcrylicPriceTable.tsx — Tabla interactiva de acrílico #1 al #8.
  *
  * Cómo funciona: la clienta elige un largo (#1-#8) y ve los 6 estilos
- * con su precio. Si el servicio existe en la BD (Supabase) el botón
- * reserva directo en /reserva; si no, abre WhatsApp con el mensaje listo.
+ * con su precio. El botón pide por WhatsApp con el mensaje listo.
  * Abajo hay una tabla completa con los 48 precios oficiales.
  */
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { ACRYLIC_STYLES, type AcrylicLength } from '../data/officialCatalog';
 import type { Service } from '../types';
 import { findServiceForAcrylic } from '../utils/catalog';
@@ -71,7 +69,7 @@ export default function AcrylicPriceTable({ services }: AcrylicPriceTableProps) 
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {cards.map(({ style, dbService, price, description }) => (
+        {cards.map(({ style, price, description }) => (
           <div
             key={style.key}
             className="rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 via-pink-50 to-white p-5 hover:shadow-lg transition"
@@ -82,26 +80,16 @@ export default function AcrylicPriceTable({ services }: AcrylicPriceTableProps) 
             <h3 className="text-lg font-bold text-gray-900 mb-1">{style.label}</h3>
             <p className="text-sm text-gray-600 mb-3">{description}</p>
             <p className="text-2xl font-bold text-pink-600 mb-4">{formatPrice(price)}</p>
-            {dbService ? (
-              <Link
-                to="/reserva"
-                state={{ serviceId: dbService.id }}
-                className="block text-center rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 font-semibold text-white transition hover:shadow-lg"
-              >
-                Reservar #{selectedLength} · {style.shortLabel}
-              </Link>
-            ) : (
-              <a
-                href={`https://wa.me/18293388282?text=${encodeURIComponent(
-                  `Hola María Quiero reservar: Acrílico ${style.label} #${selectedLength} (${formatPrice(price)}). Mi nombre es: ___.`,
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-center rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 font-semibold text-white transition hover:shadow-lg"
-              >
-                Pedir por WhatsApp
-              </a>
-            )}
+            <a
+              href={`https://wa.me/18293388282?text=${encodeURIComponent(
+                `Hola María Quiero reservar: Acrílico ${style.label} #${selectedLength} (${formatPrice(price)}). Mi nombre es: ___.`,
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-center rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 font-semibold text-white transition hover:shadow-lg"
+            >
+              Reservar #{selectedLength} · {style.shortLabel} por WhatsApp
+            </a>
           </div>
         ))}
       </div>

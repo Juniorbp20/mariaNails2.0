@@ -13,6 +13,7 @@ import { serviceService } from '../services/serviceService';
 import type { Service } from '../types';
 import { formatPrice } from '../utils/format';
 import { BUSINESS_INFO, COURTESIES } from '../data/officialCatalog';
+import { waLink } from '../data/whatsappTemplates';
 
 /** Portada del negocio: hero, beneficios, sobre María y servicios destacados. */
 export default function Home() {
@@ -46,7 +47,7 @@ export default function Home() {
       <section className="bg-gradient-to-br from-pink-50 to-red-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="mb-3 inline-block rounded-full bg-white/70 px-4 py-1 text-sm font-medium text-pink-700 border border-pink-200">
-            Reserva en línea · Solo con cita previa · {BUSINESS_INFO.phoneDisplay}
+            Reserva por WhatsApp · Solo con cita previa · {BUSINESS_INFO.phoneDisplay}
           </p>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{heroTitle}</h1>
           <p className="text-lg text-gray-700 mb-4 max-w-2xl mx-auto">{heroSubtitle}</p>
@@ -54,13 +55,15 @@ export default function Home() {
             Coffee bar de cortesía: {COURTESIES.join(' · ')} · {BUSINESS_INFO.addressLine1}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              to="/reserva"
+            <a
+              href={waLink('Hola María. Quiero reservar mi cita en Maria Nails Studio & Pedicure. Mi nombre es: ___. Quedo atenta, ¡gracias!')}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center space-x-2 px-8 py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-lg font-semibold hover:shadow-lg transition text-lg"
             >
               <Calendar className="w-5 h-5" aria-hidden="true" />
-              <span>Reserva tu cita</span>
-            </Link>
+              <span>Reservar por WhatsApp</span>
+            </a>
             <Link
               to="/galeria"
               className="inline-flex items-center px-8 py-3 bg-white text-pink-700 rounded-lg font-semibold border border-pink-200 hover:shadow transition text-lg"
@@ -150,10 +153,11 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-6 mb-8">
             {services.length > 0
               ? services.map((service) => (
-                  <Link
+                  <a
                     key={service.id}
-                    to="/reserva"
-                    state={{ serviceId: service.id }}
+                    href={waLink(`Hola María. Quiero reservar: ${service.name} (${formatPrice(service.price)}). Mi nombre es: ___.`)}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="group bg-gradient-to-br from-pink-50 to-red-50 rounded-lg p-6 border border-pink-200 transition hover:shadow-lg"
                   >
                     <div className="flex items-start justify-between gap-3 mb-2">
@@ -161,8 +165,8 @@ export default function Home() {
                       <span className="whitespace-nowrap font-bold text-pink-600">{formatPrice(service.price)}</span>
                     </div>
                     <p className="text-gray-700 mb-3 line-clamp-2">{service.description}</p>
-                    <p className="text-pink-600 font-semibold">Reservar &rarr;</p>
-                  </Link>
+                    <p className="text-pink-600 font-semibold">Reservar por WhatsApp &rarr;</p>
+                  </a>
                 ))
               : [
                   { name: 'Manicura en Seco desde RD$250', desc: 'Retiro de cutículas con drill + hidratación.' },

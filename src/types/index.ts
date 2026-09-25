@@ -68,7 +68,7 @@ export interface GalleryImage {
   updated_at: string;
 }
 
-/** Lo que la clienta escribe en el paso final de /reserva. */
+/** Lo que la clienta envía por WhatsApp para pedir su cita. */
 export interface BookingFormData {
   service_id: string;
   client_name: string;

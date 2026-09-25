@@ -3,7 +3,7 @@
  *
  * Qué hace: evita errores de zona horaria al leer "YYYY-MM-DD",
  * formatea fechas en español y calcula horarios según la duración
- * de cada servicio. Todo el flujo de /reserva depende de aquí.
+ * de cada servicio. Lo usa el panel admin para fechas de citas.
  */
 
 /** Convierte "2026-09-24" en Date local (sin desfase de UTC). */

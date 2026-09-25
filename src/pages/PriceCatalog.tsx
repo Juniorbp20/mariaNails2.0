@@ -6,8 +6,7 @@
  * arriba; si la BD está vacía usa los precios oficiales locales.
  */
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { BadgeDollarSign, Calendar } from 'lucide-react';
+import { BadgeDollarSign, MessageCircle } from 'lucide-react';
 import { useBusinessProfile } from '../contexts/BusinessProfileContext';
 import { serviceService } from '../services/serviceService';
 import type { Service } from '../types';
@@ -108,24 +107,14 @@ export default function PriceCatalog() {
             <p className="text-sm text-gray-600 mb-2">{s.description}</p>
             <p className="text-xs text-gray-500 mb-3">{formatDuration(s.duration_minutes)}</p>
             <div className="flex gap-2">
-              {s.id.startsWith('official-') ? (
-                <a
-                  href={waLink(`Hola María. Quiero reservar: ${s.name} (${formatPrice(s.price)}). Mi nombre es: ___.`)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 text-center rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-sm font-semibold text-white"
-                >
-                  Reservar por WhatsApp
-                </a>
-              ) : (
-                <Link
-                  to="/reserva"
-                  state={{ serviceId: s.id }}
-                  className="flex-1 text-center rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-sm font-semibold text-white"
-                >
-                  Reservar
-                </Link>
-              )}
+              <a
+                href={waLink(`Hola María. Quiero reservar: ${s.name} (${formatPrice(s.price)}). Mi nombre es: ___.`)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 text-center rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-sm font-semibold text-white"
+              >
+                Reservar por WhatsApp
+              </a>
             </div>
           </div>
         ))}
@@ -235,13 +224,15 @@ export default function PriceCatalog() {
         </div>
 
         <div className="mt-10 text-center space-y-3">
-          <Link
-            to="/reserva"
+          <a
+            href={waLink('Hola María. Quiero reservar mi cita en Maria Nails Studio & Pedicure. Mi nombre es: ___. Quedo atenta, ¡gracias!')}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-8 py-3 font-semibold text-white transition hover:shadow-lg"
           >
-            <Calendar className="h-5 w-5" aria-hidden="true" />
-            Reservar mi cita
-          </Link>
+            <MessageCircle className="h-5 w-5" aria-hidden="true" />
+            Reservar por WhatsApp
+          </a>
           <div>
             {whatsappUrl && (
               <a

@@ -8,6 +8,7 @@ import { Menu, X } from 'lucide-react';
 import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useBusinessProfile } from '../contexts/BusinessProfileContext';
+import { BUSINESS_INFO } from '../data/officialCatalog';
 
 /** Toques necesarios en el logo para abrir el panel admin oculto. */
 const SECRET_ADMIN_TAP_COUNT = 3;
@@ -99,12 +100,14 @@ export default function Header() {
             <Link to="/precios" className="text-gray-700 hover:text-pink-600 font-medium transition">
               Precios
             </Link>
-            <Link
-              to="/reserva"
+            <a
+              href={`${BUSINESS_INFO.whatsappUrl}?text=${encodeURIComponent('Hola María. Quiero reservar mi cita en Maria Nails Studio & Pedicure. Mi nombre es: ___. Quedo atenta, ¡gracias!')}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="px-4 py-2 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-lg font-medium hover:shadow-lg transition"
             >
-              Reservar cita
-            </Link>
+              Reservar por WhatsApp
+            </a>
           </nav>
 
           <button
@@ -147,13 +150,15 @@ export default function Header() {
             >
               Precios
             </Link>
-            <Link
-              to="/reserva"
+            <a
+              href={`${BUSINESS_INFO.whatsappUrl}?text=${encodeURIComponent('Hola María. Quiero reservar mi cita en Maria Nails Studio & Pedicure. Mi nombre es: ___. Quedo atenta, ¡gracias!')}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="block px-4 py-2 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-lg font-medium transition"
               onClick={() => setMenuOpen(false)}
             >
-              Reservar cita
-            </Link>
+              Reservar por WhatsApp
+            </a>
           </nav>
         )}
       </div>
