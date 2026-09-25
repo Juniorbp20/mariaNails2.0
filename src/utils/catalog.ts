@@ -8,7 +8,7 @@
 import type { Service } from '../types';
 import { ACRYLIC_STYLES, type AcrylicLength, type AcrylicStyleKey } from '../data/officialCatalog';
 
-/** Orden oficial en que se muestran las categorías en /servicios y /precios. */
+/** Orden oficial en que se muestran las categorías en /precios. */
 export const CATEGORY_ORDER = [
   'Manicura',
   'Gel',

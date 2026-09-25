@@ -1,7 +1,7 @@
 /**
  * PolicyBlocks.tsx — Tarjetas de cortesías, ubicación, políticas y pagos.
  *
- * Dónde se usa: debajo del catálogo (/precios) y de servicios (/servicios).
+ * Dónde se usa: debajo del catálogo (/precios).
  * Muestra siempre la info oficial: coffee bar, dirección de Tenares,
  * reglas 24h/15min y Banreservas. El texto de pagos puede venir del perfil
  * editable en /admin o del valor oficial por defecto.

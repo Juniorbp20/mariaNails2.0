@@ -179,7 +179,7 @@ export default function Home() {
           </div>
           <div className="text-center">
             <Link
-              to="/servicios"
+              to="/precios"
               className="inline-block px-8 py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-lg font-semibold hover:shadow-lg transition"
             >
               Ver todos los servicios y precios

@@ -1,7 +1,7 @@
 /**
  * ScrollToTop.tsx — Vuelve arriba al cambiar de página.
  *
- * Sin esto, al navegar de /servicios a /reserva la página quedaría
+ * Sin esto, al navegar de /precios a /reserva la página quedaría
  * a mitad de scroll. No pinta nada en pantalla (return null).
  */
 import { useEffect } from 'react';

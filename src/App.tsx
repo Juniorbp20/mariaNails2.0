@@ -1,7 +1,7 @@
 /**
  * App.tsx — Raíz de la app: rutas y estructura común.
  *
- * Rutas: / (inicio), /servicios, /galeria, /reserva, /sobre-mi, /precios,
+ * Rutas: / (inicio), /galeria, /reserva, /sobre-mi, /precios,
  * /admin y 404. Todo vive dentro de BusinessProfileProvider; Header, Footer,
  * WhatsApp flotante y asistente aparecen en todas las páginas.
  */
@@ -13,7 +13,6 @@ import ScrollToTop from './components/ScrollToTop';
 import WhatsAppFloat from './components/WhatsAppFloat';
 import AIAssistant from './components/AIAssistant';
 import Home from './pages/Home';
-import Services from './pages/Services';
 import Gallery from './pages/Gallery';
 import Booking from './pages/Booking';
 import About from './pages/About';
@@ -34,7 +33,6 @@ function App() {
           <main className="flex-grow">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/servicios" element={<Services />} />
               <Route path="/galeria" element={<Gallery />} />
               <Route path="/reserva" element={<Booking />} />
               <Route path="/sobre-mi" element={<About />} />

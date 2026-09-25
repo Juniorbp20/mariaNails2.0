@@ -1,7 +1,7 @@
 /**
  * Header.tsx — Barra superior con logo, nombre y menú de navegación.
  *
- * Incluye: enlaces a Inicio/Sobre mí/Servicios/Galería/Precios/Reservar,
+ * Incluye: enlaces a Inicio/Sobre mí/Galería/Precios/Reservar,
  * menú hamburguesa en móvil y acceso oculto a /admin (3 toques al logo).
  */
 import { Menu, X } from 'lucide-react';
@@ -93,9 +93,6 @@ export default function Header() {
             <Link to="/sobre-mi" className="text-gray-700 hover:text-pink-600 font-medium transition">
               Sobre mí
             </Link>
-            <Link to="/servicios" className="text-gray-700 hover:text-pink-600 font-medium transition">
-              Servicios
-            </Link>
             <Link to="/galeria" className="text-gray-700 hover:text-pink-600 font-medium transition">
               Galería
             </Link>
@@ -135,13 +132,6 @@ export default function Header() {
               onClick={() => setMenuOpen(false)}
             >
               Sobre mí
-            </Link>
-            <Link
-              to="/servicios"
-              className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition"
-              onClick={() => setMenuOpen(false)}
-            >
-              Servicios
             </Link>
             <Link
               to="/galeria"
