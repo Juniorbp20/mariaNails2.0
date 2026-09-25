@@ -51,7 +51,7 @@ export default function Home() {
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{heroTitle}</h1>
           <p className="text-lg text-gray-700 mb-4 max-w-2xl mx-auto">{heroSubtitle}</p>
           <p className="text-sm text-purple-700 mb-8">
-            ☕ Coffee bar de cortesía: {COURTESIES.join(' · ')} · {BUSINESS_INFO.addressLine1}
+            Coffee bar de cortesía: {COURTESIES.join(' · ')} · {BUSINESS_INFO.addressLine1}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link

@@ -25,7 +25,7 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: 'gel', label: 'Gel y Pedicura' },
   { key: 'acrilico', label: 'Acrílico #1-#8' },
   { key: 'nailart', label: 'Nail Art' },
-  { key: 'info', label: 'Cortesías y Políticas ☕' },
+  { key: 'info', label: 'Cortesías y Políticas' },
 ];
 
 /** Convierte los precios oficiales en servicios ficticios si la BD viene vacía. */
@@ -189,7 +189,7 @@ export default function PriceCatalog() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-1">Sistemas en gel y pedicura spa</h2>
               <p className="text-gray-600 mb-5 text-sm">
-                Brillo duradero y pedicura de 3 horas con máxima relajación + coffee bar ☕.
+                Brillo duradero y pedicura de 3 horas con máxima relajación + coffee bar.
               </p>
               {renderServiceCards(gelPedi, 'Pronto publicamos gel y pedicura. Escríbenos por WhatsApp.')}
             </div>

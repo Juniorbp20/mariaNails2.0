@@ -157,18 +157,18 @@ export default function Booking() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-red-50 py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4 text-center">Reserva tu cita 💅</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-4 text-center">Reserva tu cita</h1>
         <p className="text-center text-gray-600 mb-4">
-          Hola mi amor 💜 Solo con cita previa · WhatsApp {BUSINESS_INFO.phoneDisplay}
+          Hola mi amor. Solo con cita previa · WhatsApp {BUSINESS_INFO.phoneDisplay}
         </p>
         <div className="mb-8 rounded-xl border border-purple-200 bg-white/80 p-4 text-sm text-gray-700 space-y-1">
-          <p>💬 {POLICIES.bookingChannel}</p>
-          <p>🕒 {POLICIES.cancellation}</p>
-          <p>⏰ {POLICIES.punctuality}</p>
+          <p>{POLICIES.bookingChannel}</p>
+          <p>{POLICIES.cancellation}</p>
+          <p>{POLICIES.punctuality}</p>
           <p>
-            📍 {BUSINESS_INFO.addressLine1} ({BUSINESS_INFO.addressLine2})
+            {BUSINESS_INFO.addressLine1} ({BUSINESS_INFO.addressLine2})
           </p>
-          <p>☕ Coffee bar de cortesía en tu cita: café, té, jugos y galletitas.</p>
+          <p>Coffee bar de cortesía en tu cita: café, té, jugos y galletitas.</p>
         </div>
 
         <div className="mb-12 bg-white rounded-lg p-6 border border-gray-200">
@@ -435,15 +435,15 @@ export default function Booking() {
               </a>
             </p>
             <div className="mb-6 rounded-xl border border-purple-200 bg-purple-50 p-4 text-left text-sm text-gray-700">
-              <p className="font-semibold text-gray-900 mb-1">Para tu visita 💜</p>
+              <p className="font-semibold text-gray-900 mb-1">Para tu visita</p>
               <p>
-                📍 {BUSINESS_INFO.addressLine1} ({BUSINESS_INFO.addressLine2})
+                {BUSINESS_INFO.addressLine1} ({BUSINESS_INFO.addressLine2})
               </p>
               <p>
-                💳 Efectivo o transferencia {BUSINESS_INFO.bank} {BUSINESS_INFO.bankAccount} a
+                Efectivo o transferencia {BUSINESS_INFO.bank} {BUSINESS_INFO.bankAccount} a
                 nombre de {BUSINESS_INFO.bankHolder}.
               </p>
-              <p>☕ Te esperamos con cafecito, té, jugos y galletitas de cortesía.</p>
+              <p>Te esperamos con cafecito, té, jugos y galletitas de cortesía.</p>
             </div>
 
             <button

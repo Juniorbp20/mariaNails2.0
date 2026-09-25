@@ -212,7 +212,7 @@ export default function Services() {
               </div>
 
               <p className="text-xs text-gray-500 mb-4">
-                Incluye coffee bar de cortesía ☕ · Solo con cita previa · Tolerancia 15 min ·
+                Incluye coffee bar de cortesía · Solo con cita previa · Tolerancia 15 min ·
                 Cancela sin costo 24h antes.
               </p>
 

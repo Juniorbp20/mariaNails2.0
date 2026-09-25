@@ -2,7 +2,7 @@
  * GalleryImage.tsx — Foto de trabajos con vista ampliada.
  *
  * Muestra la miniatura; al tocarla abre un modal a pantalla completa
- * (se cierra con ✕, clic fuera o tecla Escape).
+ * (se cierra con X, clic fuera o tecla Escape).
  */
 import { useCallback, useEffect, useState } from 'react';
 import { X } from 'lucide-react';

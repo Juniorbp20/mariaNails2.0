@@ -38,7 +38,7 @@ export const WHATSAPP_TEMPLATES = {
 
   pagoTransferencia: `Hola María. Haré mi pago por transferencia Banreservas cuenta ${BUSINESS_INFO.bankAccount} a nombre de ${BUSINESS_INFO.bankHolder}. Te envío el comprobante. ¡Gracias!`,
 
-  direccion: `Estamos en ${BUSINESS_INFO.addressLine1} (${BUSINESS_INFO.addressLine2}). Te esperamos con cafecito, té, jugos y galletitas de cortesía ☕🍪💜`,
+  direccion: `Estamos en ${BUSINESS_INFO.addressLine1} (${BUSINESS_INFO.addressLine2}). Te esperamos con cafecito, té, jugos y galletitas de cortesía.`,
 };
 
 /** System prompt maestro: pégalo en ChatGPT/Claude/bots para clonar a la asistente. */

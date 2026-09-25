@@ -1,5 +1,5 @@
 /**
- * AIAssistant.tsx — Asistente virtual flotante (botón 💬 abajo-izquierda).
+ * AIAssistant.tsx — Asistente virtual flotante (botón abajo-izquierda).
  *
  * Cómo funciona: chat con respuestas por palabras clave (precios, acrílico,
  * pedicura, dirección, pagos, 24h/15min...). No usa IA externa ni cuesta
@@ -35,16 +35,16 @@ function getBotReply(input: string): string {
     return `Acrílico del #1 al #8 \n• ${rows}\nDime tu largo y estilo y te digo el precio exacto. Ej: “Cover Liso #4 = RD$1,250”.`;
   }
   if (q.match(/pedicura|pie/)) {
-    return `Pedicura completa RD$1,234 Aprox. 3 horas: exfoliación, hidratación profunda, tratamiento y esmaltado + coffee bar ☕. Solo con cita previa al ${BUSINESS_INFO.phoneDisplay}.`;
+    return `Pedicura completa RD$1,234 Aprox. 3 horas: exfoliación, hidratación profunda, tratamiento y esmaltado + coffee bar. Solo con cita previa al ${BUSINESS_INFO.phoneDisplay}.`;
   }
   if (q.match(/manicura|mano|gel/)) {
-    return `Manicura Seco 250, Seco Gel 450, Regular 600, Gel 800. Gel uña natural 450. Sistemas Rubber/Acry/Builder desde 1234. Todas con hidratación 💜.`;
+    return `Manicura Seco 250, Seco Gel 450, Regular 600, Gel 800. Gel uña natural 450. Sistemas Rubber/Acry/Builder desde 1234. Todas con hidratación.`;
   }
   if (q.match(/nail|arte|diseño|diseno|3d|piedra|sticker/)) {
-    return `Nail Art Mano alzada, stickers, 3D, pedrería y gel sólido. Envíame tus fotos de referencia por WhatsApp y te cotizamos con amor 💜.`;
+    return `Nail Art Mano alzada, stickers, 3D, pedrería y gel sólido. Envíame tus fotos de referencia por WhatsApp y te cotizamos con amor.`;
   }
   if (q.match(/donde|donde|ubic|direcc|tenares|llegar|mapa/)) {
-    return `Estamos en ${BUSINESS_INFO.addressLine1} (${BUSINESS_INFO.addressLine2}) Te esperamos con cafecito y galletitas ☕🍪.`;
+    return `Estamos en ${BUSINESS_INFO.addressLine1} (${BUSINESS_INFO.addressLine2}) Te esperamos con cafecito y galletitas.`;
   }
   if (q.match(/pago|banreservas|transfer|cuenta|efectivo|seña|sena|deposito/)) {
     return `Pagos Efectivo en local o transferencia ${BUSINESS_INFO.bank} cuenta ${BUSINESS_INFO.bankAccount} a nombre de ${BUSINESS_INFO.bankHolder}. Si cancelas con menos de 24h no se devuelve la seña.`;
@@ -53,10 +53,10 @@ function getBotReply(input: string): string {
     return `Puedes cancelar sin costo con 24h de anticipación Con menos de 24h pierdes la seña. Escríbenos al ${BUSINESS_INFO.phoneDisplay} con tu fecha/hora.`;
   }
   if (q.match(/tarde|puntual|15|minuto|hora/)) {
-    return `Te esperamos máximo 15 min pasada tu hora Luego el turno queda libre. Avísanos por WhatsApp si vienes en camino 💜.`;
+    return `Te esperamos máximo 15 min pasada tu hora Luego el turno queda libre. Avísanos por WhatsApp si vienes en camino.`;
   }
   if (q.match(/cafe|coffee|cortesia|te|jugo|galleta/)) {
-    return `Coffee bar gratis ☕: ${COURTESIES.join(', ')}. Para todas nuestras clientas durante su cita.`;
+    return `Coffee bar gratis: ${COURTESIES.join(', ')}. Para todas nuestras clientas durante su cita.`;
   }
   if (q.match(/cita|reserva|agenda|apartar|turno|whatsapp/)) {
     return `Reserva solo por WhatsApp al ${BUSINESS_INFO.phoneDisplay} Dime servicio + fecha + hora y te confirmamos. ${BUSINESS_INFO.modality}`;
@@ -118,7 +118,7 @@ export default function AIAssistant() {
                 aria-label="Cerrar asistente"
                 className="rounded-full bg-white/20 px-2 py-1 text-sm hover:bg-white/30"
               >
-                ✕
+                X
               </button>
             </div>
           </div>
@@ -168,7 +168,7 @@ export default function AIAssistant() {
                 type="submit"
                 className="rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-sm font-bold text-white"
               >
-                ➤
+                Enviar
               </button>
             </form>
             <div className="mt-2 flex gap-2 text-xs">

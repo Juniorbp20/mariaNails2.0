@@ -85,9 +85,9 @@ export default function About() {
             <p className="text-gray-700">Dirección: {profile.address_line_1 || BUSINESS_INFO.addressLine1}</p>
             <p className="text-gray-700">{profile.address_line_2 || BUSINESS_INFO.addressLine2}</p>
             <p className="text-gray-700">Modalidad: {BUSINESS_INFO.modality}</p>
-            <p className="text-gray-700">☕ Cortesías: {COURTESIES.join(', ')}</p>
+            <p className="text-gray-700">Cortesías: {COURTESIES.join(', ')}</p>
             <p className="text-gray-700">
-              💳 {profile.payment_details || `Efectivo. Transferencia ${BUSINESS_INFO.bank} ${BUSINESS_INFO.bankAccount} (${BUSINESS_INFO.bankHolder})`}
+              {profile.payment_details || `Efectivo. Transferencia ${BUSINESS_INFO.bank} ${BUSINESS_INFO.bankAccount} (${BUSINESS_INFO.bankHolder})`}
             </p>
             {profile.maps_url && (
               <a
