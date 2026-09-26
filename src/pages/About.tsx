@@ -21,6 +21,19 @@ function samePhone(a: string | null | undefined, b: string | null | undefined): 
   return da.slice(-10) === db.slice(-10);
 }
 
+/** Es un enlace (https://...) y no un número para mostrar. */
+function isUrl(value: string | null | undefined): boolean {
+  return /^https?:\/\//i.test((value || '').trim());
+}
+
+/** Primer valor que sea número visible (ignora enlaces wa.me). */
+function firstPhone(...values: Array<string | null | undefined>): string | null {
+  for (const v of values) {
+    if (v && !isUrl(v)) return v;
+  }
+  return null;
+}
+
 /** Perfil de María + valores + tarjeta de contacto del salón. */
 export default function About() {
   const { profile } = useBusinessProfile();
@@ -36,8 +49,8 @@ export default function About() {
     .map((line) => line.trim())
     .filter(Boolean);
 
-  const whatsapp = profile.contact_whatsapp || profile.contact_phone || BUSINESS_INFO.phoneDisplay;
-  const phone = profile.contact_phone;
+  const whatsapp = firstPhone(profile.contact_whatsapp, profile.contact_phone) || BUSINESS_INFO.phoneDisplay;
+  const phone = firstPhone(profile.contact_phone);
   const showPhoneSeparately = phone && !samePhone(phone, whatsapp);
   const addressLine1 = profile.address_line_1 || BUSINESS_INFO.addressLine1;
   const addressLine2 = profile.address_line_2 || BUSINESS_INFO.addressLine2;

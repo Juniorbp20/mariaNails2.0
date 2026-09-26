@@ -17,6 +17,19 @@ function onlyDigits(value: string | null | undefined): string {
   return (value || '').replace(/\D/g, '');
 }
 
+/** Es un enlace (https://...) y no un número para mostrar. */
+function isUrl(value: string | null | undefined): boolean {
+  return /^https?:\/\//i.test((value || '').trim());
+}
+
+/** Primer valor que sea número visible (ignora enlaces wa.me). */
+function firstPhone(...values: Array<string | null | undefined>): string | null {
+  for (const v of values) {
+    if (v && !isUrl(v)) return v;
+  }
+  return null;
+}
+
 /** Convierte un teléfono o URL en link wa.me para el botón de WhatsApp. */
 const toWhatsappUrl = (value: string | null): string | null => {
   if (!value) return null;
@@ -46,11 +59,13 @@ export default function Footer() {
     'Manicura, gel, pedicura spa y acrílico con atención profesional de María Bonifacio. Solo con cita previa.';
   const addressLine1 = profile.address_line_1 || BUSINESS_INFO.addressLine1;
   const addressLine2 = profile.address_line_2 || BUSINESS_INFO.addressLine2;
-  const phone = profile.contact_phone || profile.contact_whatsapp || DEFAULT_PHONE;
-  const whatsapp = profile.contact_whatsapp || profile.contact_phone || BUSINESS_INFO.phoneDisplay;
+  const phone = firstPhone(profile.contact_phone, profile.contact_whatsapp) || DEFAULT_PHONE;
+  const whatsapp = firstPhone(profile.contact_whatsapp, profile.contact_phone) || BUSINESS_INFO.phoneDisplay;
+  const phoneIsNumber = !!firstPhone(profile.contact_phone);
+  const whatsappIsNumber = !!firstPhone(profile.contact_whatsapp);
   const showBothPhones =
-    !!profile.contact_phone &&
-    !!profile.contact_whatsapp &&
+    phoneIsNumber &&
+    whatsappIsNumber &&
     onlyDigits(profile.contact_phone).slice(-10) !== onlyDigits(profile.contact_whatsapp).slice(-10);
   const mapsUrl = profile.maps_url;
   const instagramUrl = profile.instagram_url;
