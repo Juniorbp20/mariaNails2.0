@@ -32,7 +32,7 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
-              href={waLink('Hola María. Quiero reservar mi cita en Maria Nails Studio & Pedicure. Mi nombre es: ___. Quedo atenta, ¡gracias!')}
+              href={waLink('Hola María. Quiero reservar mi cita en Maria Nails. Mi nombre es: ___. Quedo atenta, ¡gracias!')}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-2 px-8 py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-lg font-semibold hover:shadow-lg transition text-lg"

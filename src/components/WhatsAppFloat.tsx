@@ -17,7 +17,7 @@ function WhatsAppIcon({ className }: { className?: string }) {
 /** Botón flotante que abre WhatsApp con mensaje de reserva pre-llenado. */
 export default function WhatsAppFloat() {
   const href = `${BUSINESS_INFO.whatsappUrl}?text=${encodeURIComponent(
-    'Hola María. Quiero reservar mi cita en Maria Nails Studio & Pedicure. Mi nombre es: ___. Quedo atenta, ¡gracias!',
+    'Hola María. Quiero reservar mi cita en Maria Nails. Mi nombre es: ___. Quedo atenta, ¡gracias!',
   )}`;
 
   return (

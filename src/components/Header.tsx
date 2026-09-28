@@ -59,7 +59,7 @@ export default function Header() {
               Precios
             </Link>
             <a
-              href={`${BUSINESS_INFO.whatsappUrl}?text=${encodeURIComponent('Hola María. Quiero reservar mi cita en Maria Nails Studio & Pedicure. Mi nombre es: ___. Quedo atenta, ¡gracias!')}`}
+              href={`${BUSINESS_INFO.whatsappUrl}?text=${encodeURIComponent('Hola María. Quiero reservar mi cita en Maria Nails. Mi nombre es: ___. Quedo atenta, ¡gracias!')}`}
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-lg font-medium hover:shadow-lg transition"
@@ -109,7 +109,7 @@ export default function Header() {
               Precios
             </Link>
             <a
-              href={`${BUSINESS_INFO.whatsappUrl}?text=${encodeURIComponent('Hola María. Quiero reservar mi cita en Maria Nails Studio & Pedicure. Mi nombre es: ___. Quedo atenta, ¡gracias!')}`}
+              href={`${BUSINESS_INFO.whatsappUrl}?text=${encodeURIComponent('Hola María. Quiero reservar mi cita en Maria Nails. Mi nombre es: ___. Quedo atenta, ¡gracias!')}`}
               target="_blank"
               rel="noopener noreferrer"
               className="block px-4 py-2 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-lg font-medium transition"

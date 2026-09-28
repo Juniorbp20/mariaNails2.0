@@ -1,7 +1,7 @@
 /**
  * officialCatalog.ts — Fuente única de verdad del negocio.
  *
- * Qué contiene: datos oficiales de Maria Nails Studio & Pedicure
+ * Qué contiene: datos oficiales de Maria Nails
  * (contacto, dirección, precios de manicura/gel/pedicura y la matriz
  * de acrílico 6 estilos x 8 largos). Sirve para pintar la web, validar
  * precios y alimentar el asistente virtual sin depender de la BD.
@@ -9,7 +9,7 @@
  */
 
 export const BUSINESS_INFO = {
-  name: 'Maria Nails Studio & Pedicure',
+  name: 'Maria Nails',
   professional: 'María Bonifacio',
   professionalTitle: 'Manicurista profesional técnica en manicura completa y pedicura',
   tagline: 'Belleza en tus manos y pies',
@@ -44,7 +44,7 @@ export const SITE_IMAGES = {
 
 /** Textos del sitio 100% estáticos (antes vivían en la tabla `business_profile`). */
 export const STATIC_PROFILE = {
-  heroTitle: 'Bienvenida a Maria Nails Studio & Pedicure',
+  heroTitle: 'Bienvenida a Maria Nails',
   heroSubtitle:
     'Manicurista profesional: manicura, gel, pedicura spa y acrílico del #1 al #8. Solo con cita previa. Coffee bar de cortesía en cada visita.',
   aboutTitle: 'Sobre María Bonifacio',

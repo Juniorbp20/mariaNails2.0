@@ -184,7 +184,7 @@ export default function PriceCatalog() {
 
         <div className="mt-10 text-center space-y-3">
           <a
-            href={waLink('Hola María. Quiero reservar mi cita en Maria Nails Studio & Pedicure. Mi nombre es: ___. Quedo atenta, ¡gracias!')}
+            href={waLink('Hola María. Quiero reservar mi cita en Maria Nails. Mi nombre es: ___. Quedo atenta, ¡gracias!')}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-8 py-3 font-semibold text-white transition hover:shadow-lg"
