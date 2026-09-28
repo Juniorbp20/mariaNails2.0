@@ -26,7 +26,7 @@ function getBotReply(input: string): string {
   const q = input.toLowerCase();
 
   if (q.match(/precio|cuanto|cuánto|costo|tarifa/)) {
-    return `Con gusto mi amor Precios oficiales:\n• Seco RD$250 | Seco Gel RD$450\n• Regular RD$600 | Gel RD$800\n• Gel natural RD$450 | Sistemas Gel desde RD$1,234\n• Pedicura RD$1,234 (3h spa)\n• Acrílico #1-#8: Pintura 750-1400, Cover Liso 800-1800, French 850-1800, Acrílico+Gel 900-1900, Baby Boomer 950-2000, Full Set 1000-2100.\n¿Te ayudo a reservar?`;
+    return `Con gusto mi amor:\n• Manicura, Gel y Pedicura: precio a consultar por WhatsApp.\n• Acrílico #1-#8: Pintura 750-1400, Cover Liso 800-1800, French 850-1800, Acrílico+Gel 900-1900, Baby Boomer 950-2000, Full Set 1000-2100.\n¿Te ayudo a reservar?`;
   }
   if (q.match(/acrilic|#\d|largo|cover|baby|full/)) {
     const rows = ACRYLIC_STYLES.map(
@@ -35,10 +35,10 @@ function getBotReply(input: string): string {
     return `Acrílico del #1 al #8 \n• ${rows}\nDime tu largo y estilo y te digo el precio exacto. Ej: “Cover Liso #4 = RD$1,250”.`;
   }
   if (q.match(/pedicura|pie/)) {
-    return `Pedicura completa RD$1,234 Aprox. 3 horas: exfoliación, hidratación profunda, tratamiento y esmaltado + coffee bar. Solo con cita previa al ${BUSINESS_INFO.phoneDisplay}.`;
+    return `Pedicura completa (precio a consultar) Aprox. 3 horas: exfoliación, hidratación profunda, tratamiento y esmaltado + coffee bar. Solo con cita previa al ${BUSINESS_INFO.phoneDisplay}.`;
   }
   if (q.match(/manicura|mano|gel/)) {
-    return `Manicura Seco 250, Seco Gel 450, Regular 600, Gel 800. Gel uña natural 450. Sistemas Rubber/Acry/Builder desde 1234. Todas con hidratación.`;
+    return `Manicura, esmaltado y sistemas en gel: precio a consultar por WhatsApp al ${BUSINESS_INFO.phoneDisplay}. Todas incluyen hidratación.`;
   }
   if (q.match(/nail|arte|diseño|diseno|3d|piedra|sticker/)) {
     return `Nail Art Mano alzada, stickers, 3D, pedrería y gel sólido. Envíame tus fotos de referencia por WhatsApp y te cotizamos con amor.`;

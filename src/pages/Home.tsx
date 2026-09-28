@@ -123,7 +123,7 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">Nuestros Servicios</h2>
           <p className="text-center text-gray-600 mb-2">Precios oficiales en RD$, sin sorpresas. Elige y reserva en segundos.</p>
           <p className="text-center text-sm text-purple-700 mb-12">
-            Manicura desde RD$250 · Gel desde RD$450 · Pedicura RD$1,234 · Acrílico #1-#8 ·{' '}
+            Manicura · Gel · Pedicura · Acrílico #1-#8 (precios a consultar) ·{' '}
             <a href="/precios" className="font-semibold underline">Ver tabla completa</a>
           </p>
           <div className="grid md:grid-cols-2 gap-6 mb-8">

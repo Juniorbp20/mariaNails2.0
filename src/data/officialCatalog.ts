@@ -149,20 +149,24 @@ export interface OfficialServiceSeed {
   category: string;
 }
 
-/** Los 8 servicios base con precio y duración oficial (RD$ y minutos). */
+/**
+ * Los 8 servicios base con duración oficial.
+ * Manicura, Gel y Pedicura llevan price 0 = "Consultar precio" (formatPrice lo muestra solo).
+ * Acrílico mantiene sus 48 precios en ACRYLIC_STYLES.
+ */
 export const OFFICIAL_SERVICES: OfficialServiceSeed[] = [
   {
     name: 'Manicura en Seco',
     description: 'Retiro de cutículas con drill, pintura regular e hidratación de cutícula.',
     duration_minutes: 40,
-    price: 250,
+    price: 0,
     category: 'Manicura',
   },
   {
     name: 'Manicura en Seco en Gel',
     description: 'Retiro de cutículas con drill, pintura en gel e hidratación de cutícula.',
     duration_minutes: 50,
-    price: 450,
+    price: 0,
     category: 'Manicura',
   },
   {
@@ -170,7 +174,7 @@ export const OFFICIAL_SERVICES: OfficialServiceSeed[] = [
     description:
       'Retiro de cutículas, exfoliación profunda, masaje relajante con hidratación y pintura regular.',
     duration_minutes: 60,
-    price: 600,
+    price: 0,
     category: 'Manicura',
   },
   {
@@ -178,22 +182,22 @@ export const OFFICIAL_SERVICES: OfficialServiceSeed[] = [
     description:
       'Retiro de cutículas, exfoliación profunda, masaje relajante con hidratación y esmaltado en gel de larga duración.',
     duration_minutes: 70,
-    price: 800,
+    price: 0,
     category: 'Manicura',
   },
   {
     name: 'Esmaltado en gel sobre uña natural',
     description: 'Esmaltado en gel de larga duración sobre tu uña natural.',
     duration_minutes: 45,
-    price: 450,
+    price: 0,
     category: 'Gel',
   },
   {
     name: 'Sistemas en Gel (Rubber / Acry / Builder)',
     description:
-      'Sistemas avanzados Rubber Gel, Acry Gel y Builder Gel. Precio base desde RD$ 1,234 según largo y diseño.',
+      'Sistemas avanzados Rubber Gel, Acry Gel y Builder Gel. Precio a consultar según largo y diseño.',
     duration_minutes: 90,
-    price: 1234,
+    price: 0,
     category: 'Gel',
   },
   {
@@ -201,7 +205,7 @@ export const OFFICIAL_SERVICES: OfficialServiceSeed[] = [
     description:
       'Exfoliación, hidratación profunda, tratamiento y esmaltado. Aprox. 3 horas de atención y máxima relajación.',
     duration_minutes: 180,
-    price: 1234,
+    price: 0,
     category: 'Pedicura',
   },
   {
