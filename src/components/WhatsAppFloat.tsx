@@ -1,11 +1,8 @@
 /**
  * WhatsAppFloat.tsx — Botón verde flotante (abajo-derecha) a WhatsApp.
  *
- * Qué hace: abre wa.me/18293388282 con un mensaje de reserva ya escrito.
- * El número sale del perfil del negocio (/admin) o del oficial por defecto.
+ * 100% estático: número oficial desde officialCatalog.ts, sin base de datos.
  */
-import { useBusinessProfile } from '../contexts/BusinessProfileContext';
-import { toWhatsAppUrl } from '../utils/format';
 import { BUSINESS_INFO } from '../data/officialCatalog';
 
 /** Icono de WhatsApp dibujado en SVG (sin librerías externas). */
@@ -19,14 +16,7 @@ function WhatsAppIcon({ className }: { className?: string }) {
 
 /** Botón flotante que abre WhatsApp con mensaje de reserva pre-llenado. */
 export default function WhatsAppFloat() {
-  const { profile } = useBusinessProfile();
-  const url = toWhatsAppUrl(
-    profile.contact_whatsapp || profile.contact_phone || BUSINESS_INFO.whatsappUrl,
-  );
-  if (!url) return null;
-
-  const withText = url.includes('?') ? `${url}&text=` : `${url}?text=`;
-  const href = `${withText}${encodeURIComponent(
+  const href = `${BUSINESS_INFO.whatsappUrl}?text=${encodeURIComponent(
     'Hola María. Quiero reservar mi cita en Maria Nails Studio & Pedicure. Mi nombre es: ___. Quedo atenta, ¡gracias!',
   )}`;
 

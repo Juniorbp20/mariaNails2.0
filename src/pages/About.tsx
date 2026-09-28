@@ -1,87 +1,41 @@
 /**
  * About.tsx — Página /sobre-mi de María Bonifacio.
  *
- * Presenta a la profesional, sus valores (experiencia/pasión/comunidad)
- * y un bloque de contacto con dirección, WhatsApp, pagos y cortesías.
+ * 100% estática: todo desde officialCatalog.ts, sin base de datos.
+ * Foto de perfil: coloca el archivo en `public/images/` y apunta
+ * SITE_IMAGES.profile a `/images/tu-foto.jpg`. Si es null, no se muestra imagen.
  */
 import { Heart, Users, Zap } from 'lucide-react';
-import { useBusinessProfile } from '../contexts/BusinessProfileContext';
-import { BUSINESS_INFO, COURTESIES } from '../data/officialCatalog';
-
-/** Solo dígitos de un teléfono para comparar sin formato. */
-function onlyDigits(value: string | null | undefined): string {
-  return (value || '').replace(/\D/g, '');
-}
-
-/** Dos teléfonos son el mismo si coinciden sus últimos 10 dígitos. */
-function samePhone(a: string | null | undefined, b: string | null | undefined): boolean {
-  const da = onlyDigits(a);
-  const db = onlyDigits(b);
-  if (!da || !db) return false;
-  return da.slice(-10) === db.slice(-10);
-}
-
-/** Es un enlace (https://...) y no un número para mostrar. */
-function isUrl(value: string | null | undefined): boolean {
-  return /^https?:\/\//i.test((value || '').trim());
-}
-
-/** Primer valor que sea número visible (ignora enlaces wa.me). */
-function firstPhone(...values: Array<string | null | undefined>): string | null {
-  for (const v of values) {
-    if (v && !isUrl(v)) return v;
-  }
-  return null;
-}
+import { BUSINESS_INFO, COURTESIES, SITE_IMAGES, STATIC_PROFILE } from '../data/officialCatalog';
 
 /** Perfil de María + valores + tarjeta de contacto del salón. */
 export default function About() {
-  const { profile } = useBusinessProfile();
-
-  const businessName = profile.business_name || BUSINESS_INFO.name;
-  const aboutTitle = profile.about_title || 'Sobre María Bonifacio';
-  const aboutDescription =
-    profile.about_description ||
-    'Soy María Bonifacio, manicurista profesional técnica en manicura completa y pedicura.';
-
-  const paragraphs = aboutDescription
+  const businessName = BUSINESS_INFO.name;
+  const paragraphs = STATIC_PROFILE.aboutDescription
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean);
 
-  const whatsapp = firstPhone(profile.contact_whatsapp, profile.contact_phone) || BUSINESS_INFO.phoneDisplay;
-  const phone = firstPhone(profile.contact_phone);
-  const showPhoneSeparately = phone && !samePhone(phone, whatsapp);
-  const addressLine1 = profile.address_line_1 || BUSINESS_INFO.addressLine1;
-  const addressLine2 = profile.address_line_2 || BUSINESS_INFO.addressLine2;
-  const paymentDetails =
-    profile.payment_details ||
-    `Efectivo. Transferencia ${BUSINESS_INFO.bank} ${BUSINESS_INFO.bankAccount} (${BUSINESS_INFO.bankHolder})`;
-
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">{aboutTitle}</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-8">{STATIC_PROFILE.aboutTitle}</h1>
 
-        {profile.profile_image_url && (
+        {SITE_IMAGES.profile && (
           <img
-            src={profile.profile_image_url}
-            alt={`${aboutTitle} — técnica de uñas en ${businessName}`}
+            src={SITE_IMAGES.profile}
+            alt={`${STATIC_PROFILE.aboutTitle} — técnica de uñas en ${businessName}`}
             loading="lazy"
             className="w-full h-auto max-h-[520px] object-contain rounded-lg border border-pink-200 bg-pink-50 mb-8"
           />
         )}
 
         <div className="mb-12 p-8 bg-gradient-to-br from-pink-50 to-red-50 rounded-lg border border-pink-200 space-y-4">
-          {paragraphs.length > 0 ? (
-            paragraphs.map((paragraph) => (
-              <p key={paragraph.slice(0, 40)} className="text-xl text-gray-700 leading-relaxed">
-                {paragraph}
-              </p>
-            ))
-          ) : (
-            <p className="text-xl text-gray-700 leading-relaxed">{aboutDescription}</p>
-          )}
+          {paragraphs.map((paragraph) => (
+            <p key={paragraph.slice(0, 40)} className="text-xl text-gray-700 leading-relaxed">
+              {paragraph}
+            </p>
+          ))}
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 mb-12">
@@ -114,19 +68,17 @@ export default function About() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Contacto del salón</h2>
           <div className="bg-white border border-gray-200 rounded-lg p-8 space-y-3">
             <p className="text-gray-700">Profesional: {BUSINESS_INFO.professional} — {BUSINESS_INFO.professionalTitle}</p>
-            <p className="text-gray-700">WhatsApp citas: {whatsapp}</p>
-            {showPhoneSeparately && <p className="text-gray-700">Teléfono: {phone}</p>}
-            {profile.contact_email && <p className="text-gray-700">Email: {profile.contact_email}</p>}
+            <p className="text-gray-700">WhatsApp citas: {BUSINESS_INFO.phoneDisplay}</p>
+            {BUSINESS_INFO.contactEmail && <p className="text-gray-700">Email: {BUSINESS_INFO.contactEmail}</p>}
             <p className="text-gray-700">
-              Dirección: {addressLine1}
-              {addressLine2 && `, ${addressLine2}`}
+              Dirección: {BUSINESS_INFO.addressLine1}, {BUSINESS_INFO.addressLine2}
             </p>
             <p className="text-gray-700">Modalidad: {BUSINESS_INFO.modality}</p>
             <p className="text-gray-700">Cortesías: {COURTESIES.join(', ')}</p>
-            <p className="text-gray-700">Pagos: {paymentDetails}</p>
-            {profile.maps_url && (
+            <p className="text-gray-700">Pagos: {STATIC_PROFILE.paymentDetails}</p>
+            {BUSINESS_INFO.mapsUrl && (
               <a
-                href={profile.maps_url}
+                href={BUSINESS_INFO.mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block font-semibold text-pink-600 hover:text-pink-700"

@@ -3,8 +3,7 @@
  *
  * Dónde se usa: debajo del catálogo (/precios).
  * Muestra siempre la info oficial: coffee bar, dirección de Tenares,
- * reglas 24h/15min y Banreservas. El texto de pagos puede venir del perfil
- * editable en /admin o del valor oficial por defecto.
+ * reglas 24h/15min y Banreservas. Todo 100% estático desde officialCatalog.ts.
  */
 import { Coffee, CreditCard, MapPin, ShieldCheck } from 'lucide-react';
 import { BUSINESS_INFO, COURTESIES, POLICIES } from '../data/officialCatalog';

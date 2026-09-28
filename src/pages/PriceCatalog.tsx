@@ -1,17 +1,16 @@
 /**
  * PriceCatalog.tsx — Página /precios con precios oficiales en RD$.
  *
+ * 100% estática: servicios desde OFFICIAL_SERVICES, sin base de datos.
  * Tabs: Manicura, Gel y Pedicura, Acrílico #1-#8 (interactivo), Nail Art
- * y Cortesías/Políticas. Si la admin subió una imagen de catálogo se muestra
- * arriba; si la BD está vacía usa los precios oficiales locales.
+ * y Cortesías/Políticas.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { BadgeDollarSign, MessageCircle } from 'lucide-react';
-import { useBusinessProfile } from '../contexts/BusinessProfileContext';
-import { serviceService } from '../services/serviceService';
 import type { Service } from '../types';
 import { toWhatsAppUrl, formatPrice, formatDuration } from '../utils/format';
-import { OFFICIAL_SERVICES } from '../data/officialCatalog';
+import { getOfficialServices } from '../utils/catalog';
+import { BUSINESS_INFO, SITE_IMAGES, STATIC_PROFILE } from '../data/officialCatalog';
 import { WHATSAPP_TEMPLATES, waLink } from '../data/whatsappTemplates';
 import AcrylicPriceTable from '../components/AcrylicPriceTable';
 import PolicyBlocks from '../components/PolicyBlocks';
@@ -27,51 +26,14 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: 'info', label: 'Cortesías y Políticas' },
 ];
 
-/** Convierte los precios oficiales en servicios ficticios si la BD viene vacía. */
-function toServiceLike(): Service[] {
-  const now = new Date().toISOString();
-  return OFFICIAL_SERVICES.map((s, i) => ({
-    id: `official-${i}`,
-    name: s.name,
-    description: s.description,
-    duration_minutes: s.duration_minutes,
-    price: s.price,
-    category: s.category,
-    active: true,
-    created_at: now,
-    updated_at: now,
-  }));
-}
-
-/** Catálogo oficial por pestañas con reserva directa o por WhatsApp. */
+/** Catálogo oficial por pestañas con reserva directa por WhatsApp. */
 export default function PriceCatalog() {
-  const { profile, loading: profileLoading } = useBusinessProfile();
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<TabKey>('manicura');
 
-  const businessName = profile.business_name || 'Maria Nails Studio & Pedicure';
-  const catalogUrl = profile.price_catalog_url;
-  const whatsappUrl = toWhatsAppUrl(profile.contact_whatsapp || profile.contact_phone);
-
-  useEffect(() => {
-    let mounted = true;
-    serviceService
-      .getServices()
-      .then((data) => {
-        if (!mounted) return;
-        setServices(data.length > 0 ? data : toServiceLike());
-      })
-      .catch(() => {
-        if (mounted) setServices(toServiceLike());
-      })
-      .finally(() => {
-        if (mounted) setLoading(false);
-      });
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  const services: Service[] = useMemo(() => getOfficialServices(), []);
+  const businessName = BUSINESS_INFO.name;
+  const catalogUrl = SITE_IMAGES.catalog;
+  const whatsappUrl = toWhatsAppUrl(BUSINESS_INFO.whatsappUrl);
 
   const manicura = useMemo(
     () => services.filter((s) => s.category === 'Manicura'),
@@ -87,9 +49,6 @@ export default function PriceCatalog() {
   );
 
   const renderServiceCards = (list: Service[], emptyHint: string) => {
-    if (loading) {
-      return <div className="h-32 animate-pulse rounded-xl bg-purple-100" aria-label="Cargando servicios" />;
-    }
     if (list.length === 0) return <p className="text-gray-600">{emptyHint}</p>;
     return (
       <div className="grid md:grid-cols-2 gap-4">
@@ -218,7 +177,7 @@ export default function PriceCatalog() {
               <p className="text-gray-600 mb-2 text-sm">
                 Todo lo que disfrutas en tu cita, mi amor.
               </p>
-              <PolicyBlocks paymentDetails={profile.payment_details} />
+              <PolicyBlocks paymentDetails={STATIC_PROFILE.paymentDetails} />
             </div>
           )}
         </div>
@@ -245,7 +204,6 @@ export default function PriceCatalog() {
               </a>
             )}
           </div>
-          {profileLoading && <p className="text-xs text-gray-500">Cargando perfil del negocio…</p>}
         </div>
       </div>
     </div>

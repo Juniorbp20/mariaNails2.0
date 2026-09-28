@@ -1,69 +1,38 @@
 /**
- * catalog.ts — Ayudas para ordenar y buscar servicios del catálogo.
+ * catalog.ts — Ayudas del catálogo estático de servicios.
  *
- * Qué hace: agrupa servicios por categoría en el orden oficial
- * (Manicura → Gel → Pedicura → Acrílico → Nail Art) y localiza el
- * servicio de BD que corresponde a un estilo + largo acrílico.
+ * Qué hace: convierte OFFICIAL_SERVICES en lista tipo Service y localiza
+ * el servicio que corresponde a un estilo + largo acrílico.
  */
 import type { Service } from '../types';
-import { ACRYLIC_STYLES, type AcrylicLength, type AcrylicStyleKey } from '../data/officialCatalog';
-
-/** Orden oficial en que se muestran las categorías en /precios. */
-export const CATEGORY_ORDER = [
-  'Manicura',
-  'Gel',
-  'Pedicura',
-  'Acrílico',
-  'Nail Art',
-] as const;
-
-/** Agrupa una lista de servicios por su categoría (ej: { Manicura: [...] }). */
-export function groupServicesByCategory(services: Service[]): Record<string, Service[]> {
-  const grouped: Record<string, Service[]> = {};
-  for (const s of services) {
-    const key = s.category?.trim() || 'Otros';
-    if (!grouped[key]) grouped[key] = [];
-    grouped[key].push(s);
-  }
-  return grouped;
-}
-
-/** Ordena las categorías según CATEGORY_ORDER; las desconocidas van al final. */
-export function sortedCategoryKeys(grouped: Record<string, Service[]>): string[] {
-  const keys = Object.keys(grouped);
-  return keys.sort((a, b) => {
-    const ia = CATEGORY_ORDER.indexOf(a as (typeof CATEGORY_ORDER)[number]);
-    const ib = CATEGORY_ORDER.indexOf(b as (typeof CATEGORY_ORDER)[number]);
-    if (ia === -1 && ib === -1) return a.localeCompare(b);
-    if (ia === -1) return 1;
-    if (ib === -1) return -1;
-    return ia - ib;
-  });
-}
+import {
+  ACRYLIC_STYLES,
+  OFFICIAL_SERVICES,
+  type AcrylicLength,
+  type AcrylicStyleKey,
+} from '../data/officialCatalog';
 
 /**
- * Extrae estilo y largo desde un nombre de BD.
- * Ej: "Acrílico Cover Liso #4" → { styleKey: 'cover-liso', length: 4 }.
+ * Convierte OFFICIAL_SERVICES en lista tipo Service 100% estática.
  */
-export function parseAcrylicName(name: string): {
-  styleKey: AcrylicStyleKey | null;
-  length: AcrylicLength | null;
-} {
-  const match = name.match(/#(\d)/);
-  const length = match ? (Number(match[1]) as AcrylicLength) : null;
-  const lower = name.toLowerCase();
-  const found = ACRYLIC_STYLES.find(
-    (s) =>
-      lower.includes(s.shortLabel.toLowerCase()) || lower.includes(s.label.toLowerCase()),
-  );
-  const validLength =
-    length && length >= 1 && length <= 8 ? (length as AcrylicLength) : null;
-  return { styleKey: found ? found.key : null, length: validLength };
+export function getOfficialServices(): Service[] {
+  const now = new Date().toISOString();
+  return OFFICIAL_SERVICES.map((s, i) => ({
+    id: `official-${i}`,
+    name: s.name,
+    description: s.description,
+    duration_minutes: s.duration_minutes,
+    price: s.price,
+    category: s.category,
+    active: true,
+    created_at: now,
+    updated_at: now,
+  }));
 }
 
 /**
- * Busca en la lista de la BD el servicio que coincide con un estilo + largo.
- * Devuelve null si aún no existe (entonces se usa el precio oficial).
+ * Busca en la lista estática el servicio que coincide con un estilo + largo.
+ * Devuelve null si no existe (entonces se usa el precio oficial).
  */
 export function findServiceForAcrylic(
   services: Service[],

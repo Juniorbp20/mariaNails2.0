@@ -1,4 +1,26 @@
 # Cambios — rama mariaNails2.2
+
+## Sitio estático sin base de datos (2026-09-28)
+
+- Galería redirige a Instagram: `src/pages/Gallery.tsx` reescrito como página puente a
+  `https://www.instagram.com/____marianails/` (CTA + reserva por WhatsApp). Sin paginación ni Storage.
+- `src/data/officialCatalog.ts`: agrega `instagramUrl`, `SITE_IMAGES` (logo/perfil/catálogo
+  desde `public/images/`) y `STATIC_PROFILE` (textos antes en tabla `business_profile`).
+- Páginas y componentes 100% estáticos: `Home`, `PriceCatalog`, `About`, `Header`, `Footer`,
+  `WhatsAppFloat` leen de `officialCatalog.ts` + `getOfficialServices()` (`src/utils/catalog.ts`).
+- Eliminados: `src/services/*`, `src/lib/supabase.ts`, `src/contexts/`, `src/hooks/useAsync.ts`,
+  `ConfigBanner`, `GalleryImage`, `Skeletons`, `AdminDashboard` + ruta `/admin`, carpeta `supabase/`
+  (fotos originales movidas a `FOTOS/`), dependencia `@supabase/supabase-js`.
+- Limpieza de código sin uso: `dateUtils.ts`, `CATEGORY_ORDER`/`groupServicesByCategory`/
+  `sortedCategoryKeys`/`parseAcrylicName`, `isValidPhone`/`isValidEmail`, `getAcrylicPrice`/
+  `buildAcrylicServiceName`, plantillas WhatsApp no usadas, `ASSISTANT_SYSTEM_PROMPT`, `BookingFormData`,
+  campos `shortName`/`phoneInternational`/`whatsappDigits`.
+- Fotos: `public/images/logo.jpg` (512px, 14KB) y `public/images/maria-perfil.jpg` (1080p, 79KB)
+  optimizadas desde `FOTOS/`; `.env.example` sin variables; `robots.txt` sin `/admin`.
+- Verificación: `npm run typecheck` OK, `npm run build` OK (JS 218KB / gzip 66KB).
+- Docs actualizadas + `README.md` nuevo.
+- En Vercel/Netlify: borrar `VITE_SUPABASE_*`, no se necesitan variables.
+
 ## Prompt Maestro: Maria Nails Studio & Pedicure
 
 Fecha: 2026-09-24

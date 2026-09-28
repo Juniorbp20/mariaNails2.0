@@ -10,13 +10,10 @@
 
 export const BUSINESS_INFO = {
   name: 'Maria Nails Studio & Pedicure',
-  shortName: 'María Nails',
   professional: 'María Bonifacio',
   professionalTitle: 'Manicurista profesional técnica en manicura completa y pedicura',
   tagline: 'Belleza en tus manos y pies',
   phoneDisplay: '829-338-8282',
-  phoneInternational: '+1 829 338 8282',
-  whatsappDigits: '18293388282',
   whatsappUrl: 'https://wa.me/18293388282',
   addressLine1: 'Gran Parada Tenares, Calle Principal #25, salida San Francisco de Macorís',
   addressLine2: 'En Salón Griselda, segundo nivel, República Dominicana',
@@ -24,6 +21,39 @@ export const BUSINESS_INFO = {
   bank: 'Banreservas',
   bankAccount: '9605474442',
   bankHolder: 'María Bonifacio',
+  instagramUrl: 'https://www.instagram.com/____marianails/',
+  mapsUrl: null as string | null,
+  contactEmail: null as string | null,
+} as const;
+
+/**
+ * SITE_IMAGES — Fotos estáticas servidas desde `public/images/`.
+ *
+ * Cómo cambiar tu foto de perfil / logo / catálogo sin base de datos:
+ * 1. Coloca el archivo en `public/images/` (ej: `maria-perfil.jpg`).
+ * 2. Cambia el valor aquí a `/images/maria-perfil.jpg`.
+ * 3. `null` = no mostrar imagen y usar el diseño por defecto (iniciales / placeholder).
+ *
+ * Esto reemplaza al bucket `branding` de Supabase (logo, profile, catalog).
+ */
+export const SITE_IMAGES = {
+  logo: '/images/logo.jpg',
+  profile: '/images/maria-perfil.jpg',
+  catalog: null as string | null,
+} as const;
+
+/** Textos del sitio 100% estáticos (antes vivían en la tabla `business_profile`). */
+export const STATIC_PROFILE = {
+  heroTitle: 'Bienvenida a Maria Nails Studio & Pedicure',
+  heroSubtitle:
+    'Manicurista profesional: manicura, gel, pedicura spa y acrílico del #1 al #8. Solo con cita previa. Coffee bar de cortesía en cada visita.',
+  aboutTitle: 'Sobre María Bonifacio',
+  aboutDescription:
+    'Soy María Bonifacio, manicurista profesional técnica en manicura completa y pedicura.\nTe esperamos en Gran Parada Tenares, Calle Principal #25 (Salón Griselda, segundo nivel) con cafecito, té y galletitas de cortesía.',
+  footerDescription:
+    'Manicura, gel, pedicura spa y acrílico con atención profesional de María Bonifacio. Solo con cita previa.',
+  paymentDetails:
+    'Efectivo en el local. Transferencia Banreservas cuenta 9605474442 a nombre de María Bonifacio.',
 } as const;
 
 /** Cortesías gratis que disfruta cada clienta durante su cita. */
@@ -184,20 +214,4 @@ export const OFFICIAL_SERVICES: OfficialServiceSeed[] = [
   },
 ];
 
-/**
- * Devuelve el precio oficial de un estilo + largo.
- * Ej: getAcrylicPrice('cover-liso', 4) → 1250.
- */
-export function getAcrylicPrice(styleKey: AcrylicStyleKey, length: AcrylicLength): number {
-  const style = ACRYLIC_STYLES.find((s) => s.key === styleKey);
-  if (!style) return 0;
-  return style.prices[length];
-}
 
-/**
- * Construye el nombre estándar de un servicio acrílico en la BD.
- * Ej: buildAcrylicServiceName('Cover Liso', 4) → "Acrílico Cover Liso #4".
- */
-export function buildAcrylicServiceName(styleLabel: string, length: AcrylicLength): string {
-  return `Acrílico ${styleLabel} #${length}`;
-}

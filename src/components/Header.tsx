@@ -1,32 +1,20 @@
 /**
  * Header.tsx — Barra superior con logo, nombre y menú de navegación.
  *
- * Incluye: enlaces a Inicio/Sobre mí/Galería/Precios/Reservar,
- * menú hamburguesa en móvil y acceso oculto a /admin (3 toques al logo).
+ * 100% estático: datos desde officialCatalog.ts, sin base de datos.
+ * Enlaces: Inicio / Sobre mí / Galería (puente a Instagram) / Precios / Reservar.
  */
 import { Menu, X } from 'lucide-react';
-import { useEffect, useRef, useState, type MouseEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useBusinessProfile } from '../contexts/BusinessProfileContext';
-import { BUSINESS_INFO } from '../data/officialCatalog';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { BUSINESS_INFO, SITE_IMAGES } from '../data/officialCatalog';
 
-/** Toques necesarios en el logo para abrir el panel admin oculto. */
-const SECRET_ADMIN_TAP_COUNT = 3;
-/** Tiempo máximo (ms) para completar los 3 toques. */
-const SECRET_ADMIN_TAP_WINDOW_MS = 2500;
-
-/** Encabezado fijo con navegación principal y acceso secreto a /admin. */
+/** Encabezado fijo con navegación principal. */
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { profile } = useBusinessProfile();
-  const navigate = useNavigate();
-  const hiddenTapStateRef = useRef<{
-    count: number;
-    timer: ReturnType<typeof setTimeout> | null;
-  }>({ count: 0, timer: null });
 
-  const businessName = profile.business_name || 'María Nails';
-  const tagline = profile.tagline || 'Belleza en tus manos';
+  const businessName = BUSINESS_INFO.name;
+  const tagline = BUSINESS_INFO.tagline;
   const initials =
     businessName
       .split(' ')
@@ -35,44 +23,14 @@ export default function Header() {
       .map((part) => part[0]?.toUpperCase() || '')
       .join('') || 'MN';
 
-  const handleBrandClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    const tapState = hiddenTapStateRef.current;
-    tapState.count += 1;
-
-    if (tapState.timer) {
-      clearTimeout(tapState.timer);
-      tapState.timer = null;
-    }
-
-    if (tapState.count >= SECRET_ADMIN_TAP_COUNT) {
-      event.preventDefault();
-      tapState.count = 0;
-      setMenuOpen(false);
-      navigate('/admin');
-      return;
-    }
-
-    tapState.timer = setTimeout(() => {
-      hiddenTapStateRef.current.count = 0;
-      hiddenTapStateRef.current.timer = null;
-    }, SECRET_ADMIN_TAP_WINDOW_MS);
-  };
-
-  useEffect(() => {
-    return () => {
-      const timer = hiddenTapStateRef.current.timer;
-      if (timer) clearTimeout(timer);
-    };
-  }, []);
-
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          <Link to="/" className="flex items-center space-x-3" onClick={handleBrandClick}>
-            {profile.logo_url ? (
+          <Link to="/" className="flex items-center space-x-3">
+            {SITE_IMAGES.logo ? (
               <img
-                src={profile.logo_url}
+                src={SITE_IMAGES.logo}
                 alt={`${businessName} logo`}
                 className="w-12 h-12 rounded-full object-cover border border-pink-200"
               />

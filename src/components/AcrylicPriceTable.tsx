@@ -11,16 +11,16 @@ import type { Service } from '../types';
 import { findServiceForAcrylic } from '../utils/catalog';
 import { formatPrice } from '../utils/format';
 
-/** Props: lista de servicios de la BD para enlazar cada card a su reserva. */
+/** Props: lista estática de servicios para enlazar cada card a su reserva. */
 interface AcrylicPriceTableProps {
-  services: Service[];
+  services?: Service[];
 }
 
 /** Los 8 largos disponibles. */
 const LENGTHS: AcrylicLength[] = [1, 2, 3, 4, 5, 6, 7, 8];
 
 /** Tabla interactiva: selector de largo + cards por estilo + tabla 48 precios. */
-export default function AcrylicPriceTable({ services }: AcrylicPriceTableProps) {
+export default function AcrylicPriceTable({ services = [] }: AcrylicPriceTableProps) {
   const [selectedLength, setSelectedLength] = useState<AcrylicLength>(3);
 
   const cards = useMemo(

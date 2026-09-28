@@ -4,7 +4,7 @@
  * Cómo funciona: chat con respuestas por palabras clave (precios, acrílico,
  * pedicura, dirección, pagos, 24h/15min...). No usa IA externa ni cuesta
  * dinero: todo sale de officialCatalog.ts. Incluye atajos rápidos y enlaces
- * a /precios y WhatsApp. Para una IA real, usa ASSISTANT_SYSTEM_PROMPT.
+ * a /precios y WhatsApp.
  */
 import { useState } from 'react';
 import { Link } from 'react-router-dom';

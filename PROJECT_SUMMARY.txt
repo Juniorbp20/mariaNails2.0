@@ -1,212 +1,91 @@
-╔════════════════════════════════════════════════════════════════════════════╗
-║                    MARÍA NAILS - PROYECTO COMPLETADO                       ║
-║                    Modernización y Sistema de Reservas                      ║
-╚════════════════════════════════════════════════════════════════════════════╝
+================================================================================
+                  MARIA NAILS - SITIO ESTATICO (SIN BASE DE DATOS)
+================================================================================
 
-📊 ESTADÍSTICAS DEL PROYECTO
-═══════════════════════════════════════════════════════════════════════════════
+Maria Nails Studio & Pedicure - Maria Bonifacio, Tenares, RD.
+Manicura, gel, pedicura spa y acrilico #1-#8. Reservas por WhatsApp,
+fotos en Instagram. Sin backend, sin cuentas que pagar.
 
-Archivos Creados:        23 archivos (TypeScript/TSX)
-Líneas de Código:        ~3,500+ líneas
-Componentes:             6 componentes principales
-Páginas:                 6 páginas
-Servicios API:           4 servicios
-Tablas Base de Datos:    6 tablas
-Funciones Utilitarias:   10+ funciones
+--------------------------------------------------------------------------------
+ESTADO DEL PROYECTO
+--------------------------------------------------------------------------------
 
-Bundle Size:             100KB gzip (optimizado)
-Puntuación Lighthouse:   95/100
+Paginas:               4 (/ , /galeria, /sobre-mi, /precios) + 404
+Componentes:           7 (Header, Footer, WhatsAppFloat, AIAssistant,
+                       AcrylicPriceTable, PolicyBlocks, ScrollToTop)
+Fuente de verdad:      src/data/officialCatalog.ts (precios y datos)
+Reservas:              WhatsApp wa.me/18293388282 (mensaje pre-llenado)
+Fotos trabajos:        Instagram https://www.instagram.com/____marianails/
+Foto perfil + logo:    public/images/ (optimizadas: 79KB + 14KB)
+Originales:            FOTOS/ (no se publican)
 
+Build:                 vite build -> dist/ (JS 218KB / gzip 66KB)
+Typecheck:             OK (npm run typecheck)
+Deploy:                Vercel o Netlify, SIN variables de entorno
 
-🎯 CARACTERÍSTICAS PRINCIPALES
-═══════════════════════════════════════════════════════════════════════════════
-
-✅ SISTEMA DE RESERVAS EN CALENDARIO
-   • Calendario interactivo
-   • Selección de horarios
-   • Prevención de dobles reservas
-   • Confirmación instantánea
-
-✅ PANEL DE ADMINISTRACIÓN
-   • Gestión de citas
-   • Estadísticas
-   • Configuración de horarios
-   • Gestión de servicios
-
-✅ BASE DE DATOS SUPABASE
-   • PostgreSQL seguro
-   • Row Level Security
-   • Backups automáticos
-   • Escalable y confiable
-
-✅ GALERÍA DINÁMICA
-   • Imágenes de base de datos
-   • Modal de visualización
-   • Lazy loading
-   • Paginación automática
-
-✅ DISEÑO MODERNO
-   • Responsive (móvil, tablet, desktop)
-   • Tailwind CSS
-   • Animaciones suaves
-   • Accesibilidad WCAG
-
-
-📁 ESTRUCTURA DEL PROYECTO
-═══════════════════════════════════════════════════════════════════════════════
+--------------------------------------------------------------------------------
+ESTRUCTURA
+--------------------------------------------------------------------------------
 
 src/
-├── App.tsx                          Aplicación principal con rutas
-├── components/
-│   ├── Header.tsx                   Navegación principal
-│   ├── Footer.tsx                   Pie de página
-│   ├── Calendar.tsx                 Selector de fechas
-│   ├── TimeSlots.tsx                Selector de horarios
-│   ├── ServiceCard.tsx              Tarjeta de servicio
-│   └── GalleryImage.tsx             Imagen con modal
-├── pages/
-│   ├── Home.tsx                     Página de inicio
-│   ├── About.tsx                    Sobre María
-│   ├── Services.tsx                 Catálogo de servicios
-│   ├── Gallery.tsx                  Galería de trabajos
-│   ├── Booking.tsx                  Sistema de reservas (5 pasos)
-│   └── AdminDashboard.tsx           Panel de administración
-├── services/
-│   ├── appointmentService.ts        Gestión de citas
-│   ├── serviceService.ts            Servicios disponibles
-│   ├── galleryService.ts            Imágenes de galería
-│   └── availabilityService.ts       Horarios y fechas bloqueadas
-├── lib/
-│   └── supabase.ts                  Cliente Supabase
-├── types/
-│   └── index.ts                     Tipos TypeScript
-├── hooks/
-│   └── useAsync.ts                  Hook para consultas async
-├── utils/
-│   └── dateUtils.ts                 Funciones de fecha
-├── main.tsx                         Punto de entrada
-├── index.css                        Estilos globales
-└── vite-env.d.ts                    Tipos Vite
+  App.tsx                 Router + layout comun
+  main.tsx / index.css    Entrada + estilos Tailwind
+  pages/                  Home, Gallery (puente Instagram), About,
+                          PriceCatalog, NotFound
+  components/             Header, Footer, WhatsAppFloat, AIAssistant,
+                          AcrylicPriceTable, PolicyBlocks, ScrollToTop
+  data/                   officialCatalog.ts, whatsappTemplates.ts
+  utils/                  catalog.ts, format.ts
+  types/                  index.ts (Service)
+public/
+  images/                 logo.jpg, maria-perfil.jpg
+  robots.txt / sitemap.xml
+FOTOS/                    Originales en alta resolucion
 
+--------------------------------------------------------------------------------
+COMO EDITAR (sin panel, todo en codigo)
+--------------------------------------------------------------------------------
 
-🚀 CÓMO EMPEZAR
-═══════════════════════════════════════════════════════════════════════════════
+Precios / telefono /
+direccion / Instagram : src/data/officialCatalog.ts (BUSINESS_INFO,
+                        STATIC_PROFILE, ACRYLIC_STYLES, OFFICIAL_SERVICES)
+Mensajes WhatsApp ... : src/data/whatsappTemplates.ts
+Foto perfil / logo .. : reemplazar archivo en public/images/ (mismo nombre)
+Respuestas asistente  : src/components/AIAssistant.tsx (getBotReply)
+Fotos trabajos ...... : publicar en Instagram (nada que cambiar en codigo)
 
-1. Ver la aplicación:
-   npm run dev
-   • Abre http://localhost:5173
+Flujo: npm run dev (ver) -> npm run build (verificar) -> git push (publicar)
 
-2. Panel de administración:
-   • Ve a http://localhost:5173/admin
-   • Contraseña: marianails2026
-
-3. Crear una reserva:
-   • Click en "Reservar cita"
-   • Sigue los 5 pasos
-   • Recibe confirmación instantánea
-
-4. Hacer cambios en la app:
-   npm run build   # Compilar a producción
-
-
-🔐 SEGURIDAD
-═══════════════════════════════════════════════════════════════════════════════
-
-✅ Row Level Security (RLS) habilitado
-✅ Autenticación para admin
-✅ Validación de datos
-✅ CORS configurado
-✅ Protección contra inyección SQL
-✅ Variables de entorno protegidas
-
-
-📈 RESULTADOS
-═══════════════════════════════════════════════════════════════════════════════
-
-ANTES (Sitio Estático)          AHORA (Aplicación Moderna)
-────────────────────            ──────────────────────────
-HTML + CSS + JS                 React + TypeScript + Supabase
-Sin base de datos               PostgreSQL seguro
-Reservas por WhatsApp           Calendario interactivo
-Galería hardcodeada             Galería dinámica
-Sin admin                        Panel de control profesional
-~500KB bundle                    ~100KB gzip
-
-
-🎁 DOCUMENTACIÓN INCLUIDA
-═══════════════════════════════════════════════════════════════════════════════
-
-✓ QUICK_START.md       - Guía rápida de uso
-✓ DOCUMENTATION.md     - Documentación técnica completa
-✓ IMPROVEMENTS.md      - Detalle de todas las mejoras
-✓ PROJECT_SUMMARY.txt  - Este archivo
-
-
-🔗 RUTAS DE LA APLICACIÓN
-═══════════════════════════════════════════════════════════════════════════════
+--------------------------------------------------------------------------------
+RUTAS
+--------------------------------------------------------------------------------
 
 /                       Inicio
-/sobre-mi               Sobre María
-/servicios              Catálogo de servicios
-/galeria                Galería de trabajos
-/reserva                Sistema de reservas
-/admin                  Panel de administración
+/sobre-mi               Sobre Maria + contacto
+/galeria                Puente a Instagram
+/precios                Catalogo por pestanas + tabla acrilico #1-#8
 
+--------------------------------------------------------------------------------
+DOCUMENTACION
+--------------------------------------------------------------------------------
 
-💾 BASE DE DATOS
-═══════════════════════════════════════════════════════════════════════════════
+README.md ............. Resumen general (empezar aqui)
+START_HERE.md ......... Guia de inicio
+QUICK_START.md ........ Guia rapida de 5 minutos
+DOCUMENTATION.md ...... Arquitectura tecnica
+DEPLOY_PRODUCCION.md .. Como publicar
+NEXT_STEPS.md ......... Cambios comunes paso a paso
+IMPROVEMENTS.md ....... Historial de evolucion
+CAMBIOS_mariaNails2.2 . Registro de cambios
 
-Supabase Project:    sapqurrixziczmdveooh
+--------------------------------------------------------------------------------
+CONTACTO DEL NEGOCIO
+--------------------------------------------------------------------------------
 
-Tablas:
-  • services                 6 servicios
-  • appointments             Citas dinámicas
-  • availability_slots       Horarios
-  • blocked_dates            Fechas cerradas
-  • gallery_images           Fotos de trabajos
-  • admin_users              Usuarios administrativos
+WhatsApp citas:  829-338-8282 (https://wa.me/18293388282)
+Instagram:       https://www.instagram.com/____marianails/
+Direccion:       Gran Parada Tenares, Calle Principal #25
+                 (Salon Griselda, 2do nivel)
+Pagos:           Efectivo + Banreservas 9605474442 (Maria Bonifacio)
 
-
-✨ PRÓXIMAS MEJORAS RECOMENDADAS
-═══════════════════════════════════════════════════════════════════════════════
-
-1. Autenticación Real (Supabase Auth)
-2. Envío de Emails de Confirmación
-3. SMS Reminders 24 horas antes
-4. Integración con Stripe (pagos)
-5. Analytics y conversiones
-6. Progressive Web App (PWA)
-7. Soporte multiidioma
-8. Integración con Google Calendar
-
-
-👤 USUARIO ADMINISTRADOR
-═══════════════════════════════════════════════════════════════════════════════
-
-URL:         http://localhost:5173/admin
-Contraseña:  marianails2026
-
-Acciones disponibles:
-✓ Ver todas las citas
-✓ Cambiar estado de citas
-✓ Eliminar citas
-✓ Ver estadísticas
-✓ Gestionar servicios
-✓ Configurar horarios
-
-
-📞 CONTACTO Y SOPORTE
-═══════════════════════════════════════════════════════════════════════════════
-
-WhatsApp: +1 829 338 8282
-Email: Configurar según necesidad
-
-
-════════════════════════════════════════════════════════════════════════════════
-
-                    ¡PROYECTO COMPLETADO EXITOSAMENTE! 🎉
-
-                    Tu aplicación está lista para usar.
-              Accede a /admin para comenzar a gestionar tus citas.
-
-════════════════════════════════════════════════════════════════════════════════
+================================================================================

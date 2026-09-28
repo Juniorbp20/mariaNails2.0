@@ -1,143 +1,59 @@
-# Quick Start Guide - María Nails
+# Quick Start — María Nails (5 minutos)
 
-## Sistema Completamente Renovado
+Sitio estático (React + TypeScript + Tailwind), sin base de datos.
+Reservas por WhatsApp, fotos en Instagram.
 
-Tu aplicación ha sido transformada de un sitio estático a una plataforma profesional de reservas con React, TypeScript y Supabase.
+## 1. Arrancar en local (2 min)
 
-## Lo Más Importante: Nuevas Características
-
-### 1. Sistema de Reservas en Calendario ✅
-En lugar de enviar mensajes por WhatsApp, tus clientes ahora pueden:
-- Seleccionar servicios
-- Elegir fechas en un calendario interactivo
-- Escoger horarios disponibles
-- Recibir confirmación instantánea
-
-**URL**: `/reserva`
-
-### 2. Panel de Administración ✅
-Gestiona todas tus citas desde un dashboard profesional
-**URL**: `/admin`
-**Contraseña**: `marianails2026`
-
-## Archivos Principales Creados
-
-### Páginas (src/pages/)
-- `Home.tsx` - Página de inicio
-- `Services.tsx` - Catálogo de servicios
-- `Gallery.tsx` - Galería de trabajos
-- `Booking.tsx` - Sistema de reservas (5 pasos)
-- `About.tsx` - Sobre María
-- `AdminDashboard.tsx` - Panel de control
-
-### Componentes (src/components/)
-- `Header.tsx` - Navegación principal
-- `Footer.tsx` - Pie de página
-- `Calendar.tsx` - Calendario interactivo
-- `TimeSlots.tsx` - Selector de horarios
-- `ServiceCard.tsx` - Tarjeta de servicio
-- `GalleryImage.tsx` - Imagen con modal
-
-### Servicios API (src/services/)
-- `appointmentService.ts` - Gestión de citas
-- `serviceService.ts` - Servicios disponibles
-- `availabilityService.ts` - Horarios y fechas bloqueadas
-- `galleryService.ts` - Imágenes de galería
-
-### Base de Datos
-Automáticamente creada con:
-- 6 servicios profesionales
-- Horarios de trabajo (Lun, Mié, Jue, Vie, Sab)
-- Tablas para citas, usuarios, fechas bloqueadas
-
-## Rutas de la Aplicación
-
-```
-/ ........................... Inicio
-/sobre-mi .................... Sobre María
-/servicios ................... Catálogo de servicios
-/galeria ..................... Galería de trabajos
-/reserva ..................... Sistema de reservas
-/admin ....................... Panel de administración
+```bash
+npm install
+npm run dev
 ```
 
-## Cambios de Estructura
+Abre http://localhost:5173.
 
-### Antes (Estático)
+## 2. Recorrer las 4 páginas (1 min)
+
+- `/` — inicio con hero, beneficios y servicios destacados
+- `/galeria` — puente a Instagram + botón de reserva
+- `/sobre-mi` — perfil de María y contacto
+- `/precios` — catálogo por pestañas + tabla de acrílico #1-#8
+
+## 3. Hacer tu primer cambio: un precio (2 min)
+
+1. Abre `src/data/officialCatalog.ts`.
+2. Busca el servicio en `OFFICIAL_SERVICES` (o la matriz en `ACRYLIC_STYLES`) y cambia el número.
+3. Guarda y mira el cambio en el navegador (recarga automática).
+4. Compila para verificar: `npm run build`.
+
+Ese es todo el flujo: **editar el archivo → ver en local → build → push** (el deploy es automático).
+
+## Cambios más comunes
+
+| Cambio | Dónde |
+|---|---|
+| Precio o descripción | `src/data/officialCatalog.ts` (`OFFICIAL_SERVICES` o `ACRYLIC_STYLES`) |
+| Teléfono / dirección / Instagram | `src/data/officialCatalog.ts` (`BUSINESS_INFO`) |
+| Textos del hero o "sobre mí" | `src/data/officialCatalog.ts` (`STATIC_PROFILE`) |
+| Mensaje de WhatsApp | `src/data/whatsappTemplates.ts` |
+| Foto de perfil o logo | Reemplaza el archivo en `public/images/` (mismo nombre) |
+| Respuesta del asistente | `src/components/AIAssistant.tsx` (función `getBotReply`) |
+
+## Rutas
+
 ```
-- index.html
-- styles.css
-- script.js
-- /img
-- /vendor
+/ .................... Inicio
+/sobre-mi ............ Sobre María
+/galeria ............. Puente a Instagram
+/precios ............. Catálogo de precios
 ```
-
-### Ahora (Moderno)
-```
-src/
-├── components/          Componentes reutilizables
-├── pages/               Páginas de la app
-├── services/            Conexión API/Supabase
-├── types/               Tipos TypeScript
-├── hooks/               Lógica compartida
-├── utils/               Funciones auxiliares
-├── lib/                 Configuración Supabase
-└── App.tsx              Enrutamiento principal
-```
-
-## Base de Datos Supabase
-
-### Tablas Creadas
-1. **services** - Servicios de uñas
-2. **appointments** - Reservas de clientes
-3. **availability_slots** - Horarios de trabajo
-4. **blocked_dates** - Fechas cerradas
-5. **gallery_images** - Fotos de trabajos
-6. **admin_users** - Usuarios administrativos
-
-### Acceso RLS
-- Clientes: Pueden crear citas
-- Admin: Acceso completo (protegido por contraseña)
-
-## Próximos Pasos Recomendados
-
-### 1. Agregar Imágenes de Galería
-Ve a `/admin` y busca la sección de galería para subir fotos de tus trabajos.
-
-### 2. Actualizar Información de Servicios
-En `/admin` puedes editar precios, duraciones y descripciones.
-
-### 3. Cambiar Contraseña Admin
-Busca "marianails2026" en `src/pages/AdminDashboard.tsx` y cámbiala.
-
-### 4. Agregar Fotos de María
-Reemplaza las imágenes placeholder con fotos reales en las páginas.
-
-### 5. Configurar Horarios
-Ajusta los horarios según tus disponibilidades en la base de datos.
-
-## Performance
-
-- **Bundle Size**: 100KB gzip (muy optimizado)
-- **Imágenes**: Lazy loading automático
-- **Base de Datos**: Queries optimizadas con índices
-- **Caching**: Implementado en servicios
 
 ## Tecnologías
 
-- React 18
-- TypeScript
-- Tailwind CSS (sin dependencias UI externas)
-- Supabase (PostgreSQL)
+- React 18 + TypeScript + Vite 5
+- Tailwind CSS
 - React Router v6
 - Lucide React (iconos)
 
-## Soporte
-
-Para dudas técnicas, revisa `DOCUMENTATION.md` para información detallada sobre la arquitectura y funcionalidades.
-
----
-
-**¡Tu aplicación está lista para usar! 🎉**
-
-Accede a `/admin` con la contraseña `marianails2026` para comenzar a gestionar tus citas.
+Sin backend, sin base de datos, sin variables de entorno. Más detalle en `DOCUMENTATION.md`.
+Cómo publicar en `DEPLOY_PRODUCCION.md`.
