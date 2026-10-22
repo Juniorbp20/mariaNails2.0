@@ -39,6 +39,7 @@ export const BUSINESS_INFO = {
 export const SITE_IMAGES = {
   logo: '/images/logo.jpg',
   profile: '/images/maria-perfil.jpg',
+  profileSmall: '/images/maria-perfil-480.jpg',
   catalog: null as string | null,
 } as const;
 

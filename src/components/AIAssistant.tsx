@@ -6,11 +6,18 @@
  * dinero: todo sale de officialCatalog.ts. Incluye atajos rápidos y enlaces
  * a /precios y WhatsApp.
  */
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Bot, MessageCircle } from 'lucide-react';
 import { ACRYLIC_STYLES, BUSINESS_INFO, COURTESIES } from '../data/officialCatalog';
 import { WHATSAPP_TEMPLATES, waLink } from '../data/whatsappTemplates';
+
+const ACRYLIC_SUMMARY = ACRYLIC_STYLES.map((style) => {
+  const prices = Object.values(style.prices);
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  return `${style.shortLabel} RD$${min.toLocaleString('es-DO')}-${max.toLocaleString('es-DO')}`;
+}).join(', ');
 
 /** Un mensaje del chat: 'bot' (asistente) o 'user' (visitante). */
 interface ChatMsg {
@@ -26,7 +33,7 @@ function getBotReply(input: string): string {
   const q = input.toLowerCase();
 
   if (q.match(/precio|cuanto|cuánto|costo|tarifa/)) {
-    return `Con gusto mi amor:\n• Manicura, Gel y Pedicura: precio a consultar por WhatsApp.\n• Acrílico #1-#8: Pintura 750-1400, Cover Liso 800-1800, French 850-1800, Acrílico+Gel 900-1900, Baby Boomer 950-2000, Full Set 1000-2100.\n¿Te ayudo a reservar?`;
+    return `Con gusto mi amor:\n• Manicura, Gel y Pedicura: precio a consultar por WhatsApp.\n• Acrílico #1-#8: ${ACRYLIC_SUMMARY}.\n¿Te ayudo a reservar?`;
   }
   if (q.match(/acrilic|#\d|largo|cover|baby|full/)) {
     const rows = ACRYLIC_STYLES.map(
@@ -43,7 +50,7 @@ function getBotReply(input: string): string {
   if (q.match(/nail|arte|diseño|diseno|3d|piedra|sticker/)) {
     return `Nail Art Mano alzada, stickers, 3D, pedrería y gel sólido. Envíame tus fotos de referencia por WhatsApp y te cotizamos con amor.`;
   }
-  if (q.match(/donde|donde|ubic|direcc|tenares|llegar|mapa/)) {
+  if (q.match(/dónde|donde|ubic|direcc|tenares|llegar|mapa/)) {
     return `Estamos en ${BUSINESS_INFO.addressLine1} (${BUSINESS_INFO.addressLine2}) Te esperamos con cafecito y galletitas.`;
   }
   if (q.match(/pago|banreservas|transfer|cuenta|efectivo|seña|sena|deposito/)) {
@@ -77,6 +84,34 @@ export default function AIAssistant() {
   const [messages, setMessages] = useState<ChatMsg[]>([
     { from: 'bot', text: WHATSAPP_TEMPLATES.bienvenida },
   ]);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const wasOpen = useRef(false);
+
+  useEffect(() => {
+    if (open) {
+      wasOpen.current = true;
+      return;
+    }
+
+    if (wasOpen.current) triggerRef.current?.focus();
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, [messages, open]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [open]);
 
   /** Envía un mensaje del usuario y agrega la respuesta del bot al historial. */
   const send = (text: string) => {
@@ -91,8 +126,12 @@ export default function AIAssistant() {
     <>
       {!open && (
         <button
+          ref={triggerRef}
+          type="button"
           onClick={() => setOpen(true)}
           aria-label="Abrir asistente virtual"
+          aria-haspopup="dialog"
+          aria-controls="ai-assistant"
           title="Asistente virtual"
           className="fixed bottom-5 left-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-xl shadow-purple-500/30 transition hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-300"
         >
@@ -101,7 +140,12 @@ export default function AIAssistant() {
       )}
 
       {open && (
-        <div className="fixed bottom-5 left-5 z-50 flex h-[480px] w-[330px] max-w-[calc(100vw-2.5rem)] flex-col overflow-hidden rounded-2xl border border-purple-200 bg-white shadow-2xl">
+        <div
+          id="ai-assistant"
+          role="dialog"
+          aria-label="Asistente virtual de Maria Nails"
+          className="fixed bottom-5 left-5 z-50 flex h-[480px] w-[330px] max-w-[calc(100vw-2.5rem)] flex-col overflow-hidden rounded-2xl border border-purple-200 bg-white shadow-2xl"
+        >
           <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 text-white">
             <div className="flex items-start justify-between gap-2">
               <div className="flex items-center gap-2">
@@ -114,6 +158,7 @@ export default function AIAssistant() {
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => setOpen(false)}
                 aria-label="Cerrar asistente"
                 className="rounded-full bg-white/20 px-2 py-1 text-sm hover:bg-white/30"
@@ -123,7 +168,12 @@ export default function AIAssistant() {
             </div>
           </div>
 
-          <div className="flex-1 space-y-2 overflow-y-auto bg-gradient-to-b from-purple-50 to-white p-3">
+          <div
+            role="log"
+            aria-live="polite"
+            aria-label="Conversación"
+            className="flex-1 space-y-2 overflow-y-auto bg-gradient-to-b from-purple-50 to-white p-3"
+          >
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.from === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <p
@@ -137,6 +187,7 @@ export default function AIAssistant() {
                 </p>
               </div>
             ))}
+            <div ref={messagesEndRef} />
           </div>
 
           <div className="border-t border-purple-100 bg-white p-2">
@@ -144,6 +195,7 @@ export default function AIAssistant() {
               {QUICK.map((q) => (
                 <button
                   key={q}
+                  type="button"
                   onClick={() => send(q)}
                   className="rounded-full border border-purple-200 bg-purple-50 px-2 py-1 text-xs font-semibold text-purple-700 hover:bg-purple-100"
                 >
@@ -158,10 +210,15 @@ export default function AIAssistant() {
               }}
               className="flex gap-2"
             >
+              <label htmlFor="ai-assistant-input" className="sr-only">
+                Escribe tu mensaje
+              </label>
               <input
+                id="ai-assistant-input"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ej: precio acrílico #4..."
+                autoFocus
                 className="flex-1 rounded-full border border-purple-200 px-3 py-2 text-sm outline-none focus:border-purple-400"
               />
               <button

@@ -5,38 +5,23 @@
  * con su precio. El botón pide por WhatsApp con el mensaje listo.
  * Abajo hay una tabla completa con los 48 precios oficiales.
  */
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { ACRYLIC_STYLES, type AcrylicLength } from '../data/officialCatalog';
-import type { Service } from '../types';
-import { findServiceForAcrylic } from '../utils/catalog';
+import { waLink } from '../data/whatsappTemplates';
 import { formatPrice } from '../utils/format';
-
-/** Props: lista estática de servicios para enlazar cada card a su reserva. */
-interface AcrylicPriceTableProps {
-  services?: Service[];
-}
 
 /** Los 8 largos disponibles. */
 const LENGTHS: AcrylicLength[] = [1, 2, 3, 4, 5, 6, 7, 8];
 
 /** Tabla interactiva: selector de largo + cards por estilo + tabla 48 precios. */
-export default function AcrylicPriceTable({ services = [] }: AcrylicPriceTableProps) {
+export default function AcrylicPriceTable() {
   const [selectedLength, setSelectedLength] = useState<AcrylicLength>(3);
 
-  const cards = useMemo(
-    () =>
-      ACRYLIC_STYLES.map((style) => {
-        const dbService = findServiceForAcrylic(services, style.key, selectedLength);
-        const officialPrice = style.prices[selectedLength];
-        return {
-          style,
-          dbService,
-          price: dbService?.price ?? officialPrice,
-          description: dbService?.description || style.description,
-        };
-      }),
-    [services, selectedLength],
-  );
+  const cards = ACRYLIC_STYLES.map((style) => ({
+    style,
+    price: style.prices[selectedLength],
+    description: style.description,
+  }));
 
   return (
     <div>
@@ -81,9 +66,9 @@ export default function AcrylicPriceTable({ services = [] }: AcrylicPriceTablePr
             <p className="text-sm text-gray-600 mb-3">{description}</p>
             <p className="text-2xl font-bold text-pink-600 mb-4">{formatPrice(price)}</p>
             <a
-              href={`https://wa.me/18293388282?text=${encodeURIComponent(
-                `Hola María Quiero reservar: Acrílico ${style.label} #${selectedLength} (${formatPrice(price)}). Mi nombre es: ___.`,
-              )}`}
+              href={waLink(
+                `Hola María. Quiero reservar: Acrílico ${style.label} #${selectedLength} (${formatPrice(price)}). Mi nombre es: ___.`,
+              )}
               target="_blank"
               rel="noopener noreferrer"
               className="block text-center rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 font-semibold text-white transition hover:shadow-lg"
@@ -100,11 +85,12 @@ export default function AcrylicPriceTable({ services = [] }: AcrylicPriceTablePr
         </summary>
         <div className="mt-4 overflow-x-auto">
           <table className="w-full min-w-[640px] text-sm">
+            <caption className="sr-only">Precios de acrílico por estilo y largo</caption>
             <thead>
               <tr className="bg-purple-50 text-purple-800">
-                <th className="px-3 py-2 text-left font-semibold">Estilo</th>
+                <th scope="col" className="px-3 py-2 text-left font-semibold">Estilo</th>
                 {LENGTHS.map((n) => (
-                  <th key={n} className="px-3 py-2 text-center font-semibold">
+                  <th key={n} scope="col" className="px-3 py-2 text-center font-semibold">
                     #{n}
                   </th>
                 ))}
@@ -121,7 +107,7 @@ export default function AcrylicPriceTable({ services = [] }: AcrylicPriceTablePr
                         n === selectedLength ? 'bg-purple-100 text-purple-800 font-bold' : 'text-gray-700'
                       }`}
                     >
-                      RD${style.prices[n].toLocaleString('es-DO')}
+                      {formatPrice(style.prices[n])}
                     </td>
                   ))}
                 </tr>

@@ -10,7 +10,7 @@ import { useMemo } from 'react';
 import { formatPrice } from '../utils/format';
 import { getOfficialServices } from '../utils/catalog';
 import { BUSINESS_INFO, COURTESIES, SITE_IMAGES, STATIC_PROFILE } from '../data/officialCatalog';
-import { waLink } from '../data/whatsappTemplates';
+import { waLink, WHATSAPP_TEMPLATES } from '../data/whatsappTemplates';
 
 /** Portada del negocio: hero, beneficios, sobre María y servicios destacados. */
 export default function Home() {
@@ -32,7 +32,7 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
-              href={waLink('Hola María. Quiero reservar mi cita en Maria Nails. Mi nombre es: ___. Quedo atenta, ¡gracias!')}
+              href={waLink(WHATSAPP_TEMPLATES.reserva)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-2 px-8 py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-lg font-semibold hover:shadow-lg transition text-lg"
@@ -105,8 +105,13 @@ export default function Home() {
             {SITE_IMAGES.profile ? (
               <img
                 src={SITE_IMAGES.profile}
+                srcSet={`${SITE_IMAGES.profileSmall} 480w, ${SITE_IMAGES.profile} 809w`}
+                sizes="(min-width: 1280px) 608px, (min-width: 768px) 50vw, 100vw"
                 alt={`${STATIC_PROFILE.aboutTitle} — técnica de uñas`}
+                width={809}
+                height={1080}
                 loading="lazy"
+                decoding="async"
                 className="w-full h-auto max-h-[520px] object-contain rounded-lg border border-pink-200 bg-pink-50"
               />
             ) : (
@@ -123,8 +128,8 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">Nuestros Servicios</h2>
           <p className="text-center text-gray-600 mb-2">Precios oficiales en RD$, sin sorpresas. Elige y reserva en segundos.</p>
           <p className="text-center text-sm text-purple-700 mb-12">
-            Manicura · Gel · Pedicura · Acrílico #1-#8 (precios a consultar) ·{' '}
-            <a href="/precios" className="font-semibold underline">Ver tabla completa</a>
+            Manicura · Gel · Pedicura · Acrílico #1-#8 desde RD$750 ·{' '}
+            <Link to="/precios" className="font-semibold underline">Ver tabla completa</Link>
           </p>
           <div className="grid md:grid-cols-2 gap-6 mb-8">
             {services.map((service) => (
@@ -165,6 +170,7 @@ export default function Home() {
                 src={SITE_IMAGES.catalog}
                 alt={`Catálogo de precios de ${businessName}`}
                 loading="lazy"
+                decoding="async"
                 className="max-h-[480px] w-full object-cover object-top"
               />
             </Link>

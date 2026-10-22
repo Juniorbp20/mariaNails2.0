@@ -6,8 +6,17 @@
  */
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { BUSINESS_INFO, SITE_IMAGES } from '../data/officialCatalog';
+import { waLink, WHATSAPP_TEMPLATES } from '../data/whatsappTemplates';
+
+const desktopNavClass = ({ isActive }: { isActive: boolean }) =>
+  `font-medium transition ${isActive ? 'text-pink-600' : 'text-gray-700 hover:text-pink-600'}`;
+
+const mobileNavClass = ({ isActive }: { isActive: boolean }) =>
+  `block px-4 py-2 rounded-lg transition ${
+    isActive ? 'bg-pink-50 text-pink-700 font-semibold' : 'text-gray-700 hover:bg-gray-100'
+  }`;
 
 /** Encabezado fijo con navegación principal. */
 export default function Header() {
@@ -31,7 +40,10 @@ export default function Header() {
             {SITE_IMAGES.logo ? (
               <img
                 src={SITE_IMAGES.logo}
-                alt={`${businessName} logo`}
+                alt=""
+                width={48}
+                height={48}
+                decoding="async"
                 className="w-12 h-12 rounded-full object-cover border border-pink-200"
               />
             ) : (
@@ -40,26 +52,26 @@ export default function Header() {
               </div>
             )}
             <div>
-              <h1 className="text-xl font-bold text-gray-900">{businessName}</h1>
+              <p className="text-xl font-bold text-gray-900">{businessName}</p>
               <p className="text-xs text-gray-600">{tagline}</p>
             </div>
           </Link>
 
           <nav className="hidden md:flex space-x-8">
-            <Link to="/" className="text-gray-700 hover:text-pink-600 font-medium transition">
+            <NavLink to="/" end className={desktopNavClass}>
               Inicio
-            </Link>
-            <Link to="/sobre-mi" className="text-gray-700 hover:text-pink-600 font-medium transition">
+            </NavLink>
+            <NavLink to="/sobre-mi" className={desktopNavClass}>
               Sobre mí
-            </Link>
-            <Link to="/galeria" className="text-gray-700 hover:text-pink-600 font-medium transition">
+            </NavLink>
+            <NavLink to="/galeria" className={desktopNavClass}>
               Galería
-            </Link>
-            <Link to="/precios" className="text-gray-700 hover:text-pink-600 font-medium transition">
+            </NavLink>
+            <NavLink to="/precios" className={desktopNavClass}>
               Precios
-            </Link>
+            </NavLink>
             <a
-              href={`${BUSINESS_INFO.whatsappUrl}?text=${encodeURIComponent('Hola María. Quiero reservar mi cita en Maria Nails. Mi nombre es: ___. Quedo atenta, ¡gracias!')}`}
+              href={waLink(WHATSAPP_TEMPLATES.reserva)}
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-lg font-medium hover:shadow-lg transition"
@@ -69,9 +81,11 @@ export default function Header() {
           </nav>
 
           <button
+            type="button"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={menuOpen}
+            aria-controls="mobile-nav"
             className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition"
           >
             {menuOpen ? <X className="w-6 h-6 text-gray-700" /> : <Menu className="w-6 h-6 text-gray-700" />}
@@ -79,37 +93,21 @@ export default function Header() {
         </div>
 
         {menuOpen && (
-          <nav className="md:hidden pb-4 space-y-2">
-            <Link
-              to="/"
-              className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition"
-              onClick={() => setMenuOpen(false)}
-            >
+          <nav id="mobile-nav" className="md:hidden pb-4 space-y-2">
+            <NavLink to="/" end className={mobileNavClass} onClick={() => setMenuOpen(false)}>
               Inicio
-            </Link>
-            <Link
-              to="/sobre-mi"
-              className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition"
-              onClick={() => setMenuOpen(false)}
-            >
+            </NavLink>
+            <NavLink to="/sobre-mi" className={mobileNavClass} onClick={() => setMenuOpen(false)}>
               Sobre mí
-            </Link>
-            <Link
-              to="/galeria"
-              className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition"
-              onClick={() => setMenuOpen(false)}
-            >
+            </NavLink>
+            <NavLink to="/galeria" className={mobileNavClass} onClick={() => setMenuOpen(false)}>
               Galería
-            </Link>
-            <Link
-              to="/precios"
-              className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition"
-              onClick={() => setMenuOpen(false)}
-            >
+            </NavLink>
+            <NavLink to="/precios" className={mobileNavClass} onClick={() => setMenuOpen(false)}>
               Precios
-            </Link>
+            </NavLink>
             <a
-              href={`${BUSINESS_INFO.whatsappUrl}?text=${encodeURIComponent('Hola María. Quiero reservar mi cita en Maria Nails. Mi nombre es: ___. Quedo atenta, ¡gracias!')}`}
+              href={waLink(WHATSAPP_TEMPLATES.reserva)}
               target="_blank"
               rel="noopener noreferrer"
               className="block px-4 py-2 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-lg font-medium transition"

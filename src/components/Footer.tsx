@@ -37,7 +37,7 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-bold mb-4">Ubicación</h3>
             <div className="flex items-start space-x-3 mb-4">
-              <MapPin className="w-5 h-5 text-pink-500 flex-shrink-0 mt-1" />
+              <MapPin className="w-5 h-5 text-pink-500 flex-shrink-0 mt-1" aria-hidden="true" />
               <div>
                 <p className="text-gray-300 text-sm">{BUSINESS_INFO.addressLine1}</p>
                 <p className="text-gray-400 text-sm">{BUSINESS_INFO.addressLine2}</p>
@@ -59,17 +59,17 @@ export default function Footer() {
             <h3 className="text-lg font-bold mb-4">Contacto y Pagos</h3>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
-                <Phone className="w-5 h-5 text-pink-500" />
+                <Phone className="w-5 h-5 text-pink-500" aria-hidden="true" />
                 <span className="text-gray-300">
                   {BUSINESS_INFO.phoneDisplay} · WhatsApp citas
                 </span>
               </div>
               <div className="flex items-start space-x-3">
-                <CreditCard className="w-5 h-5 text-pink-500 flex-shrink-0 mt-0.5" />
+                <CreditCard className="w-5 h-5 text-pink-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
                 <p className="text-gray-300 text-sm">{STATIC_PROFILE.paymentDetails}</p>
               </div>
               <div className="flex items-center space-x-3">
-                <Clock className="w-5 h-5 text-pink-500" />
+                <Clock className="w-5 h-5 text-pink-500" aria-hidden="true" />
                 <div className="text-gray-300 text-sm">
                   <p>Solo con cita previa</p>
                   <p className="text-gray-400">Cancela sin costo 24h antes · Tolerancia 15 min</p>
@@ -92,7 +92,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-white font-semibold shadow-lg hover:shadow-pink-500/30 hover:-translate-y-0.5 transition"
               >
-                <Instagram className="w-5 h-5" />
+                <Instagram className="w-5 h-5" aria-hidden="true" />
                 <span className="text-sm">Instagram</span>
               </a>
 

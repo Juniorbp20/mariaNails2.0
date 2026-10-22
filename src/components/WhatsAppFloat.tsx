@@ -4,6 +4,7 @@
  * 100% estático: número oficial desde officialCatalog.ts, sin base de datos.
  */
 import { BUSINESS_INFO } from '../data/officialCatalog';
+import { waLink, WHATSAPP_TEMPLATES } from '../data/whatsappTemplates';
 
 /** Icono de WhatsApp dibujado en SVG (sin librerías externas). */
 function WhatsAppIcon({ className }: { className?: string }) {
@@ -16,16 +17,14 @@ function WhatsAppIcon({ className }: { className?: string }) {
 
 /** Botón flotante que abre WhatsApp con mensaje de reserva pre-llenado. */
 export default function WhatsAppFloat() {
-  const href = `${BUSINESS_INFO.whatsappUrl}?text=${encodeURIComponent(
-    'Hola María. Quiero reservar mi cita en Maria Nails. Mi nombre es: ___. Quedo atenta, ¡gracias!',
-  )}`;
+  const href = waLink(WHATSAPP_TEMPLATES.reserva);
 
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Escríbenos por WhatsApp al 829-338-8282"
+      aria-label={`Escríbenos por WhatsApp al ${BUSINESS_INFO.phoneDisplay}`}
       title="Escríbenos por WhatsApp"
       className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500 text-white shadow-xl shadow-emerald-500/30 transition hover:-translate-y-1 hover:bg-emerald-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300"
     >

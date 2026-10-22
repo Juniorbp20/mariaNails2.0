@@ -24,8 +24,14 @@ export default function About() {
         {SITE_IMAGES.profile && (
           <img
             src={SITE_IMAGES.profile}
+            srcSet={`${SITE_IMAGES.profileSmall} 480w, ${SITE_IMAGES.profile} 809w`}
+            sizes="(min-width: 896px) 896px, 100vw"
             alt={`${STATIC_PROFILE.aboutTitle} — técnica de uñas en ${businessName}`}
-            loading="lazy"
+            width={809}
+            height={1080}
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
             className="w-full h-auto max-h-[520px] object-contain rounded-lg border border-pink-200 bg-pink-50 mb-8"
           />
         )}

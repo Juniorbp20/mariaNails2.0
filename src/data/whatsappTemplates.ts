@@ -16,6 +16,8 @@ export function waLink(message: string): string {
 export const WHATSAPP_TEMPLATES = {
   bienvenida: `Hola, bienvenida a ${BUSINESS_INFO.name} Soy la asistente de María. Atendemos exclusivamente con cita previa. ¿En qué servicio estás interesada hoy? Tenemos manicura, gel, pedicura spa y acrílico del #1 al #8.`,
 
+  reserva: 'Hola María. Quiero reservar mi cita en Maria Nails. Mi nombre es: ___. Quedo atenta, ¡gracias!',
+
   nailArt: `Hola María. Me interesa Nail Art personalizado (mano alzada / 3D / pedrería). Te envío mis fotos de referencia para cotizar. ¡Gracias!`,
 
   direccion: `Estamos en ${BUSINESS_INFO.addressLine1} (${BUSINESS_INFO.addressLine2}). Te esperamos con cafecito, té, jugos y galletitas de cortesía.`,

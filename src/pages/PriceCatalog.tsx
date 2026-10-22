@@ -8,7 +8,7 @@
 import { useMemo, useState } from 'react';
 import { BadgeDollarSign, MessageCircle } from 'lucide-react';
 import type { Service } from '../types';
-import { toWhatsAppUrl, formatPrice, formatDuration } from '../utils/format';
+import { formatPrice, formatDuration } from '../utils/format';
 import { getOfficialServices } from '../utils/catalog';
 import { BUSINESS_INFO, SITE_IMAGES, STATIC_PROFILE } from '../data/officialCatalog';
 import { WHATSAPP_TEMPLATES, waLink } from '../data/whatsappTemplates';
@@ -33,7 +33,6 @@ export default function PriceCatalog() {
   const services: Service[] = useMemo(() => getOfficialServices(), []);
   const businessName = BUSINESS_INFO.name;
   const catalogUrl = SITE_IMAGES.catalog;
-  const whatsappUrl = toWhatsAppUrl(BUSINESS_INFO.whatsappUrl);
 
   const manicura = useMemo(
     () => services.filter((s) => s.category === 'Manicura'),
@@ -98,7 +97,8 @@ export default function PriceCatalog() {
                 src={catalogUrl}
                 alt={`Catálogo de precios de ${businessName}`}
                 className="w-full object-contain"
-                loading="lazy"
+                loading="eager"
+                decoding="async"
               />
             </figure>
           )}
@@ -108,8 +108,11 @@ export default function PriceCatalog() {
           {TABS.map((t) => (
             <button
               key={t.key}
+              type="button"
               role="tab"
+              id={`tab-${t.key}`}
               aria-selected={tab === t.key}
+              aria-controls="pricing-panel"
               onClick={() => setTab(t.key)}
               className={`rounded-full px-5 py-2 font-semibold transition ${
                 tab === t.key
@@ -122,7 +125,12 @@ export default function PriceCatalog() {
           ))}
         </div>
 
-        <div className="rounded-2xl bg-white/70 border border-purple-100 p-4 sm:p-6 shadow-sm">
+        <div
+          role="tabpanel"
+          id="pricing-panel"
+          aria-labelledby={`tab-${tab}`}
+          className="rounded-2xl bg-white/70 border border-purple-100 p-4 sm:p-6 shadow-sm"
+        >
           {tab === 'manicura' && (
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-1">Manicura clásica y cuidado</h2>
@@ -149,7 +157,7 @@ export default function PriceCatalog() {
               <p className="text-gray-600 mb-5 text-sm">
                 Selecciona tu largo y compara los 6 estilos. Precios oficiales en RD$.
               </p>
-              <AcrylicPriceTable services={services} />
+              <AcrylicPriceTable />
             </div>
           )}
 
@@ -184,7 +192,7 @@ export default function PriceCatalog() {
 
         <div className="mt-10 text-center space-y-3">
           <a
-            href={waLink('Hola María. Quiero reservar mi cita en Maria Nails. Mi nombre es: ___. Quedo atenta, ¡gracias!')}
+            href={waLink(WHATSAPP_TEMPLATES.reserva)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-8 py-3 font-semibold text-white transition hover:shadow-lg"
@@ -193,16 +201,14 @@ export default function PriceCatalog() {
             Reservar por WhatsApp
           </a>
           <div>
-            {whatsappUrl && (
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm font-semibold text-purple-700 hover:text-purple-800"
-              >
-                ¿Dudas? Escríbenos al 829-338-8282 por WhatsApp
-              </a>
-            )}
+            <a
+              href={BUSINESS_INFO.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-semibold text-purple-700 hover:text-purple-800"
+            >
+              ¿Dudas? Escríbenos al {BUSINESS_INFO.phoneDisplay} por WhatsApp
+            </a>
           </div>
         </div>
       </div>
