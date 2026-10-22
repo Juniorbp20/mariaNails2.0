@@ -1,259 +1,59 @@
-# Mejoras Realizadas - María Nails
+# Evolución — María Nails
 
-## De Estático a Dinámico
+## Etapa actual: sitio estático (sin base de datos)
 
-### Antes
-- Sitio HTML estático con CSS
-- Reservas exclusivamente por WhatsApp
-- Galería con imágenes hardcodeadas
-- Sin base de datos
-- Sin admin panel
-- Sin gestión de disponibilidad
+Decisión: eliminar Supabase, el panel `/admin` y el sistema de citas con calendario.
+Motivos: cero costos, cero mantenimiento, web más rápida y todo el contenido ya vivía
+en `officialCatalog.ts` o en Instagram.
 
-### Ahora
-- Aplicación React moderna
-- Sistema completo de reservas en calendario
-- Galería dinámica
-- Base de datos Supabase
-- Panel de administración profesional
-- Gestión automática de horarios y disponibilidad
+### Antes (con Supabase) → Ahora (estático)
 
----
-
-## 1. Interfaz de Usuario
-
-### Mejoras
-✅ Diseño moderno y responsive con Tailwind CSS
-✅ Navegación intuitiva sin necesidad de menú hamburguesa
-✅ Animaciones suaves y transiciones
-✅ Componentes reutilizables
-✅ Accesibilidad WCAG mejorada
-✅ Soporte completo para móviles, tablets y desktop
-
-### Antes vs Ahora
-```
-Antes: Sitio con scroll largo, todo en una página
-Ahora: Navegación por secciones, páginas dedicadas
-```
-
----
-
-## 2. Sistema de Reservas
-
-### Características Nuevas
-✅ **Calendario Interactivo**
-  - Selecciona fechas disponibles visualmente
-  - Bloqueo automático de domingos y martes
-  - Indicador de fechas pasadas
-  - Fechas bloqueadas especiales (vacaciones, etc)
-
-✅ **Horarios Dinámicos**
-  - Slots de 30 minutos
-  - Horario de descanso personalizado
-  - Prevención automática de dobles reservas
-  - Disponibilidad según servicio
-
-✅ **Proceso de 5 Pasos**
-  1. Seleccionar servicio
-  2. Elegir fecha
-  3. Escoger hora
-  4. Datos de contacto
-  5. Confirmación
-
-✅ **Confirmación Instantánea**
-  - Número de confirmación
-  - Resumen detallado
-  - Información de contacto
-  - Opción de WhatsApp para cambios
-
----
-
-## 3. Base de Datos
-
-### Supabase PostgreSQL
-```
-Ventajas:
-✅ Datos persistentes y seguros
-✅ Escalable a miles de citas
-✅ Backups automáticos
-✅ Row Level Security (RLS) configurado
-✅ APIs REST incluidas
-✅ Consultas optimizadas con índices
-```
-
-### Tablas
-| Tabla | Función | Registros |
-|-------|---------|-----------|
-| services | Servicios disponibles | 6 |
-| appointments | Citas reservadas | Dinámico |
-| availability_slots | Horarios de trabajo | 5 |
-| blocked_dates | Fechas cerradas | Dinámico |
-| gallery_images | Fotos de trabajos | Dinámico |
-| admin_users | Usuarios admin | 1 |
-
----
-
-## 4. Panel de Administración
-
-### Funcionalidades
-✅ **Gestión de Citas**
-  - Ver todas las citas
-  - Cambiar estado (Pendiente → Confirmada → Completada)
-  - Enlace directo a WhatsApp
-  - Eliminar citas
-
-✅ **Gestión de Servicios**
-  - Ver catálogo
-  - Agregar nuevos servicios
-  - Actualizar precios y duraciones
-  - Activar/desactivar servicios
-
-✅ **Configuración de Horarios**
-  - Establecer horas de trabajo
-  - Configurar descansos
-  - Bloquear fechas especiales
-  - Definir dias de cierre
-
-✅ **Estadísticas**
-  - Total de citas
-  - Citas confirmadas
-  - Citas pendientes
-  - Servicios activos
-
----
-
-## 5. Galería Dinámica
-
-### Antes
-```html
-<img src="trabajo1.jpg" alt="Trabajo 1">
-<img src="trabajo2.jpg" alt="Trabajo 2">
-<!-- Limitado a un número fijo -->
-```
-
-### Ahora
-✅ Galería basada en base de datos
-✅ Imágenes con descripción
-✅ Modal con vista ampliada
-✅ Paginación automática
-✅ Lazy loading de imágenes
-✅ Asociación por servicio
-
----
-
-## 6. Performance y Optimización
-
-### Velocidad
-| Métrica | Antes | Ahora |
-|---------|-------|-------|
-| Bundle | ~500KB | ~100KB gzip |
-| Carga | ~2s | ~0.8s |
-| Lighthouse | 60/100 | 95/100 |
-| Core Web Vitals | Pobre | Excelente |
-
-### Técnicas Implementadas
-✅ Code splitting por rutas
-✅ Lazy loading de imágenes
-✅ Optimización de CSS con Tailwind
-✅ Minificación automática
-✅ Gzip compression
-✅ Caché de datos en cliente
-
----
-
-## 7. Seguridad
-
-### Mejoras de Seguridad
-✅ Row Level Security (RLS) en todas las tablas
-✅ Autenticación para admin
-✅ Validación de datos en cliente y servidor
-✅ HTTPS recomendado
-✅ CORS configurado
-✅ Protección contra inyección SQL (Supabase)
-
----
-
-## 8. Mantenimiento
-
-### Facilidad de Actualización
-
-**Antes**
-- Editar HTML manualmente
-- Actualizar CSS para cambios
-- Riesgo de quebrar diseño
-
-**Ahora**
-- Panel admin para cambios
-- Base de datos centralizada
-- Componentes reutilizables
-- TypeScript para menos errores
-
----
-
-## 9. Escalabilidad
-
-### Capacidad de Crecimiento
-
-✅ **Múltiples Usuarios Admin**
-  - Agregar más usuarios administradores
-  - Diferentes permisos (futura mejora)
-
-✅ **Múltiples Servicios**
-  - Sin límite en catálogo
-  - Categorías personalizadas
-
-✅ **Histórico de Citas**
-  - Base de datos persiste todo
-  - Reportes disponibles
-
-✅ **Integración Futura**
-  - Email confirmaciones
-  - SMS reminders
-  - Pagos con Stripe
-  - Exportación de datos
-
----
-
-## 10. Experiencia del Usuario
-
-### Cliente
 | Antes | Ahora |
-|-------|-------|
-| Busca horarios por WhatsApp | Ve disponibilidad inmediatamente |
-| Espera respuesta | Confirmación al instante |
-| Confusión sobre precios | Catálogo claro con precios |
-| Sin recordatorio | Confirmación guardada |
+|---|---|
+| Tablas `services`, `appointments`, `gallery_images`... | `src/data/officialCatalog.ts` (precios y datos en código) |
+| Galería con Storage + paginación | `/galeria` redirige a Instagram |
+| Panel `/admin` con login | Cambios editando el archivo de datos + push |
+| Citas en base de datos + calendario | Reserva directa por WhatsApp con mensaje pre-llenado |
+| Variables `VITE_SUPABASE_*` en Vercel | Sin variables de entorno |
+| Dependencia `@supabase/supabase-js` | Eliminada (bundle más liviano) |
 
-### Administrador
-| Antes | Ahora |
-|-------|-------|
-| Chats desorganizados | Tabla ordenada de citas |
-| Sin registro | Base de datos completa |
-| Difícil programación | Calendario visual |
-| Sin información | Estadísticas claras |
+### Archivos eliminados
 
----
+- `src/services/*` (5 servicios), `src/lib/supabase.ts`, `src/contexts/`, `src/hooks/useAsync.ts`
+- `src/components/ConfigBanner.tsx`, `GalleryImage.tsx`, `Skeletons.tsx`
+- `src/pages/AdminDashboard.tsx` + ruta `/admin`
+- Carpeta `supabase/` (functions, migrations, config) — fotos originales movidas a `FOTOS/`
+- Código sin uso: `dateUtils.ts`, validadores de formulario, helpers de categorías,
+  plantillas de WhatsApp no usadas, `getAcrylicPrice`/`buildAcrylicServiceName`
 
-## Resumen Ejecutivo
+### Lo que se mantiene
 
-### Antes
-- Sitio web estático
-- Gestión manual de reservas
-- Sin base de datos
-- Experiencia inconsistente
-
-### Ahora
-- Aplicación moderna y profesional
-- Sistema automático de reservas
-- Base de datos segura
-- Experiencia premium para clientes y admin
-
-### Beneficios
-✅ **Para Clientes**: Reservan cuando quieren, 24/7
-✅ **Para María**: Panel completo de control
-✅ **Para el Negocio**: Mayor profesionalismo, más confianza
-✅ **Para el Futuro**: Fácil de escalar y mejorar
+- 4 páginas, catálogo con pestañas, tabla de acrílico 6x8, asistente virtual local,
+  botones de WhatsApp, logo + foto optimizadas en `public/images/`.
 
 ---
 
-**Transformación Completada: De 1.0 a 2.0** 🚀
+## Historial: de estático simple a plataforma con backend (etapa anterior)
+
+La primera modernización transformó un HTML estático en una app React con reservas
+en calendario, galería dinámica, base de datos Supabase y panel admin. Aportó el
+diseño actual (Tailwind, responsive, páginas por ruta) y el catálogo oficial de
+precios, que sobrevivieron a la simplificación.
+
+### Aportes que se conservan de esa etapa
+
+- Diseño moderno y responsive con Tailwind CSS
+- Navegación por páginas (`/`, `/sobre-mi`, `/galeria`, `/precios`)
+- Catálogo oficial: 8 servicios base + matriz acrílico 6 estilos x 8 largos
+- Políticas del negocio: solo WhatsApp, cancelación 24h, tolerancia 15 min
+- Datos oficiales: Banreservas 9605474442, dirección en Tenares, coffee bar
+- Asistente virtual con tono cálido y respuestas por palabras clave
+- Performance: bundle ~218KB JS / ~66KB gzip, imágenes optimizadas, lazy loading
+
+### Lo que se descartó y por qué
+
+- **Calendario de reservas en DB**: las clientas igual confirman por WhatsApp; el
+  calendario agregaba complejidad sin uso real.
+- **Panel admin**: obligaba a mantener auth, RLS y Storage por editar textos que
+  cambian pocas veces al año.
+- **Galería en Storage**: duplicaba lo que ya se publica en Instagram.

@@ -1,145 +1,94 @@
-# María Nails - Aplicación Modernizada
+# María Nails — Documentación técnica
 
-## Resumen de Cambios
+Sitio 100% estático (React 18 + TypeScript + Vite 5 + Tailwind), sin base de datos ni backend.
+Reservas por WhatsApp, galería en Instagram.
 
-Se ha completado una transformación integral de la aplicación María Nails, migrando de un sitio estático HTML a una aplicación React moderna con TypeScript, integración con Supabase y un sistema completo de reservas en línea.
-
-## Características Principales
-
-### 1. Sistema de Reservas en Calendario
-- **Calendario Interactivo**: Selecciona fechas disponibles
-- **Horarios Dinámicos**: Horarios automáticos según disponibilidad
-- **Prevención de Dobles Reservas**: Validación en tiempo real
-- **Confirmación Instantánea**: Recepción inmediata de confirmación
-
-### 2. Base de Datos Supabase
-- **Tablas Principales**:
-  - `services`: Servicios ofrecidos
-  - `appointments`: Reservas de clientes
-  - `availability_slots`: Horarios de trabajo
-  - `blocked_dates`: Fechas de cierre
-  - `gallery_images`: Imágenes de trabajos
-  - `admin_users`: Usuarios administrativos
-
-- **Seguridad**:
-  - Row Level Security (RLS) habilitado
-  - Políticas de acceso restrictivas
-  - Autenticación admin protegida
-
-### 3. Panel de Administración
-- **Acceso**: `/admin` con contraseña
-- **Funciones**:
-  - Ver todas las reservas
-  - Cambiar estado de citas
-  - Eliminar reservas
-  - Gestionar servicios
-  - Configurar horarios
-  - Ver estadísticas
-
-- **Contraseña Admin**: `marianails2026`
-
-### 4. Páginas Principales
-- **Inicio**: Presentación y llamada a la acción
-- **Sobre mí**: Información de María y su experiencia
-- **Servicios**: Catálogo completo de servicios
-- **Galería**: Portfolio de trabajos
-- **Reservar Cita**: Sistema de 5 pasos
-- **Admin**: Panel de control
-
-## Estructura del Proyecto
+## Arquitectura
 
 ```
-src/
-├── components/          # Componentes reutilizables
-│   ├── Header.tsx
-│   ├── Footer.tsx
-│   ├── ServiceCard.tsx
-│   ├── GalleryImage.tsx
-│   ├── Calendar.tsx
-│   └── TimeSlots.tsx
-├── pages/               # Páginas de la aplicación
-│   ├── Home.tsx
-│   ├── About.tsx
-│   ├── Services.tsx
-│   ├── Gallery.tsx
-│   ├── Booking.tsx
-│   └── AdminDashboard.tsx
-├── services/            # Servicios API
-│   ├── appointmentService.ts
-│   ├── serviceService.ts
-│   ├── galleryService.ts
-│   └── availabilityService.ts
-├── lib/                 # Librerías
-│   └── supabase.ts
-├── types/               # Tipos TypeScript
-│   └── index.ts
-├── hooks/               # Custom hooks
-│   └── useAsync.ts
-├── utils/               # Funciones utilitarias
-│   └── dateUtils.ts
-└── App.tsx              # Aplicación principal
+Navegador → Build estático (dist/) → WhatsApp (reservas) / Instagram (fotos)
 ```
 
-## Configuración de Supabase
+No hay servidor, ni API, ni variables de entorno. Todo el contenido vive en el código,
+con `src/data/officialCatalog.ts` como fuente única de verdad.
 
-### Variables de Entorno
+## Páginas (`src/pages/`)
+
+| Archivo | Ruta | Qué hace |
+|---|---|---|
+| `Home.tsx` | `/` | Hero con reserva, 3 beneficios, sobre María, 4 servicios destacados, imagen de catálogo (si existe) |
+| `Gallery.tsx` | `/galeria` | Puente a Instagram: explica que las fotos están ahí + CTA grande + reserva por WhatsApp |
+| `About.tsx` | `/sobre-mi` | Perfil de María, valores y tarjeta de contacto del salón |
+| `PriceCatalog.tsx` | `/precios` | Tabs Manicura / Gel y Pedicura / Acrílico #1-#8 / Nail Art / Info + políticas |
+| `NotFound.tsx` | `*` | Página 404 |
+
+## Componentes (`src/components/`)
+
+| Archivo | Uso |
+|---|---|
+| `Header.tsx` | Navegación + logo estático (`SITE_IMAGES.logo`, fallback a iniciales) |
+| `Footer.tsx` | Ubicación, contacto, pagos, botones Instagram + WhatsApp |
+| `WhatsAppFloat.tsx` | Botón flotante verde con mensaje de reserva pre-llenado |
+| `AIAssistant.tsx` | Chat local por palabras clave (precios, acrílico, dirección, pagos...). Sin IA externa ni costo |
+| `AcrylicPriceTable.tsx` | Selector de largo #1-#8 + 6 cards por estilo + tabla completa de 48 precios |
+| `PolicyBlocks.tsx` | Cortesías, ubicación, políticas 24h/15min, pagos |
+| `ScrollToTop.tsx` | Vuelve arriba al cambiar de ruta |
+
+`App.tsx` monta el router y el layout común (Header, Footer y los dos flotantes en todas las páginas).
+
+## Datos (`src/data/`)
+
+### `officialCatalog.ts` — fuente única de verdad
+
+- `BUSINESS_INFO`: nombre, profesional, tagline, teléfono/WhatsApp, dirección, banco/cuenta,
+  `instagramUrl`, `mapsUrl`, `contactEmail`.
+- `SITE_IMAGES`: rutas a `/images/...` (`logo`, `profile`, `catalog`). `null` = usar diseño por defecto.
+- `STATIC_PROFILE`: textos del hero, "sobre mí", footer y pagos.
+- `COURTESIES`: café, tés, jugos, galletas.
+- `POLICIES`: canal WhatsApp, cancelación 24h, tolerancia 15 min.
+- `ACRYLIC_STYLES`: 6 estilos x 8 largos = 48 precios oficiales (RD$).
+- `OFFICIAL_SERVICES`: 8 servicios base con precio y duración.
+- Tipos: `AcrylicLength` (1-8), `AcrylicStyleKey`, `AcrylicStyle`, `OfficialServiceSeed`.
+
+### `whatsappTemplates.ts`
+
+- `waLink(mensaje)`: arma links `wa.me` con texto codificado.
+- `WHATSAPP_TEMPLATES`: `bienvenida` (asistente), `nailArt`, `direccion`.
+
+## Utilidades y tipos
+
+- `src/utils/catalog.ts`: `getOfficialServices()` (convierte `OFFICIAL_SERVICES` a `Service[]`),
+  `findServiceForAcrylic()` (precio oficial por estilo + largo).
+- `src/utils/format.ts`: `formatPrice()` (RD$), `formatDuration()`, `toWhatsAppUrl()`.
+- `src/types/index.ts`: `Service` (id, nombre, descripción, duración, precio, categoría...).
+
+## Imágenes
+
+- `public/images/logo.jpg` (512px, Header) y `public/images/maria-perfil.jpg` (máx. 1080px,
+  Inicio + Sobre mí). Se sirven tal cual desde `dist/`.
+- `FOTOS/` guarda los originales en alta resolución. No se publica ni se importa en el código.
+
+## Rutas y SEO
+
+- React Router con rewrite SPA a `index.html` (`vercel.json` / `netlify.toml`).
+- `public/sitemap.xml`: `/`, `/galeria`, `/precios`, `/sobre-mi`.
+- `public/robots.txt`: permite todo.
+
+## Comandos
+
+```bash
+npm run dev        # Desarrollo local
+npm run build      # Producción → dist/
+npm run preview    # Previsualizar build
+npm run typecheck  # tsc --noEmit
 ```
-VITE_SUPABASE_URL=https://sapqurrixziczmdveooh.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-```
 
-### Datos Iniciales
-Se han insertado automáticamente:
-- 6 servicios profesionales
-- Horarios de trabajo (Lun, Mié, Jue, Vie, Sab)
-- Usuario admin
+Nota: `npm run lint` falla por incompatibilidad preexistente del toolchain
+(eslint 9.39 + `@typescript-eslint`), no relacionada con el código.
 
-## Cómo Usar
+## Historial relevante
 
-### Para Clientes
-1. Navega a `/reserva`
-2. Selecciona servicio
-3. Elige fecha disponible
-4. Selecciona hora
-5. Ingresa datos de contacto
-6. Confirma reserva
-
-### Para Administrador
-1. Ve a `/admin`
-2. Ingresa contraseña: `marianails2026`
-3. Gestiona citas y servicios
-
-## Optimizaciones de Performance
-
-- **Code Splitting**: Rutas cargadas dinámicamente
-- **Lazy Loading**: Imágenes con lazy loading
-- **Bundle Size**: 100KB gzip (optimizado)
-- **Caching**: Datos en caché con React Query
-- **CSS**: Tailwind CSS con purging automático
-
-## Tecnologías Utilizadas
-
-- **Frontend**: React 18, TypeScript, Tailwind CSS
-- **Backend**: Supabase (PostgreSQL + APIs REST)
-- **Routing**: React Router v6
-- **Icons**: Lucide React
-- **Build**: Vite
-- **Validación**: Validación nativa HTML5
-
-## Próximas Mejoras Recomendadas
-
-1. **Autenticación Real**: Implementar Supabase Auth en lugar de contraseña estática
-2. **Email Notifications**: Envío automático de confirmaciones por email
-3. **SMS Reminders**: Recordatorios 24 horas antes
-4. **Payment Integration**: Integración con Stripe para depósitos
-5. **Analytics**: Seguimiento de conversiones
-6. **PWA Features**: App instalable en dispositivos
-
-## Soporte y Contacto
-
-Para más información o soporte técnico, contacta a través de WhatsApp: +1 829 338 8282
-
----
-
-**Última actualización**: 2026-03-21
-**Versión**: 2.0.0
+El proyecto pasó por una etapa con Supabase (tablas, panel `/admin`, Edge Functions),
+eliminada por completo: sin `src/services/`, sin `src/lib/supabase.ts`, sin dependencias
+de `@supabase/supabase-js`, sin variables `VITE_SUPABASE_*`. Ver `IMPROVEMENTS.md` y
+`CAMBIOS_mariaNails2.2.md`.

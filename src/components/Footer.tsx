@@ -1,17 +1,13 @@
-import { Clock, Instagram, MapPin, Phone } from 'lucide-react';
-import { useBusinessProfile } from '../contexts/BusinessProfileContext';
+/**
+ * Footer.tsx — Pie de página con negocio, ubicación, contacto y redes.
+ *
+ * 100% estático: todo sale de officialCatalog.ts, sin base de datos.
+ * Si quitas la DB, Vercel ya no necesita VITE_SUPABASE_*.
+ */
+import { Clock, CreditCard, Instagram, MapPin, Phone } from 'lucide-react';
+import { BUSINESS_INFO, COURTESIES, STATIC_PROFILE } from '../data/officialCatalog';
 
-const DEFAULT_PHONE = '+1 829 338 8282';
-
-const toWhatsappUrl = (value: string | null): string | null => {
-  if (!value) return null;
-  if (/^https?:\/\//i.test(value)) return value;
-
-  const digits = value.replace(/\D/g, '');
-  if (!digits) return null;
-  return `https://wa.me/${digits}`;
-};
-
+/** Icono de WhatsApp en SVG (igual que el botón flotante). */
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
@@ -20,17 +16,11 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
+/** Pie de página estático: 3 columnas + Instagram y WhatsApp. */
 export default function Footer() {
-  const { profile } = useBusinessProfile();
-
-  const businessName = profile.business_name || 'Maria Nails';
-  const footerDescription = profile.footer_description || 'Manicura, pedicura y unas acrilicas con atencion profesional.';
-  const addressLine1 = profile.address_line_1 || 'Direccion no configurada';
-  const addressLine2 = profile.address_line_2 || '';
-  const phone = profile.contact_phone || DEFAULT_PHONE;
-  const mapsUrl = profile.maps_url;
-  const instagramUrl = profile.instagram_url;
-  const whatsappUrl = toWhatsappUrl(profile.contact_whatsapp || profile.contact_phone);
+  const businessName = BUSINESS_INFO.name;
+  const instagramUrl = BUSINESS_INFO.instagramUrl;
+  const mapsUrl = BUSINESS_INFO.mapsUrl;
 
   return (
     <footer className="bg-gray-900 text-white mt-20">
@@ -38,16 +28,19 @@ export default function Footer() {
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
             <h3 className="text-xl font-bold mb-4">{businessName}</h3>
-            <p className="text-gray-400">{footerDescription}</p>
+            <p className="text-gray-400 text-sm">{STATIC_PROFILE.footerDescription}</p>
+            <p className="mt-3 text-xs text-purple-300">
+              Cortesía: {COURTESIES.join(' · ')}
+            </p>
           </div>
 
           <div>
-            <h3 className="text-lg font-bold mb-4">Ubicacion</h3>
+            <h3 className="text-lg font-bold mb-4">Ubicación</h3>
             <div className="flex items-start space-x-3 mb-4">
               <MapPin className="w-5 h-5 text-pink-500 flex-shrink-0 mt-1" />
               <div>
-                <p className="text-gray-300 text-sm">{addressLine1}</p>
-                {addressLine2 && <p className="text-gray-400 text-sm">{addressLine2}</p>}
+                <p className="text-gray-300 text-sm">{BUSINESS_INFO.addressLine1}</p>
+                <p className="text-gray-400 text-sm">{BUSINESS_INFO.addressLine2}</p>
               </div>
             </div>
             {mapsUrl && (
@@ -63,50 +56,55 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-lg font-bold mb-4">Contacto</h3>
+            <h3 className="text-lg font-bold mb-4">Contacto y Pagos</h3>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-pink-500" />
-                <span className="text-gray-300">{phone}</span>
+                <span className="text-gray-300">
+                  {BUSINESS_INFO.phoneDisplay} · WhatsApp citas
+                </span>
+              </div>
+              <div className="flex items-start space-x-3">
+                <CreditCard className="w-5 h-5 text-pink-500 flex-shrink-0 mt-0.5" />
+                <p className="text-gray-300 text-sm">{STATIC_PROFILE.paymentDetails}</p>
               </div>
               <div className="flex items-center space-x-3">
                 <Clock className="w-5 h-5 text-pink-500" />
                 <div className="text-gray-300 text-sm">
-                  <p>Lun-Sab: 9am - 6pm</p>
-                  <p className="text-gray-400">Cerrado Dom y Mar</p>
+                  <p>Solo con cita previa</p>
+                  <p className="text-gray-400">Cancela sin costo 24h antes · Tolerancia 15 min</p>
                 </div>
               </div>
+              {BUSINESS_INFO.contactEmail && (
+                <p className="text-gray-300 text-sm">{BUSINESS_INFO.contactEmail}</p>
+              )}
             </div>
           </div>
         </div>
 
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <p className="text-gray-400 text-sm">&copy; 2026 {businessName}. Todos los derechos reservados.</p>
+            <p className="text-gray-400 text-sm">&copy; {new Date().getFullYear()} {businessName}. Todos los derechos reservados.</p>
             <div className="flex items-center gap-3">
-              {instagramUrl && (
-                <a
-                  href={instagramUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-white font-semibold shadow-lg hover:shadow-pink-500/30 hover:-translate-y-0.5 transition"
-                >
-                  <Instagram className="w-5 h-5" />
-                  <span className="text-sm">Instagram</span>
-                </a>
-              )}
+              <a
+                href={instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-white font-semibold shadow-lg hover:shadow-pink-500/30 hover:-translate-y-0.5 transition"
+              >
+                <Instagram className="w-5 h-5" />
+                <span className="text-sm">Instagram</span>
+              </a>
 
-              {whatsappUrl && (
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500 text-white font-semibold shadow-lg hover:bg-emerald-400 hover:-translate-y-0.5 transition"
-                >
-                  <WhatsAppIcon className="w-5 h-5" />
-                  <span className="text-sm">WhatsApp</span>
-                </a>
-              )}
+              <a
+                href={BUSINESS_INFO.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500 text-white font-semibold shadow-lg hover:bg-emerald-400 hover:-translate-y-0.5 transition"
+              >
+                <WhatsAppIcon className="w-5 h-5" />
+                <span className="text-sm">WhatsApp</span>
+              </a>
             </div>
           </div>
         </div>

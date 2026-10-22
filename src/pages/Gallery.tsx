@@ -1,72 +1,79 @@
-import { useState, useEffect } from 'react';
-import { galleryService } from '../services/galleryService';
-import GalleryImage from '../components/GalleryImage';
-import type { GalleryImage as GalleryImageType } from '../types';
+/**
+ * Gallery.tsx — Página /galeria como puente a Instagram.
+ *
+ * Ya no usa base de datos: las fotos viven en Instagram.
+ * Muestra qué verán ahí y un CTA grande para abrir el perfil.
+ * Para cambiar el destino edita BUSINESS_INFO.instagramUrl en officialCatalog.ts.
+ */
+import { Camera, Heart, Instagram, Sparkles } from 'lucide-react';
+import { BUSINESS_INFO } from '../data/officialCatalog';
+import { waLink } from '../data/whatsappTemplates';
 
+/** Galería estática: redirige a Instagram, sin Supabase ni paginación. */
 export default function Gallery() {
-  const [images, setImages] = useState<GalleryImageType[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(0);
-  const ITEMS_PER_PAGE = 12;
-
-  useEffect(() => {
-    const loadImages = async () => {
-      try {
-        const data = await galleryService.getGalleryImages(ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
-        setImages(data);
-      } catch (error) {
-        console.error('Error loading gallery images:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadImages();
-  }, [page]);
+  const instagramUrl = BUSINESS_INFO.instagramUrl;
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Galería de Trabajos</h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Explora algunos de nuestros trabajos más recientes y diseños especiales.
-          </p>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 via-pink-500 to-purple-600 text-white shadow-lg">
+          <Instagram className="h-8 w-8" aria-hidden="true" />
         </div>
 
-        {loading ? (
-          <div className="text-center text-gray-600">Cargando galería...</div>
-        ) : images.length > 0 ? (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {images.map(image => (
-                <GalleryImage key={image.id} image={image} />
-              ))}
-            </div>
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">Galería de Trabajos</h1>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-4">
+          Todos nuestros trabajos más recientes, diseños de acrílico #1-#8, manicura, gel,
+          pedicura spa y Nail Art están publicados en nuestro Instagram.
+        </p>
+        <p className="text-sm text-gray-500 max-w-xl mx-auto mb-10">
+          Ahí puedes ver fotos y videos actualizados, guardar tus favoritos y traerlos
+          como referencia a tu cita.
+        </p>
 
-            <div className="flex justify-center items-center space-x-4">
-              <button
-                onClick={() => setPage(Math.max(0, page - 1))}
-                disabled={page === 0}
-                className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition"
-              >
-                Anterior
-              </button>
-              <span className="text-gray-600 font-medium">
-                Página {page + 1}
-              </span>
-              <button
-                onClick={() => setPage(page + 1)}
-                disabled={images.length < ITEMS_PER_PAGE}
-                className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition"
-              >
-                Siguiente
-              </button>
-            </div>
-          </>
-        ) : (
-          <div className="text-center text-gray-600">No hay imágenes en la galería aún.</div>
-        )}
+        <div className="grid sm:grid-cols-3 gap-4 mb-10 text-left">
+          <div className="rounded-xl border border-pink-200 bg-gradient-to-br from-pink-50 to-red-50 p-5">
+            <Camera className="h-6 w-6 text-pink-600 mb-2" aria-hidden="true" />
+            <h2 className="font-bold text-gray-900 mb-1">Trabajos reales</h2>
+            <p className="text-sm text-gray-600">Fotos de clientas, sin filtros exagerados.</p>
+          </div>
+          <div className="rounded-xl border border-pink-200 bg-gradient-to-br from-pink-50 to-red-50 p-5">
+            <Sparkles className="h-6 w-6 text-pink-600 mb-2" aria-hidden="true" />
+            <h2 className="font-bold text-gray-900 mb-1">Ideas por estilo</h2>
+            <p className="text-sm text-gray-600">Cover, French, Baby Boomer, Full Set y más.</p>
+          </div>
+          <div className="rounded-xl border border-pink-200 bg-gradient-to-br from-pink-50 to-red-50 p-5">
+            <Heart className="h-6 w-6 text-pink-600 mb-2" aria-hidden="true" />
+            <h2 className="font-bold text-gray-900 mb-1">Guarda tu favorito</h2>
+            <p className="text-sm text-gray-600">Tráelo a tu cita y lo recreamos para ti.</p>
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a
+            href={instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-lg bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-white font-semibold text-lg shadow-lg transition hover:shadow-xl hover:-translate-y-0.5"
+          >
+            <Instagram className="w-5 h-5" aria-hidden="true" />
+            <span>Ver trabajos en Instagram</span>
+          </a>
+          <a
+            href={waLink(
+              'Hola María. Vi sus trabajos en Instagram y quiero reservar mi cita. Mi nombre es: ___. Mi referencia es: ___. ¡Gracias!',
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center px-8 py-3 bg-white text-pink-700 rounded-lg font-semibold border border-pink-200 hover:shadow transition text-lg"
+          >
+            Reservar por WhatsApp
+          </a>
+        </div>
+
+        <p className="mt-8 text-xs text-gray-400">
+          ¿No tienes Instagram? Escríbenos por WhatsApp al {BUSINESS_INFO.phoneDisplay} y te
+          enviamos fotos de referencia.
+        </p>
       </div>
     </div>
   );
